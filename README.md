@@ -1,5 +1,43 @@
 # Arch Sway Offensive Security Workstation
 
+## Executive Summary
+
+This repository documents the audit, cleanup, hardening, and reorganization of my daily-use offensive security workstation running Arch Linux and Sway. The work focuses on reducing attack surface, improving operational reliability, and establishing repeatable, OPSEC-safe workflows suitable for real offensive security research and lab work.
+
+Rather than treating the workstation as a disposable lab, this project approaches it as a long-lived system: changes are measured, documented, validated, and revisited over time. The result is a stable, secure, and maintainable environment that supports exploit development, reverse engineering, and assessment-style workflows without sacrificing usability.
+
+## Why This Matters
+
+Offensive security tooling is often demonstrated in disposable or undocumented environments. In practice, professional offensive work depends on systems that are stable, predictable, and trustworthy over time.
+
+This project matters because it treats the workstation itself as part of the attack surface and the workflow:
+
+- **Reduced ambient risk:** Fewer unnecessary packages, services, and network features means fewer unintended behaviors on hostile networks.
+- **Operational clarity:** A standardized directory layout, clear PATH usage, and documented tool locations reduce mistakes and friction during real work.
+- **Reproducibility:** Audit-first changes and automated health checks make it possible to reason about system state instead of guessing.
+- **OPSEC awareness:** Verification steps are documented without publishing sensitive system details or raw listener data.
+- **Long-term maintainability:** The system is designed to evolve safely, not require periodic rebuilds to “reset” problems.
+
+## Who This Is For
+
+This repository is written to be useful to a few different audiences:
+
+- **Recruiters / Hiring Managers:**  
+  A quick, concrete example of how I approach system ownership: audit-first changes, risk reduction, clear documentation, and repeatable workflows. Start with the Executive Summary, Why This Matters, and the “High-Level Changes” section.
+
+- **Offensive Security Practitioners / Red Teamers:**  
+  Practical workstation practices that reduce friction during labs and assessment-style workflows (tool organization, OPSEC-safe validation, stable paths, repeatable checks) without breaking daily usability.
+
+- **Linux / Infrastructure Engineers:**  
+  A documented approach to maintaining a long-lived workstation: package and service minimization, permissions hygiene, boot baseline measurement, and lightweight automation for ongoing system health.
+
+If you’re new to Arch or hardening, you can treat this as a reference for *how to think* about changes: measure first, change deliberately, and validate after.
+
+## Lab Methodology (Built Environments)
+
+I design and maintain small, isolated lab environments (e.g., Active Directory, Linux, and mixed network setups) to practice realistic offensive workflows against systems I configured myself. Each lab starts from a known baseline, stays within defined scope, and emphasizes minimal validation, evidence capture, and clear remediation-focused reporting.
+
+The focus is not on “winning” challenges, but on repeatable methodology: understanding system behavior, validating impact safely, and documenting findings in a way that would hold up in a real assessment or internal review.
 
 ## System Snapshot History
 
@@ -60,25 +98,7 @@ The goal of this project is to create a reproducible, secure, and performant wor
 
 This repository will evolve as I continue learning and refining my skills in offensive security, with plans for additional sections such as labs, training, and research findings.
 
-### Lab Methodology Example
 
-```markdown
-# AD (Active Directory Red Teaming)
-
-## Purpose
-This lab focuses on exploiting and defending Active Directory environments through red teaming exercises. It covers techniques such as enumeration, privilege escalation, and lateral movement.
-
-## Tools Used
-- BloodHound
-- PowerShell Empire
-- Impacket
-- Mimikatz
-
-## Methodology
-1. **Reconnaissance**: Identify attack paths and potential vulnerabilities in the AD setup.
-2. **Exploitation**: Use misconfigurations, weak permissions, or vulnerabilities to escalate privileges.
-3. **Persistence**: Implement methods for maintaining access within the AD environment.
-4. **Defense**: Learn how to harden Active Directory environments.
 
 ## Tools Setup
 Instructions for setting up the tools used in this lab can be found in the **Tools/** directory.
@@ -100,3 +120,6 @@ Coming soon: workstation screenshots and a short walkthrough video.
 Lab writeups and challenge artifacts live in the security portfolio repository.
 
 - https://github.com/ForeverLX/security-portfolio
+
+
+> Note: Sensitive configurations and live service details are intentionally excluded from public documentation to respect OPSEC.
