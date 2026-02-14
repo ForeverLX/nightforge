@@ -22,3 +22,6 @@ dist/
 # Python cache
 __pycache__/
 *.py[cod]
+artifacts/
+*.tar
+*.log

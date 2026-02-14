@@ -1,0 +1,32 @@
+# offsec-toolbox (minimal)
+# Purpose: Base container with core CLI tooling
+FROM archlinux:base
+
+# Keep pacman predictable + non-interactive inside builds
+RUN sed -i 's/^#Color/Color/' /etc/pacman.conf && \
+    sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf && \
+    printf '\n[options]\nILoveCandy\n' >> /etc/pacman.conf || true
+
+# Install from repo-owned package list (tight + auditable)
+COPY modules/container/toolbox/packages.txt /tmp/packages.txt
+
+# Install everything with aggressive overwrite (include all gcc-libs conflicts)
+RUN pacman -Sy --noconfirm --needed archlinux-keyring && \
+    pacman -Syu --noconfirm --overwrite='*' && \
+    pacman -S --noconfirm --needed --overwrite='*' $(grep -vE '^\s*#|^\s*$' /tmp/packages.txt) && \
+    ldconfig && \
+    pacman -Scc --noconfirm && \
+    rm -f /tmp/packages.txt
+
+# Non-root runtime user (rootless-friendly)
+RUN useradd -m -s /bin/bash operator && \
+    touch /home/operator/.bashrc && \
+    chown -R operator:operator /home/operator
+
+# Set default shell and working directory
+USER operator
+WORKDIR /work
+SHELL ["/bin/bash", "-l"]
+
+# Default command: interactive shell
+CMD ["bash", "-l"]

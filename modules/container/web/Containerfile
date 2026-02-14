@@ -1,0 +1,29 @@
+# web-profile container
+# Purpose: Web recon, discovery, enumeration (minimal workflow)
+# Base: offsec-toolbox (rootless bash + minimal Arch)
+FROM containers-storage:localhost/offsec-toolbox:0.1.0
+
+# Switch to root for package installation
+USER root
+
+# Copy manifest of packages
+COPY manifests/web-packages.txt /tmp/web-packages.txt
+
+# Install core packages
+RUN pacman -Sy --noconfirm --needed --overwrite='*' $(grep -vE '^\s*#|^\s*$' /tmp/web-packages.txt) && \
+    pacman -Scc --noconfirm && \
+    rm -f /tmp/web-packages.txt
+
+# Install Python web tooling (minimal recon workflow)
+# httpx: Fast HTTP toolkit with pipeline support
+# requests: Standard HTTP library for scripting
+RUN pip install --break-system-packages --no-cache-dir \
+    httpx \
+    requests
+
+# Switch back to non-root operator
+USER operator
+WORKDIR /work
+
+# Default shell
+CMD ["bash", "-l"]

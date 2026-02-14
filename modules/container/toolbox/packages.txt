@@ -1,0 +1,37 @@
+# Minimal “operator” CLI toolbox
+bash
+coreutils
+findutils
+grep
+sed
+gawk
+less
+which
+procps-ng
+psmisc
+util-linux
+iproute2
+inetutils
+bind
+openssh
+git
+tmux
+neovim
+
+# Workflow
+ripgrep
+fd
+fzf
+bat
+zoxide
+yazi
+jq
+
+# Python runtime (required by all profiles)
+python
+python-pip
+
+# Arch CA / TLS basics
+ca-certificates
+ca-certificates-utils
+

@@ -1,0 +1,33 @@
+# re-profile container
+# Purpose: Reverse engineering + vulnerability research CLI tooling
+# Base: offsec-toolbox (rootless bash + minimal Arch)
+FROM containers-storage:localhost/offsec-toolbox:0.1.0
+
+# Switch to root for package installation
+USER root
+
+# Copy RE tooling manifest
+COPY manifests/re-packages.txt /tmp/re-packages.txt
+
+# Install RE packages
+RUN pacman -Sy --noconfirm --needed --overwrite='*' $(grep -vE '^\s*#|^\s*$' /tmp/re-packages.txt) && \
+    pacman -Scc --noconfirm && \
+    rm -f /tmp/re-packages.txt
+
+# Install Python RE tooling
+# pwntools: CTF/exploit framework
+# ROPgadget: ROP gadget finder (replaces ropper, Python 3.14 compatible)
+# capstone: Disassembly framework
+# unicorn: CPU emulator framework
+RUN pip install --break-system-packages --no-cache-dir \
+    pwntools \
+    ROPgadget \
+    capstone \
+    unicorn
+
+# Switch back to non-root operator
+USER operator
+WORKDIR /work
+
+# Default shell
+CMD ["bash", "-l"]
