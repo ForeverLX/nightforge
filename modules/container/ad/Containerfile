@@ -1,0 +1,25 @@
+# ad-profile container
+# Purpose: Active Directory / enterprise engagement tooling
+# Base: offsec-toolbox (rootless bash + minimal Arch)
+FROM containers-storage:localhost/offsec-toolbox:0.1.0
+
+# Switch to root for package installation
+USER root
+
+# Copy AD tooling manifest for reproducible install
+COPY manifests/ad-packages.txt /tmp/ad-packages.txt
+
+# Install AD / Kerberos / LDAP / SMB tooling (use --overwrite for consistency)
+RUN pacman -Sy --noconfirm --needed --overwrite='*' $(grep -vE '^\s*#|^\s*$' /tmp/ad-packages.txt) && \
+    pacman -Scc --noconfirm && \
+    rm -f /tmp/ad-packages.txt
+
+# Install Impacket suite (Python-based AD tooling)
+RUN pip install --break-system-packages --no-cache-dir impacket
+
+# Switch back to non-root operator
+USER operator
+WORKDIR /work
+
+# Default shell
+CMD ["bash", "-l"]

@@ -1,0 +1,14 @@
+# Active Directory / Enterprise Engagement Tooling
+# Purpose: Kerberos, LDAP, SMB interrogation and abuse
+# Note: Python is in toolbox base
+
+# Kerberos tooling (krb5 is the standard MIT implementation)
+krb5
+
+# LDAP / AD interrogation
+openldap
+samba
+
+# Network utilities for AD enumeration
+# bind provides dig, nslookup for DNS recon
+bind
