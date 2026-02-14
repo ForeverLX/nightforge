@@ -1,0 +1,60 @@
+=== DATE ===
+2026-02-11T17:59:20-08:00
+
+=== PACMAN: installed packages for core stack ===
+fd 10.3.0-1
+fzf 0.67.0-2
+ghostty 1.2.3-2
+ghostty-shell-integration 1.2.3-2
+ghostty-terminfo 1.2.3-2
+git 2.53.0-1
+git-filter-repo 2.47.0-3
+neovim 0.11.6-1
+openssh 10.2p1-2
+ripgrep 15.1.0-1
+tmux 3.6_a-1
+yazi 26.1.22-1
+zoxide 0.9.9-1
+zsh 5.9-5
+zsh-autosuggestions 0.7.1-1
+
+=== DEFAULT SHELL ===
+/bin/zsh
+
+=== TERMINAL BINARIES ===
+ghostty: /usr/bin/ghostty
+kitty: MISSING
+tmux: /usr/bin/tmux
+zsh: /usr/bin/zsh
+fzf: /usr/bin/fzf
+rg: /usr/bin/rg
+fd: /usr/bin/fd
+bat: MISSING
+zoxide: /usr/bin/zoxide
+yazi: /usr/bin/yazi
+nvim: /usr/bin/nvim
+git: /usr/bin/git
+ssh: /usr/bin/ssh
+
+=== ENABLED SYSTEM SERVICES (enabled only) ===
+auditd.service
+getty@.service
+ip6tables.service
+iptables.service
+NetworkManager-dispatcher.service
+NetworkManager.service
+nginx.service
+nvidia-hibernate.service
+nvidia-resume.service
+nvidia-suspend.service
+nvidia-suspend-then-hibernate.service
+postgresql.service
+systemd-resolved.service
+systemd-timesyncd.service
+
+=== ENABLED USER SERVICES (enabled only) ===
+cliphist.service
+pipewire-pulse.service
+pipewire.service
+wireplumber.service
+

@@ -1,0 +1,11 @@
+zsh
+fzf
+ripgrep
+fd
+bat
+zoxide
+yazi
+neovim
+git
+openssh
+

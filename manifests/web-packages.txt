@@ -1,0 +1,25 @@
+# Web Recon / Discovery / Enumeration (Minimal Workflow)
+# Purpose: Network scanning, HTTP enumeration, basic web tooling
+# Note: Python is in toolbox base
+
+# Core network scanning
+nmap
+masscan
+
+# HTTP clients and utilities
+curl
+wget
+
+# JSON processing (essential for modern API recon)
+jq
+
+# Content discovery
+gobuster
+
+# Network debugging tools
+tcpdump
+
+# Note: ffuf is faster but only available in AUR
+# To use ffuf instead, install manually:
+# - Download binary: https://github.com/ffuf/ffuf/releases
+# - Or via Go: go install github.com/ffuf/ffuf/v2@latest
