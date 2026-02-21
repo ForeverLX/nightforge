@@ -1,0 +1,23 @@
+[Unit]
+Description=offsec-workstation Host Maintenance
+Documentation=https://github.com/ForeverLX/offsec-workstation
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+Environment="INTERACTIVE=false"
+Environment="LOG_DIR=/var/log/offsec-workstation"
+ExecStart=/usr/local/bin/offsec-maintenance
+StandardOutput=journal
+StandardError=journal
+
+# Security hardening
+PrivateTmp=yes
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/log/offsec-workstation /var/cache/pacman
+
+[Install]
+WantedBy=multi-user.target
