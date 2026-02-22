@@ -1,29 +1,55 @@
-# web-profile container
-# Purpose: Web recon, discovery, enumeration (minimal workflow)
-# Base: offsec-toolbox (rootless bash + minimal Arch)
+# Web Profile v0.5.0 - Network Scanning & OSINT
+# Based on: offsec-toolbox:0.1.0
 FROM containers-storage:localhost/offsec-toolbox:0.1.0
 
-# Switch to root for package installation
+# Switch to root for installation
 USER root
 
-# Copy manifest of packages
+# Install official repo packages
 COPY manifests/web-packages.txt /tmp/web-packages.txt
-
-# Install core packages
-RUN pacman -Sy --noconfirm --needed --overwrite='*' $(grep -vE '^\s*#|^\s*$' /tmp/web-packages.txt) && \
+RUN pacman -Sy --noconfirm --needed --overwrite='*' \
+    $(grep -vE '^\s*#|^\s*$' /tmp/web-packages.txt) \
+    base-devel git && \
     pacman -Scc --noconfirm && \
     rm -f /tmp/web-packages.txt
 
-# Install Python web tooling (minimal recon workflow)
-# httpx: Fast HTTP toolkit with pipeline support
-# requests: Standard HTTP library for scripting
+# Install Python HTTP tools (requests only, httpx conflicts with Go httpx)
 RUN pip install --break-system-packages --no-cache-dir \
-    httpx \
     requests
 
-# Switch back to non-root operator
+# Install yay (AUR helper) as build user
+RUN useradd -m -G wheel -s /bin/bash builduser && \
+    echo 'builduser ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers && \
+    git clone --depth 1 https://aur.archlinux.org/yay-bin.git /tmp/yay && \
+    chown -R builduser:builduser /tmp/yay && \
+    cd /tmp/yay && \
+    sudo -u builduser makepkg --noconfirm -si && \
+    rm -rf /tmp/yay
+
+# Install OSINT tools from AUR
+RUN sudo -u builduser yay -S --noconfirm --needed \
+    subfinder \
+    httpx \
+    dnsx \
+    whatweb
+
+# Remove build user and dependencies
+RUN userdel -r builduser && \
+    pacman -Rns --noconfirm base-devel && \
+    pacman -Scc --noconfirm
+
+# Copy recon pipeline script
+COPY scripts/recon/recon-pipeline.sh /usr/local/bin/recon-pipeline
+RUN chmod +x /usr/local/bin/recon-pipeline
+
+# Switch back to operator
 USER operator
 WORKDIR /work
 
-# Default shell
+# Ensure operator can write to /work
+USER root
+RUN chown -R operator:operator /work
+USER operator
+
+# Default command
 CMD ["bash", "-l"]
