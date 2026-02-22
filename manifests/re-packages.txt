@@ -1,28 +1,26 @@
-# Reverse Engineering / Vulnerability Research CLI Tooling
-# Purpose: Binary analysis, debugging, exploitation development
-# Note: Python is in toolbox base
+# RE Profile Package Manifest
+# Purpose: Reverse engineering and exploit development tools
 
-# Core disassembly and binary analysis
+# Reverse engineering tools
 radare2
-binutils
-file
-
-# Debuggers and tracers
 gdb
+binutils
+
+# System tracing and debugging
 strace
 ltrace
 
-# Hex editors
+# Binary analysis
 hexedit
 
-# Build tools (for compiling exploits/payloads and building Python packages)
+# Build tools (for compiling exploits and native extensions)
 base-devel
 gcc
 make
 cmake
 
-# Python RE tools installed via pip in Containerfile:
-# - pwntools (CTF/exploit framework)
-# - ROPgadget (ROP gadget finder)
-# - capstone (disassembly engine)
-# - unicorn (CPU emulator - requires cmake)
+# Ruby (for one_gadget)
+ruby
+
+# Assembly
+nasm
