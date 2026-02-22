@@ -1,0 +1,109 @@
+// Web Layout - Web Application Testing
+// Usage: zellij --layout web.kdl
+// Container: offsec-web
+
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        children
+        pane size=2 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+    }
+
+    tab name="🌐 Proxy" focus=true {
+        pane split_direction="vertical" {
+            pane size="40%" {
+                name "proxy-notes"
+                focus true
+            }
+            pane size="60%" {
+                name "manual-tests"
+            }
+        }
+    }
+
+    tab name="💉 SQLi" {
+        pane split_direction="horizontal" {
+            pane size="60%" {
+                name "sqlmap"
+            }
+            pane size="40%" {
+                name "manual-sqli"
+            }
+        }
+    }
+
+    tab name="⚡ XSS" {
+        pane split_direction="vertical" {
+            pane size="50%" {
+                name "xss-payloads"
+            }
+            pane size="50%" {
+                name "xss-results"
+            }
+        }
+    }
+
+    tab name="🔓 Auth" {
+        pane split_direction="horizontal" {
+            pane size="60%" {
+                name "auth-testing"
+            }
+            pane size="40%" {
+                name "jwt-analysis"
+            }
+        }
+    }
+
+    tab name="🔨 Fuzz" {
+        pane split_direction="vertical" {
+            pane size="60%" {
+                name "ffuf/wfuzz"
+            }
+            pane size="40%" {
+                name "fuzz-results"
+            }
+        }
+    }
+
+    tab name="📤 Upload" {
+        pane split_direction="horizontal" {
+            pane size="50%" {
+                name "upload-testing"
+            }
+            pane size="50%" {
+                name "webshell-listener"
+            }
+        }
+    }
+
+    tab name="🔌 API" {
+        pane split_direction="vertical" {
+            pane size="60%" {
+                name "api-enum"
+            }
+            pane size="40%" {
+                name "api-docs"
+            }
+        }
+    }
+
+    tab name="📝 Notes" {
+        pane {
+            name "webapp-notes"
+        }
+    }
+}
+
+floating_panes {
+    pane {
+        name "payload-ref"
+        x "5%"
+        y "5%"
+        width "90%"
+        height "90%"
+    }
+}
