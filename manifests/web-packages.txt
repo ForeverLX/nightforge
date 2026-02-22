@@ -1,6 +1,5 @@
-# Web Recon / Discovery / Enumeration (Minimal Workflow)
-# Purpose: Network scanning, HTTP enumeration, basic web tooling
-# Note: Python is in toolbox base
+# Web Profile Package Manifest
+# Purpose: Network scanning, HTTP enumeration, OSINT workflows
 
 # Core network scanning
 nmap
@@ -10,16 +9,30 @@ masscan
 curl
 wget
 
-# JSON processing (essential for modern API recon)
+# JSON processing
 jq
 
 # Content discovery
 gobuster
 
-# Network debugging tools
+# Network debugging
 tcpdump
 
-# Note: ffuf is faster but only available in AUR
-# To use ffuf instead, install manually:
-# - Download binary: https://github.com/ffuf/ffuf/releases
-# - Or via Go: go install github.com/ffuf/ffuf/v2@latest
+# DNS utilities
+# provides dig, nslookup
+bind
+whois
+
+# Exploit database
+# provides searchsploit
+exploitdb
+
+# Tech stack fingerprinting (optional - can add later)
+# whatweb
+
+# Optional manual installs (AUR or binary):
+# - ffuf (faster than gobuster, AUR only)
+# - amass (subdomain enum, requires Go)
+# - subfinder (subdomain enum, requires Go)
+# - httpx (modern HTTP toolkit, requires Go)
+# - nuclei (vulnerability scanner, requires Go)

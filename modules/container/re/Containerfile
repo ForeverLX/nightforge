@@ -1,33 +1,37 @@
-# re-profile container
-# Purpose: Reverse engineering + vulnerability research CLI tooling
-# Base: offsec-toolbox (rootless bash + minimal Arch)
+# RE Profile - Reverse Engineering & Exploit Development
+# Based on: offsec-toolbox
 FROM containers-storage:localhost/offsec-toolbox:0.1.0
 
 # Switch to root for package installation
 USER root
 
-# Copy RE tooling manifest
+# Install RE-specific packages
 COPY manifests/re-packages.txt /tmp/re-packages.txt
+RUN pacman -Sy --noconfirm --needed --overwrite='*' \
+    $(grep -vE '^\s*(#|$)' /tmp/re-packages.txt) && \
+    ldconfig && \
+    pacman -Scc --noconfirm
 
-# Install RE packages
-RUN pacman -Sy --noconfirm --needed --overwrite='*' $(grep -vE '^\s*#|^\s*$' /tmp/re-packages.txt) && \
-    pacman -Scc --noconfirm && \
-    rm -f /tmp/re-packages.txt
-
-# Install Python RE tooling
-# pwntools: CTF/exploit framework
-# ROPgadget: ROP gadget finder (replaces ropper, Python 3.14 compatible)
-# capstone: Disassembly framework
-# unicorn: CPU emulator framework
+# Install Python tools (pwntools, ROPgadget, etc.)
 RUN pip install --break-system-packages --no-cache-dir \
     pwntools \
     ROPgadget \
     capstone \
     unicorn
 
-# Switch back to non-root operator
-USER operator
-WORKDIR /work
+# Install one_gadget (ROP helper)
+RUN gem install one_gadget --no-document
 
-# Default shell
-CMD ["bash", "-l"]
+# Clean up
+RUN rm -f /tmp/re-packages.txt
+
+# Switch back to operator
+USER operator
+WORKDIR /home/operator
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD gdb --version && python3 -c "import pwn" || exit 1
+
+# Default command
+CMD ["/bin/bash"]
