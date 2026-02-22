@@ -1,4 +1,4 @@
-# Web Profile Package Manifest
+# Web Profile Package Manifest - v0.5.0
 # Purpose: Network scanning, HTTP enumeration, OSINT workflows
 
 # Core network scanning
@@ -27,12 +27,5 @@ whois
 # provides searchsploit
 exploitdb
 
-# Tech stack fingerprinting (optional - can add later)
-# whatweb
-
-# Optional manual installs (AUR or binary):
-# - ffuf (faster than gobuster, AUR only)
-# - amass (subdomain enum, requires Go)
-# - subfinder (subdomain enum, requires Go)
-# - httpx (modern HTTP toolkit, requires Go)
-# - nuclei (vulnerability scanner, requires Go)
+# Note: whatweb and Go-based tools (amass, subfinder, httpx, nuclei)
+# will be installed separately in the Containerfile
