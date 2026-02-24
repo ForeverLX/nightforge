@@ -1,5 +1,5 @@
 #!/bin/bash
-# Recon Pipeline - Automated reconnaissance workflow
+# Recon Pipeline - Automated reconnaissance workflow (FIXED)
 # Usage: recon-pipeline <domain> [output-dir]
 
 set -euo pipefail
@@ -10,6 +10,13 @@ OUTPUT_DIR="${2:-$(pwd)/recon-$(date +%Y%m%d-%H%M%S)}"
 THREADS=50
 WORDLIST_COMMON="/usr/share/wordlists/dirb/common.txt"
 
+# Initialize counters (FIX: initialize all variables)
+SUBDOMAIN_COUNT=0
+RESOLVED_COUNT=0
+PORT_COUNT=0
+HTTP_COUNT=0
+VULN_COUNT=0
+
 # Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -18,99 +25,118 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
-usage() {
-    cat << EOF
-Usage: $(basename "$0") <domain> [output-dir]
-
-Automated reconnaissance pipeline for external pentests.
-
-Stages:
-  1. Subdomain Enumeration (subfinder, amass)
-  2. DNS Resolution (dnsx)
-  3. Port Scanning (nmap)
-  4. HTTP Detection (httpx)
-  5. Tech Fingerprinting (whatweb)
-  6. Vulnerability Scanning (nuclei)
-  7. Report Generation (markdown)
-
-Examples:
-  $(basename "$0") example.com
-  $(basename "$0") target.com ./engage/target-recon
-
-Output Structure:
-  \$OUTPUT_DIR/
-    ├── subdomains.txt       # All discovered subdomains
-    ├── resolved.txt         # DNS-resolved hosts
-    ├── nmap/                # Nmap scan results
-    ├── http-hosts.txt       # Live HTTP services
-    ├── tech-stack.txt       # Technology fingerprints
-    ├── vulnerabilities.txt  # Nuclei findings
-    └── REPORT.md            # Final markdown report
-EOF
-    exit 1
-}
-
+# Logging
 log() {
-    echo -e "${BLUE}[$(date +%H:%M:%S)]${NC} $*"
+    echo -e "${CYAN}[$(date '+%H:%M:%S')]${NC} ${BLUE}$*${NC}"
 }
 
 log_success() {
     echo -e "${GREEN}[✓]${NC} $*"
 }
 
-log_error() {
-    echo -e "${RED}[✗]${NC} $*"
-}
-
 log_warn() {
     echo -e "${YELLOW}[!]${NC} $*"
 }
 
-banner() {
-    cat << 'EOF'
-    ____                          ____  _            ___            
-   / __ \___  _________  ____    / __ \(_)___  ___  / (_)___  ___   
-  / /_/ / _ \/ ___/ __ \/ __ \  / /_/ / / __ \/ _ \/ / / __ \/ _ \  
- / _, _/  __/ /__/ /_/ / / / / / ____/ / /_/ /  __/ / / / / /  __/  
-/_/ |_|\___/\___/\____/_/ /_/ /_/   /_/ .___/\___/_/_/_/ /_/\___/   
-                                     /_/                             
-EOF
-    echo ""
-    echo -e "${CYAN}Target: ${DOMAIN}${NC}"
-    echo -e "${CYAN}Output: ${OUTPUT_DIR}${NC}"
-    echo ""
+log_error() {
+    echo -e "${RED}[✗]${NC} $*"
 }
 
-# Validate inputs
-if [[ -z "$DOMAIN" ]]; then
+banner() {
+    cat << 'EOF'
+    ____                          ____  _            ___
+   / __ \___  _________  ____    / __ \(_)___  ___  / (_)___  ___
+  / /_/ / _ \/ ___/ __ \/ __ \  / /_/ / / __ \/ _ \/ / / __ \/ _ \
+ / _, _/  __/ /__/ /_/ / / / / / ____/ / /_/ /  __/ / / / / /  __/
+/_/ |_|\___/\___/\____/_/ /_/ /_/   /_/ .___/\___/_/_/_/ /_/\___/
+                                     /_/
+EOF
+}
+
+usage() {
+    cat << EOF
+Usage: $(basename "$0") <domain> [output-dir]
+
+Automated reconnaissance pipeline with 7 stages:
+  1. Subdomain Enumeration (subfinder)
+  2. DNS Resolution (dnsx)  
+  3. Port Scanning (nmap)
+  4. HTTP Detection (httpx)
+  5. Technology Fingerprinting (whatweb)
+  6. Vulnerability Scanning (nuclei - optional)
+  7. Report Generation (markdown)
+
+Examples:
+  $(basename "$0") example.com
+  $(basename "$0") example.com /tmp/recon-output
+  
+Notes:
+  - Provide DOMAIN only (not full URL)
+  - Output directory created automatically if not specified
+  - Requires: subfinder, dnsx, nmap, httpx, whatweb
+  - Optional: nuclei (for vulnerability scanning)
+EOF
+    exit 1
+}
+
+# FIX: Extract domain from URL if provided
+extract_domain() {
+    local input="$1"
+    
+    # Remove protocol
+    input="${input#http://}"
+    input="${input#https://}"
+    
+    # Remove path
+    input="${input%%/*}"
+    
+    # Remove port
+    input="${input%%:*}"
+    
+    echo "$input"
+}
+
+# Validate input
+if [[ -z "$DOMAIN" ]] || [[ "$DOMAIN" == "--help" ]] || [[ "$DOMAIN" == "-h" ]]; then
     usage
+fi
+
+# FIX: Handle URLs by extracting domain
+if [[ "$DOMAIN" =~ ^https?:// ]]; then
+    log_warn "URL detected, extracting domain..."
+    ORIGINAL_INPUT="$DOMAIN"
+    DOMAIN=$(extract_domain "$DOMAIN")
+    log "Extracted domain: $DOMAIN"
 fi
 
 # Create output directory
 mkdir -p "$OUTPUT_DIR"/{nmap,screenshots}
 cd "$OUTPUT_DIR"
 
-# Start timer
+# Start
 START_TIME=$(date +%s)
-
 banner
+echo ""
+echo "Target: $DOMAIN"
+echo "Output: $OUTPUT_DIR"
 
 # Stage 1: Subdomain Enumeration
 log "Stage 1: Subdomain Enumeration"
 {
-    subfinder -d "$DOMAIN" -silent -o subdomains-subfinder.txt || true
+    subfinder -d "$DOMAIN" \
+        -all \
+        -silent \
+        -o subdomains.txt || true
     
-    # Note: amass skipped (large dependency, install separately if needed)
-    # amass enum -passive -d "$DOMAIN" -o subdomains-amass.txt || true
+    SUBDOMAIN_COUNT=$(wc -l < subdomains.txt 2>/dev/null || echo 0)
     
-    # Use only subfinder results
-    cat subdomains-*.txt 2>/dev/null | sort -u > subdomains.txt
-    SUBDOMAIN_COUNT=$(wc -l < subdomains.txt)
-    
-    if [[ $SUBDOMAIN_COUNT -gt 0 ]]; then
-        log_success "Found $SUBDOMAIN_COUNT subdomains"
-    else
+    if [[ $SUBDOMAIN_COUNT -eq 0 ]]; then
         log_warn "No subdomains found"
+        # Add the domain itself
+        echo "$DOMAIN" > subdomains.txt
+        SUBDOMAIN_COUNT=1
+    else
+        log_success "Found $SUBDOMAIN_COUNT subdomains"
     fi
 }
 
@@ -118,12 +144,22 @@ log "Stage 1: Subdomain Enumeration"
 log "Stage 2: DNS Resolution"
 {
     if [[ -s subdomains.txt ]]; then
-        dnsx -l subdomains.txt -silent -o resolved.txt || true
+        dnsx -l subdomains.txt \
+            -silent \
+            -a \
+            -resp-only \
+            -o resolved.txt || true
+        
         RESOLVED_COUNT=$(wc -l < resolved.txt 2>/dev/null || echo 0)
-        log_success "Resolved $RESOLVED_COUNT hosts"
+        
+        if [[ $RESOLVED_COUNT -eq 0 ]]; then
+            log_warn "No subdomains resolved"
+        else
+            log_success "Resolved $RESOLVED_COUNT hosts"
+        fi
     else
         log_warn "No subdomains to resolve"
-        echo "$DOMAIN" > resolved.txt
+        RESOLVED_COUNT=0
     fi
 }
 
@@ -131,22 +167,34 @@ log "Stage 2: DNS Resolution"
 log "Stage 3: Port Scanning (nmap)"
 {
     if [[ -s resolved.txt ]]; then
+        # Use TCP connect scan (-sT) instead of SYN (-sS) for containers
+        # Remove --defeat-rst-ratelimit which requires SYN scan
         nmap -iL resolved.txt \
             -p- \
-            --min-rate 10000 \
-            -oA nmap/full-scan \
+            -sT \
+            --min-rate 1000 \
             -T4 \
-            --open \
-            2>/dev/null || true
+            -oA nmap/full-scan 2>&1 | tee nmap/scan.log || true
         
-        # Quick service detection on open ports
-        if [[ -f nmap/full-scan.gnmap ]]; then
-            grep -oP '\d+/open' nmap/full-scan.gnmap | cut -d'/' -f1 | sort -u > nmap/open-ports.txt || true
-            PORT_COUNT=$(wc -l < nmap/open-ports.txt 2>/dev/null || echo 0)
+        # Extract open ports from nmap output
+        if [[ -f "nmap/full-scan.nmap" ]]; then
+            # Extract port numbers from lines like "80/tcp   open  http"
+            grep "open" nmap/full-scan.nmap | grep -oP '^\d+' | sort -u > open-ports.txt 2>/dev/null || true
+        else
+            touch open-ports.txt
+        fi
+        
+        PORT_COUNT=$(wc -l < open-ports.txt 2>/dev/null || echo 0)
+        
+        if [[ $PORT_COUNT -gt 0 ]]; then
             log_success "Found $PORT_COUNT open ports"
+        else
+            log_warn "No open ports found"
         fi
     else
         log_warn "No hosts to scan"
+        PORT_COUNT=0
+        touch open-ports.txt
     fi
 }
 
@@ -179,24 +227,26 @@ log "Stage 4: HTTP Service Detection"
 # Stage 5: Technology Fingerprinting
 log "Stage 5: Technology Fingerprinting"
 {
-    if [[ -s http-hosts.txt ]]; then
-        # Extract URLs only
-        grep -oP 'https?://[^\s]+' http-hosts.txt > urls-only.txt || true
-        
-        whatweb -i urls-only.txt \
-            --color=never \
-            --quiet \
-            --log-brief=tech-stack.txt || true
-        
-        log_success "Technology fingerprinting complete"
+    if [[ -s urls-only.txt ]]; then
+        # Run whatweb and capture output (ignore warnings about Ruby 3.4)
+        if xargs -a urls-only.txt -I {} whatweb -a 3 --quiet {} > tech-stack.txt 2>&1; then
+            # Check if we got actual results (not just error messages)
+            if grep -qE "http|IP|Country" tech-stack.txt 2>/dev/null; then
+                log_success "Technology fingerprinting complete"
+            else
+                log_warn "whatweb produced no results"
+            fi
+        else
+            log_warn "whatweb encountered errors"
+        fi
     else
         log_warn "No HTTP services to fingerprint"
+        touch tech-stack.txt
     fi
 }
 
 # Stage 6: Vulnerability Scanning
 log "Stage 6: Vulnerability Scanning (nuclei)"
-VULN_COUNT=0
 {
     if command -v nuclei &> /dev/null; then
         if [[ -s urls-only.txt ]]; then
@@ -214,10 +264,12 @@ VULN_COUNT=0
             fi
         else
             log_warn "No targets for vulnerability scan"
+            VULN_COUNT=0
         fi
     else
         log_warn "nuclei not installed - skipping vulnerability scan"
         echo "# nuclei not available - install with: go install github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest" > vulnerabilities.txt
+        VULN_COUNT=0
     fi
 }
 
@@ -248,8 +300,8 @@ log "Stage 7: Generating Report"
 ## Subdomains
 
 \`\`\`
-$(cat subdomains.txt 2>/dev/null | head -20)
-$(if [[ $SUBDOMAIN_COUNT -gt 20 ]]; then echo "... and $((SUBDOMAIN_COUNT - 20)) more"; fi)
+$(head -20 subdomains.txt 2>/dev/null || echo "None found")
+$(if [[ $SUBDOMAIN_COUNT -gt 20 ]]; then echo "... and $(($SUBDOMAIN_COUNT - 20)) more"; fi)
 \`\`\`
 
 ---
@@ -257,8 +309,7 @@ $(if [[ $SUBDOMAIN_COUNT -gt 20 ]]; then echo "... and $((SUBDOMAIN_COUNT - 20))
 ## HTTP Services
 
 \`\`\`
-$(cat http-hosts.txt 2>/dev/null | head -20)
-$(if [[ $HTTP_COUNT -gt 20 ]]; then echo "... and $((HTTP_COUNT - 20)) more"; fi)
+$(cat http-hosts.txt 2>/dev/null || echo "None found")
 \`\`\`
 
 ---
@@ -266,36 +317,26 @@ $(if [[ $HTTP_COUNT -gt 20 ]]; then echo "... and $((HTTP_COUNT - 20)) more"; fi
 ## Technology Stack
 
 \`\`\`
-$(cat tech-stack.txt 2>/dev/null | head -30)
+$(cat tech-stack.txt 2>/dev/null || echo "Not available")
 \`\`\`
 
 ---
 
 ## Vulnerabilities
 
-$(if [[ -s vulnerabilities.txt ]]; then
-    echo "\`\`\`"
-    cat vulnerabilities.txt
-    echo "\`\`\`"
-    echo ""
-    echo "⚠️ **CRITICAL**: Review vulnerabilities and prioritize exploitation"
-else
-    echo "✅ No vulnerabilities detected by automated scan."
-    echo ""
-    echo "**Note**: Manual testing still required."
-fi)
+\`\`\`
+$(cat vulnerabilities.txt 2>/dev/null || echo "None detected or nuclei not installed")
+\`\`\`
+
+$(if [[ $VULN_COUNT -gt 0 ]]; then echo "⚠️ **CRITICAL**: Review vulnerabilities and prioritize exploitation"; fi)
 
 ---
 
 ## Open Ports
 
-$(if [[ -f nmap/open-ports.txt ]]; then
-    echo "\`\`\`"
-    cat nmap/open-ports.txt | head -50
-    echo "\`\`\`"
-else
-    echo "No port scan results available."
-fi)
+\`\`\`
+$(cat open-ports.txt 2>/dev/null || echo "None found")
+\`\`\`
 
 ---
 
@@ -328,19 +369,14 @@ REPORT_EOF
     log_success "Report generated: REPORT.md"
 }
 
-# Calculate runtime
+# Summary
 END_TIME=$(date +%s)
 RUNTIME=$((END_TIME - START_TIME))
 
 echo ""
-echo -e "${GREEN}═══════════════════════════════════════════════${NC}"
-echo -e "${GREEN}  Reconnaissance Complete${NC}"
-echo -e "${GREEN}═══════════════════════════════════════════════${NC}"
-echo -e "${CYAN}Runtime: ${RUNTIME}s${NC}"
-echo -e "${CYAN}Report: ${OUTPUT_DIR}/REPORT.md${NC}"
-echo ""
-
-# Open report if in interactive terminal
-if [[ -t 1 ]]; then
-    echo -e "View report: ${YELLOW}cat ${OUTPUT_DIR}/REPORT.md${NC}"
-fi
+echo "═══════════════════════════════════════════════"
+echo "  Reconnaissance Complete"
+echo "═══════════════════════════════════════════════"
+echo "Runtime: ${RUNTIME}s"
+echo "Report: $OUTPUT_DIR/REPORT.md"
+echo "View report: cat $OUTPUT_DIR/REPORT.md"
