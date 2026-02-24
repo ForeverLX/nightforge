@@ -29,11 +29,15 @@ RUN useradd -m -G wheel -s /bin/bash builduser && \
 # Install OSINT tools from AUR
 RUN sudo -u builduser yay -S --noconfirm --needed \
     subfinder \
-    httpx \
     dnsx \
     whatweb
 
-# Remove build user and dependencies
+# Install httpx from source (AUR package is Python library)
+RUN go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest && \
+    cp /root/go/bin/httpx /usr/local/bin/ && \
+    chmod +x /usr/local/bin/httpx
+
+# Remove build user and build dependencies (but keep Go for httpx)
 RUN userdel -r builduser && \
     pacman -Rns --noconfirm base-devel && \
     pacman -Scc --noconfirm
@@ -45,11 +49,6 @@ RUN chmod +x /usr/local/bin/recon-pipeline
 # Switch back to operator
 USER operator
 WORKDIR /work
-
-# Ensure operator can write to /work
-USER root
-RUN chown -R operator:operator /work
-USER operator
 
 # Default command
 CMD ["bash", "-l"]

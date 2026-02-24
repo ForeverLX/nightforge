@@ -1,5 +1,5 @@
 #!/bin/bash
-# Container Management Script - Updated for proper user permissions
+# Container Management Script - Enhanced UX
 # Location: modules/container/scripts/container.sh
 
 set -euo pipefail
@@ -40,6 +40,69 @@ EOF
     exit 1
 }
 
+check_engagement_dir() {
+    local current_dir="$PWD"
+    
+    # Check if we're in an engagement directory
+    if [[ "$current_dir" =~ /engage/[^/]+$ ]]; then
+        return 0  # We're in an engagement dir
+    fi
+    
+    # Check if we have engagement structure
+    if [[ -d "c2" ]] || [[ -d "recon" ]] || [[ -d "exploit" ]]; then
+        return 0  # Looks like engagement dir
+    fi
+    
+    return 1  # Not an engagement dir
+}
+
+check_permissions() {
+    local dir="$1"
+    local perms=$(stat -c "%a" "$dir" 2>/dev/null || echo "000")
+    
+    if [[ "$perms" == "777" ]]; then
+        return 0
+    fi
+    
+    return 1
+}
+
+warn_not_in_engagement() {
+    echo -e "${YELLOW}⚠️  Warning: You're not in an engagement directory${NC}"
+    echo -e "${BLUE}Current directory:${NC} $PWD"
+    echo ""
+    echo -e "${YELLOW}The container will mount:${NC} $PWD → /work"
+    echo ""
+    echo -e "${BLUE}Recommendations:${NC}"
+    echo "  1. cd ~/engage/<engagement-name>"
+    echo "  2. chmod 777 ."
+    echo "  3. Run this command again"
+    echo ""
+    read -p "Continue anyway? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 0
+    fi
+}
+
+warn_permissions() {
+    local dir="$1"
+    local perms=$(stat -c "%a" "$dir")
+    
+    echo -e "${YELLOW}⚠️  Warning: Directory permissions are $perms (not 777)${NC}"
+    echo -e "${BLUE}Directory:${NC} $dir"
+    echo ""
+    echo -e "${YELLOW}You may encounter permission errors in the container.${NC}"
+    echo ""
+    echo -e "${BLUE}Fix with:${NC} chmod 777 $dir"
+    echo ""
+    read -p "Continue anyway? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 0
+    fi
+}
+
 build() {
     local PROFILE="$1"
     local IMAGE="localhost/offsec-${PROFILE}:0.1.0"
@@ -76,15 +139,25 @@ run() {
         exit 1
     fi
 
-    echo -e "${BLUE}[*]${NC} Running ${PROFILE} container..."
+    # Check if we're in an engagement directory
+    if ! check_engagement_dir; then
+        warn_not_in_engagement
+    fi
     
-    # Run container as host user for proper file permissions
+    # Check permissions
+    if ! check_permissions "$WORK_DIR"; then
+        warn_permissions "$WORK_DIR"
+    fi
+    
+    echo -e "${BLUE}[*]${NC} Running ${PROFILE} container..."
+    echo -e "${BLUE}[*]${NC} Mounting: $WORK_DIR → /work"
+    
+    # Run container
     podman run -it --rm \
         -v "$WORK_DIR:/work:z" \
         -w /work \
         --cap-add=NET_RAW \
         --cap-add=NET_ADMIN \
-        --user "$(id -u):$(id -g)" \
         --hostname "offsec-${PROFILE}" \
         "$IMAGE" \
         bash -l
