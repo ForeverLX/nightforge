@@ -1,9 +1,10 @@
-# Web Profile Package Manifest - v0.5.0
-# Purpose: Network scanning, HTTP enumeration, OSINT workflows
+# Web Profile Package Manifest - v2.0.0
+# Modern Recon Stack based on Jason Haddix TBHM v4
+# Updated: Phase 6.3
 
 # Core network scanning
 nmap
-masscan
+rustscan
 
 # HTTP clients and utilities
 curl
@@ -12,20 +13,19 @@ wget
 # JSON processing
 jq
 
-# Content discovery
-gobuster
-
 # Network debugging
 tcpdump
 
-# DNS utilities
-# provides dig, nslookup
+# DNS utilities (provides dig, nslookup)
 bind
 whois
 
-# Exploit database
-# provides searchsploit
-exploitdb
-
-# Note: whatweb and Go-based tools (amass, subfinder, httpx, nuclei)
-# will be installed separately in the Containerfile
+# Note: Modern recon tools (Go-based) installed via Containerfile:
+# - amass (comprehensive subdomain enumeration - OWASP)
+# - naabu (fast port scanner - ProjectDiscovery)
+# - httpx (HTTP probing - ProjectDiscovery)
+# - dnsx (DNS resolution - ProjectDiscovery)
+# - ffuf (content discovery - fuzzing)
+# - webanalyze (tech detection - Wappalyzer DB)
+# - gitleaks (secret scanning - GitHub)
+# - cloud_enum (cloud asset discovery - S3/Azure/GCP)
