@@ -1,0 +1,2 @@
+# Disable NVMe APST (Autonomous Power State Transition) for max performance
+ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{power/control}="on"

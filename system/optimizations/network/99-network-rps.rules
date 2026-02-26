@@ -1,0 +1,2 @@
+ACTION=="add", SUBSYSTEM=="net", NAME=="enp3s0", \
+  RUN+="/bin/sh -c 'echo ff > /sys/class/net/enp3s0/queues/rx-0/rps_cpus'"
