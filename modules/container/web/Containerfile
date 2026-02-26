@@ -1,5 +1,7 @@
-# Web Profile v0.5.0 - Network Scanning & OSINT
+# Web Profile v2.0.0 - Modern Reconnaissance Stack
 # Based on: offsec-toolbox:0.1.0
+# Methodology: Jason Haddix TBHM v4
+# Tools: nmap, rustscan, amass, naabu, httpx, dnsx, ffuf, webanalyze, gitleaks, cloud_enum
 FROM containers-storage:localhost/offsec-toolbox:0.1.0
 
 # Switch to root for installation
@@ -9,11 +11,11 @@ USER root
 COPY manifests/web-packages.txt /tmp/web-packages.txt
 RUN pacman -Sy --noconfirm --needed --overwrite='*' \
     $(grep -vE '^\s*#|^\s*$' /tmp/web-packages.txt) \
-    base-devel git && \
+    base-devel git go && \
     pacman -Scc --noconfirm && \
     rm -f /tmp/web-packages.txt
 
-# Install Python HTTP tools (requests only, httpx conflicts with Go httpx)
+# Install Python HTTP tools
 RUN pip install --break-system-packages --no-cache-dir \
     requests
 
@@ -26,29 +28,65 @@ RUN useradd -m -G wheel -s /bin/bash builduser && \
     sudo -u builduser makepkg --noconfirm -si && \
     rm -rf /tmp/yay
 
-# Install OSINT tools from AUR
-RUN sudo -u builduser yay -S --noconfirm --needed \
-    subfinder \
-    dnsx \
-    whatweb
+# Install modern recon tools from Go (one at a time for better error handling)
+RUN echo "Installing amass..." && \
+    go install -v github.com/owasp-amass/amass/v4/...@master && \
+    cp /root/go/bin/amass /usr/local/bin/ && \
+    chmod +x /usr/local/bin/amass
 
-# Install httpx from source (AUR package is Python library)
-RUN go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest && \
+RUN echo "Installing naabu..." && \
+    go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest && \
+    cp /root/go/bin/naabu /usr/local/bin/ && \
+    chmod +x /usr/local/bin/naabu
+
+RUN echo "Installing httpx..." && \
+    go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest && \
     cp /root/go/bin/httpx /usr/local/bin/ && \
     chmod +x /usr/local/bin/httpx
 
-# Remove build user and build dependencies (but keep Go for httpx)
+RUN echo "Installing dnsx..." && \
+    go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest && \
+    cp /root/go/bin/dnsx /usr/local/bin/ && \
+    chmod +x /usr/local/bin/dnsx
+
+RUN echo "Installing ffuf..." && \
+    go install -v github.com/ffuf/ffuf/v2@latest && \
+    cp /root/go/bin/ffuf /usr/local/bin/ && \
+    chmod +x /usr/local/bin/ffuf
+
+RUN echo "Installing webanalyze..." && \
+    go install -v github.com/rverton/webanalyze/cmd/webanalyze@latest && \
+    cp /root/go/bin/webanalyze /usr/local/bin/ && \
+    chmod +x /usr/local/bin/webanalyze && \
+    webanalyze -update
+
+RUN echo "Installing gitleaks..." && \
+    go install -v github.com/zricethezav/gitleaks/v8@latest && \
+    cp /root/go/bin/gitleaks /usr/local/bin/ && \
+    chmod +x /usr/local/bin/gitleaks
+
+# Install cloud_enum from GitHub
+RUN git clone https://github.com/initstring/cloud_enum /opt/cloud_enum && \
+    pip install --break-system-packages --no-cache-dir -r /opt/cloud_enum/requirements.txt && \
+    ln -s /opt/cloud_enum/cloud_enum.py /usr/local/bin/cloud_enum && \
+    chmod +x /usr/local/bin/cloud_enum
+
+# Remove build user and dependencies
 RUN userdel -r builduser && \
     pacman -Rns --noconfirm base-devel && \
     pacman -Scc --noconfirm
 
 # Copy recon pipeline script
-COPY scripts/recon/recon-pipeline.sh /usr/local/bin/recon-pipeline
+COPY scripts/recon/recon-pipeline-v2.sh /usr/local/bin/recon-pipeline
 RUN chmod +x /usr/local/bin/recon-pipeline
 
 # Switch back to operator
 USER operator
 WORKDIR /work
 
-# Default command
+# Set working directory permissions
+USER root
+RUN chown -R operator:operator /work
+USER operator
+
 CMD ["bash", "-l"]
