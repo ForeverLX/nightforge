@@ -1,6 +1,6 @@
 #!/bin/bash
-# Container Management Script - Enhanced UX
-# Location: modules/container/scripts/container.sh
+# Container Management Script - Enhanced
+# Uses host network for builds (speed), bridge network for runtime (security)
 
 set -euo pipefail
 
@@ -20,9 +20,8 @@ usage() {
 Usage: $(basename "$0") <command> <profile> [options]
 
 Commands:
-    build <profile>    Build a container profile
-    run <profile>      Run a container interactively
-    exec <profile>     Execute command in running container
+    build <profile>    Build container (uses host network for speed)
+    run <profile>      Run container (uses bridge network for security)
     list               List all built images
     clean              Remove old/dangling images
 
@@ -41,66 +40,21 @@ EOF
 }
 
 check_engagement_dir() {
-    local current_dir="$PWD"
-    
-    # Check if we're in an engagement directory
-    if [[ "$current_dir" =~ /engage/[^/]+$ ]]; then
-        return 0  # We're in an engagement dir
-    fi
-    
-    # Check if we have engagement structure
-    if [[ -d "c2" ]] || [[ -d "recon" ]] || [[ -d "exploit" ]]; then
-        return 0  # Looks like engagement dir
-    fi
-    
-    return 1  # Not an engagement dir
-}
-
-check_permissions() {
-    local dir="$1"
-    local perms=$(stat -c "%a" "$dir" 2>/dev/null || echo "000")
-    
-    if [[ "$perms" == "777" ]]; then
-        return 0
-    fi
-    
-    return 1
+    [[ "$PWD" =~ /engage/[^/]+$ ]] || [[ -d "c2" ]] || [[ -d "recon" ]] || [[ -d "exploit" ]]
 }
 
 warn_not_in_engagement() {
-    echo -e "${YELLOW}⚠️  Warning: You're not in an engagement directory${NC}"
-    echo -e "${BLUE}Current directory:${NC} $PWD"
+    echo -e "${YELLOW}⚠️  Warning: Not in an engagement directory${NC}"
+    echo -e "${BLUE}Current:${NC} $PWD"
+    echo -e "${YELLOW}Will mount:${NC} $PWD → /work"
     echo ""
-    echo -e "${YELLOW}The container will mount:${NC} $PWD → /work"
-    echo ""
-    echo -e "${BLUE}Recommendations:${NC}"
+    echo -e "${BLUE}Recommended:${NC}"
     echo "  1. cd ~/engage/<engagement-name>"
     echo "  2. chmod 777 ."
-    echo "  3. Run this command again"
     echo ""
-    read -p "Continue anyway? (y/N) " -n 1 -r
+    read -p "Continue? (y/N) " -n 1 -r
     echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 0
-    fi
-}
-
-warn_permissions() {
-    local dir="$1"
-    local perms=$(stat -c "%a" "$dir")
-    
-    echo -e "${YELLOW}⚠️  Warning: Directory permissions are $perms (not 777)${NC}"
-    echo -e "${BLUE}Directory:${NC} $dir"
-    echo ""
-    echo -e "${YELLOW}You may encounter permission errors in the container.${NC}"
-    echo ""
-    echo -e "${BLUE}Fix with:${NC} chmod 777 $dir"
-    echo ""
-    read -p "Continue anyway? (y/N) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 0
-    fi
+    [[ $REPLY =~ ^[Yy]$ ]] || exit 0
 }
 
 build() {
@@ -109,22 +63,24 @@ build() {
     local DATE_TAG="localhost/offsec-${PROFILE}:$(date +%Y%m%d)"
     local CONTAINERFILE="$REPO_ROOT/modules/container/${PROFILE}/Containerfile"
 
-    if [[ ! -f "$CONTAINERFILE" ]]; then
+    [[ -f "$CONTAINERFILE" ]] || {
         echo -e "${RED}[ERROR]${NC} Containerfile not found: $CONTAINERFILE"
         exit 1
-    fi
+    }
 
-    echo -e "${BLUE}[*]${NC} Building ${PROFILE} container (${IMAGE})..."
-    
+    echo -e "${BLUE}[*]${NC} Building ${PROFILE} (${IMAGE})..."
+    echo -e "${BLUE}[*]${NC} Using host network for speed..."
+
     if podman build \
+        --network=host \
         -f "$CONTAINERFILE" \
         -t "$IMAGE" \
         -t "$DATE_TAG" \
         "$REPO_ROOT"; then
-        echo -e "${GREEN}[*]${NC} Successfully built ${PROFILE} (${IMAGE})"
-        echo -e "${GREEN}[*]${NC} Date-tagged as: ${DATE_TAG}"
+        echo -e "${GREEN}[✓]${NC} Built: ${IMAGE}"
+        echo -e "${GREEN}[✓]${NC} Tagged: ${DATE_TAG}"
     else
-        echo -e "${RED}[ERROR]${NC} Build failed for ${PROFILE}"
+        echo -e "${RED}[ERROR]${NC} Build failed"
         exit 1
     fi
 }
@@ -133,26 +89,18 @@ run() {
     local PROFILE="$1"
     local IMAGE="localhost/offsec-${PROFILE}:0.1.0"
 
-    if ! podman image exists "$IMAGE"; then
+    podman image exists "$IMAGE" || {
         echo -e "${RED}[ERROR]${NC} Image not found: $IMAGE"
-        echo "Build it first: $0 build $PROFILE"
+        echo "Build it: $0 build $PROFILE"
         exit 1
-    fi
+    }
 
-    # Check if we're in an engagement directory
-    if ! check_engagement_dir; then
-        warn_not_in_engagement
-    fi
-    
-    # Check permissions
-    if ! check_permissions "$WORK_DIR"; then
-        warn_permissions "$WORK_DIR"
-    fi
-    
-    echo -e "${BLUE}[*]${NC} Running ${PROFILE} container..."
-    echo -e "${BLUE}[*]${NC} Mounting: $WORK_DIR → /work"
-    
-    # Run container
+    check_engagement_dir || warn_not_in_engagement
+
+    echo -e "${BLUE}[*]${NC} Running ${PROFILE}..."
+    echo -e "${BLUE}[*]${NC} Mount: $WORK_DIR → /work"
+    echo -e "${BLUE}[*]${NC} Network: bridge (isolated)"
+
     podman run -it --rm \
         -v "$WORK_DIR:/work:z" \
         -w /work \
@@ -164,41 +112,21 @@ run() {
 }
 
 list() {
-    echo -e "${BLUE}[*]${NC} Built profile images:"
-    podman images | grep -E "offsec-(toolbox|web|re|ad)" | sort -k1,1 -k2,2
+    echo -e "${BLUE}[*]${NC} Container images:"
+    podman images | grep -E "offsec-(toolbox|web|re|ad)" | sort
 }
 
 clean() {
-    echo -e "${YELLOW}[*]${NC} Cleaning up old images..."
-    
-    # Remove dangling images
+    echo -e "${YELLOW}[*]${NC} Cleaning..."
     podman image prune -f
-    
-    echo -e "${GREEN}[*]${NC} Cleanup complete"
+    echo -e "${GREEN}[✓]${NC} Done"
 }
 
 # Main
-COMMAND="${1:-}"
-shift || true
-
-case "$COMMAND" in
-    build)
-        PROFILE="${1:-}"
-        [[ -z "$PROFILE" ]] && usage
-        build "$PROFILE"
-        ;;
-    run)
-        PROFILE="${1:-}"
-        [[ -z "$PROFILE" ]] && usage
-        run "$PROFILE"
-        ;;
-    list)
-        list
-        ;;
-    clean)
-        clean
-        ;;
-    *)
-        usage
-        ;;
+case "${1:-}" in
+    build) build "${2:-}" ;;
+    run) run "${2:-}" ;;
+    list) list ;;
+    clean) clean ;;
+    *) usage ;;
 esac
