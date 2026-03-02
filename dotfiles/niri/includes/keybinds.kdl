@@ -1,0 +1,108 @@
+// Keybindings Configuration
+// offsec-workstation - Niri compositor
+// With focus-or-spawn integration
+
+binds {
+    // ========== HELP ==========
+    Mod+Shift+Slash { show-hotkey-overlay; }
+    
+    // ========== APPLICATIONS (with focus-or-spawn) ==========
+    Mod+Return { spawn "ghostty"; }  // Always spawn new terminal
+    
+    // DMS launcher
+    Mod+D { spawn "quickshell"; }
+    
+    // Focus-or-spawn for these apps
+    Mod+B { spawn "~/.config/niri/scripts/focus-or-spawn.sh" "--app-id" "brave-browser" "brave"; }
+    Mod+N { spawn "~/.config/niri/scripts/focus-or-spawn.sh" "--app-id" "obsidian" "obsidian"; }
+    Mod+F { spawn "~/.config/niri/scripts/focus-or-spawn.sh" "--app-id" "com.mitchellh.ghostty" "ghostty -e yazi"; }
+    
+    // ========== WINDOW MANAGEMENT ==========
+    Mod+Q { close-window; }
+    Mod+Space { toggle-window-floating; }
+    Mod+Shift+F { fullscreen-window; }
+    Mod+Shift+X { maximize-column; }
+    Mod+W { toggle-column-tabbed-display; }
+    
+    // ========== NAVIGATION (Vim keys) ==========
+    Mod+H { focus-column-left; }
+    Mod+J { focus-window-down; }
+    Mod+K { focus-window-up; }
+    Mod+L { focus-column-right; }
+    
+    // ========== WINDOW MOVEMENT ==========
+    Mod+Shift+H { move-column-left; }
+    Mod+Shift+L { move-column-right; }
+    Mod+Shift+J { move-window-down; }
+    Mod+Shift+K { move-window-up; }
+    
+    // ========== COLUMN MANAGEMENT ==========
+    Mod+BracketLeft { consume-or-expel-window-left; }
+    Mod+BracketRight { consume-or-expel-window-right; }
+    Mod+Comma { consume-window-into-column; }
+    Mod+Period { expel-window-from-column; }
+    
+    // ========== SPATIAL ==========
+    Mod+Home { focus-column-first; }
+    Mod+End { focus-column-last; }
+    Mod+Ctrl+Home { move-column-to-first; }
+    Mod+Ctrl+End { move-column-to-last; }
+    
+    // ========== WORKSPACES ==========
+    Mod+1 { focus-workspace "1"; }
+    Mod+2 { focus-workspace "2"; }
+    Mod+3 { focus-workspace "3"; }
+    Mod+4 { focus-workspace "4"; }
+    Mod+5 { focus-workspace "5"; }
+    
+    Mod+Shift+1 { move-column-to-workspace "1"; }
+    Mod+Shift+2 { move-column-to-workspace "2"; }
+    Mod+Shift+3 { move-column-to-workspace "3"; }
+    Mod+Shift+4 { move-column-to-workspace "4"; }
+    Mod+Shift+5 { move-column-to-workspace "5"; }
+    
+    Mod+Page_Down { focus-workspace-down; }
+    Mod+Page_Up { focus-workspace-up; }
+    Mod+Shift+Page_Down { move-column-to-workspace-down; }
+    Mod+Shift+Page_Up { move-column-to-workspace-up; }
+    
+    Mod+U { focus-workspace-down; }
+    Mod+I { focus-workspace-up; }
+    Mod+Ctrl+U { move-column-to-workspace-down; }
+    Mod+Ctrl+I { move-column-to-workspace-up; }
+    Mod+Shift+U { move-workspace-down; }
+    Mod+Shift+I { move-workspace-up; }
+    
+    // ========== RESIZING ==========
+    Mod+Ctrl+H { set-window-width "-10%"; }
+    Mod+Ctrl+L { set-window-width "+10%"; }
+    Mod+Ctrl+J { set-window-height "-10%"; }
+    Mod+Ctrl+K { set-window-height "+10%"; }
+    
+    Mod+R { switch-preset-column-width; }
+    Mod+Shift+R { expand-column-to-available-width; }
+    
+    // ========== OVERVIEW ==========
+    Mod+O { toggle-overview; }
+    Mod+Tab { toggle-overview; }
+    
+    // ========== SCREENSHOTS ==========
+    Print { screenshot; }
+    Shift+Print { screenshot-screen; }
+    Mod+Print { screenshot-window; }
+    
+    // ========== MEDIA KEYS ==========
+    XF86AudioRaiseVolume { spawn "pamixer" "--allow-boost" "--set-limit" "120" "--increase" "5"; }
+    XF86AudioLowerVolume { spawn "pamixer" "--allow-boost" "--set-limit" "120" "--decrease" "5"; }
+    XF86AudioMute { spawn "pamixer" "--toggle-mute"; }
+    XF86AudioMicMute { spawn "pamixer" "--default-source" "--toggle-mute"; }
+    XF86AudioNext { spawn "playerctl" "next"; }
+    XF86AudioPrev { spawn "playerctl" "previous"; }
+    XF86AudioPlay { spawn "playerctl" "play-pause"; }
+    XF86MonBrightnessUp { spawn "brightnessctl" "set" "5%+"; }
+    XF86MonBrightnessDown { spawn "brightnessctl" "set" "5%-"; }
+    
+    // ========== SYSTEM ==========
+    Mod+Escape { toggle-keyboard-shortcuts-inhibit; }
+    Mod+Shift+Q { quit skip-confirmation=true; }
+}

@@ -1,0 +1,68 @@
+// Window Rules
+// App-specific window management
+
+// ========== BROWSERS ==========
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"brave-browser$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+// ========== TERMINALS ==========
+// Ghostty
+window-rule {
+    match app-id=r#"^com\.mitchellh\.ghostty$"#
+    default-column-width { proportion 0.5; }
+}
+
+// ========== DEVELOPMENT TOOLS ==========
+// Obsidian
+window-rule {
+    match app-id=r#"obsidian$"#
+    open-on-workspace 4
+    default-column-width { proportion 0.66667; }
+}
+
+// ========== FLOATING DIALOGS ==========
+window-rule {
+    match title=r#"^Open File$"#
+    open-floating true
+}
+
+window-rule {
+    match title=r#"^Save File$"#
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"pavucontrol$"#
+    open-floating true
+}
+
+// ========== CONTAINER WINDOWS ==========
+// Note: Container windows may need runtime detection
+// We'll add these after testing actual app-ids from containers
+
+// Example for future container apps:
+// window-rule {
+//     match app-id=r#"bloodhound$"#
+//     open-on-workspace 5
+// }
+
+// ========== SECURITY - BLOCK FROM SCREEN CAPTURE ==========
+// Uncomment to block password managers from screenshots
+// window-rule {
+//     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+//     block-out-from "screen-capture"
+// }
+
+// ========== ROUNDED CORNERS (Optional) ==========
+// Uncomment to enable rounded corners for all windows
+// window-rule {
+//     geometry-corner-radius 8
+//     clip-to-geometry true
+// }

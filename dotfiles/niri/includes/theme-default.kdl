@@ -1,0 +1,85 @@
+// Default Theme
+// offsec-workstation dark theme (matches Sway colors)
+
+layout {
+    gaps 8
+    
+    center-focused-column "never"
+    
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+    
+    default-column-width { proportion 0.5; }
+    
+    // Focus ring (active window indicator)
+    focus-ring {
+        width 2
+        active-color "#2a2026"      // Focused window
+        inactive-color "#17171a"     // Unfocused window on same monitor
+    }
+    
+    // Border (always visible)
+    border {
+        off  // Using focus ring instead
+        
+        // Uncomment to use border instead of focus ring:
+        // width 2
+        // active-color "#2a2026"
+        // inactive-color "#17171a"
+        // urgent-color "#3a0f18"
+    }
+    
+    // Shadows (disabled for performance)
+    shadow {
+        // Uncomment to enable:
+        // on
+        // softness 30
+        // spread 5
+        // offset x=0 y=5
+        // color "#0007"
+    }
+}
+
+// Cursor theme
+cursor {
+    xcursor-theme "Adwaita"
+    xcursor-size 24
+}
+
+// Animation settings (minimal for performance)
+animations {
+    // Uncomment to disable all animations:
+    // off
+    
+    slowdown 1.0
+    
+    window-open {
+        duration-ms 150
+        curve "ease-out-cubic"
+    }
+    
+    window-close {
+        duration-ms 150
+        curve "ease-in-cubic"
+    }
+    
+    workspace-switch {
+        duration-ms 200
+        curve "ease-out-cubic"
+    }
+}
+
+// Request no client-side decorations
+prefer-no-csd
+
+// Screenshot settings
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+// Hotkey overlay
+hotkey-overlay {
+    // Skip the "Important Hotkeys" popup at startup
+    skip-at-startup
+}

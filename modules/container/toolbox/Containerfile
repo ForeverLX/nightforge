@@ -1,6 +1,7 @@
 # offsec-toolbox (minimal)
 # Purpose: Base container with core CLI tooling
 FROM archlinux:base
+RUN echo 'Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist
 
 # Keep pacman predictable + non-interactive inside builds
 RUN sed -i 's/^#Color/Color/' /etc/pacman.conf && \
