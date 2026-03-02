@@ -51,3 +51,5 @@ spawn-at-startup "wl-paste --watch cliphist store"
 // debug {
 //     render-drm-device "/dev/dri/card0"
 // }
+
+include "dms/cursor.kdl"
