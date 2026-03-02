@@ -1,0 +1,47 @@
+# Niri Module - Required Packages
+
+## Core
+niri
+xwayland-satellite
+swaync
+libnotify
+
+## Clipboard
+wl-clipboard
+cliphist
+
+## Wallpaper
+swaybg
+
+## Screen Capture  
+flameshot
+
+## Session Management
+swaylock
+swayidle
+
+## System Utilities
+brightnessctl
+playerctl
+pavucontrol
+
+## Dependencies
+polkit
+xdg-desktop-portal
+xdg-desktop-portal-gtk
+pipewire
+wireplumber
+
+## Fonts
+ttf-nerd-fonts-symbols-mono
+noto-fonts-emoji
+ttf-meslo-nerd
+
+# Optional packages (commented out - install manually if needed):
+# wlsunset
+# grim
+# slurp
+# wl-screenrec
+
+# AUR packages (install separately):
+# yay -S walker-bin quickshell-git quickshell-dms-git

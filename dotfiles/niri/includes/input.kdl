@@ -1,0 +1,33 @@
+// Input Configuration
+// Keyboard, mouse, touchpad, and focus settings
+
+input {
+    keyboard {
+        xkb {
+            layout "us"
+        }
+        
+        // Enable numlock on startup
+        numlock
+    }
+
+    touchpad {
+        tap
+        natural-scroll
+        // Disable touchpad when external mouse is connected
+        // disabled-on-external-mouse
+    }
+
+    mouse {
+        // Natural scroll disabled for mouse (keep normal)
+        // natural-scroll
+        accel-speed 0.0
+        accel-profile "flat"
+    }
+
+    // Uncomment to warp mouse to center of newly focused windows
+    // warp-mouse-to-focus
+
+    // Focus follows mouse (optional)
+    // focus-follows-mouse max-scroll-amount="0%"
+}
