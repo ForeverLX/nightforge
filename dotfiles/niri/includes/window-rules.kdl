@@ -1,6 +1,26 @@
 // Window Rules
 // App-specific window management
 
+// ========== GLOBAL APPEARANCE ==========
+// Rounded corners for all windows
+window-rule {
+    geometry-corner-radius 8
+    clip-to-geometry true
+}
+
+// ========== GLOBAL GLASS LOOK ==========
+// All windows: transparent when unfocused
+window-rule {
+    match is-focused=false
+    opacity 0.35
+}
+
+// All windows: fully opaque when focused
+window-rule {
+    match is-focused=true
+    opacity 1.0
+}
+
 // ========== BROWSERS ==========
 window-rule {
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
@@ -13,17 +33,26 @@ window-rule {
 }
 
 // ========== TERMINALS ==========
-// Ghostty
+// Unfocused terminals: glass look (transparent)
 window-rule {
     match app-id=r#"^com\.mitchellh\.ghostty$"#
-    default-column-width { proportion 0.5; }
+    match is-focused=false
+    opacity 0.35
+    // background-blur 8   // Uncomment when blur is available
+}
+
+// Focused terminals: fully opaque
+window-rule {
+    match app-id=r#"^com\.mitchellh\.ghostty$"#
+    match is-focused=true
+    opacity 1.0
 }
 
 // ========== DEVELOPMENT TOOLS ==========
 // Obsidian
 window-rule {
     match app-id=r#"obsidian$"#
-    open-on-workspace 4
+    open-on-workspace "4"
     default-column-width { proportion 0.66667; }
 }
 
@@ -58,11 +87,4 @@ window-rule {
 // window-rule {
 //     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
 //     block-out-from "screen-capture"
-// }
-
-// ========== ROUNDED CORNERS (Optional) ==========
-// Uncomment to enable rounded corners for all windows
-// window-rule {
-//     geometry-corner-radius 8
-//     clip-to-geometry true
 // }

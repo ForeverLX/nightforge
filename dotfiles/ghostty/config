@@ -1,0 +1,66 @@
+# Ghostty Dark Theme (OPSEC Low-Light)
+# offsec-workstation
+
+# Font
+font-family = "MesloLGS Nerd Font"
+font-size = 13
+
+# Background – almost black with purple hint
+background = #1a0f1f
+background-opacity = 0.35
+
+# Foreground – light gray for readability
+foreground = "#f8f8f2"
+
+# Cursor
+cursor-color = #ff79c6
+cursor-text = #1a1a2e
+
+# Selection
+selection-background = #8b0000
+selection-foreground = #f8f8f2
+
+# Black & Bright Black
+palette = 0=#21222c
+palette = 8=#6272a4
+
+# Red & Bright Red
+palette = 1=#ff5555
+palette = 9=#ff6e6e
+
+# Green & Bright Green
+palette = 2=#50fa7b
+palette = 10=#69ff94
+
+# Yellow & Bright Yellow
+palette = 3=#f1fa8c
+palette = 11=#ffffa5
+
+# Blue & Bright Blue
+palette = 4=#bd93f9
+palette = 12=#d6acff
+
+# Magenta & Bright Magenta
+palette = 5=#ff79c6
+palette = 13=#ff92df
+
+# Cyan & Bright Cyan
+palette = 6=#8be9fd
+palette = 14=#a4ffff
+
+# White & Bright White
+palette = 7=#f8f8f2
+palette = 15=#ffffff
+
+# Window
+window-padding-x = 4
+window-padding-y = 4
+window-decoration = false
+
+# Performance
+shell-integration = zsh
+shell-integration-features = no-cursor,no-title
+
+# Keybinds
+keybind = ctrl+shift+c=copy_to_clipboard
+keybind = ctrl+shift+v=paste_from_clipboard
