@@ -1,0 +1,14 @@
+{
+  "name": "Dark Red / Maroon",
+  "colors": {
+    "background": "#1a0f1f",
+    "foreground": "#f8f8f2",
+    "primary": "#8b0000",
+    "secondary": "#b22222",
+    "accent": "#ff79c6",
+    "surface": "#2a1a2a",
+    "error": "#ff5555",
+    "warning": "#f1fa8c",
+    "success": "#50fa7b"
+  }
+}
