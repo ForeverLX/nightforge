@@ -1,25 +1,61 @@
-# Keybind Contract (Operator Cheat Sheet)
+# Niri Keybindings Cheatsheet
+**offsec-workstation** - Quick reference guide
 
-This workstation uses a two-layer model:
-- **tmux** = session/workspace control
-- **neovim** = editing + project navigation
-- **shell** = fast entrypoints (aliases/functions)
+Generated automatically from `keybinds.kdl`
 
-## tmux (prefix = Ctrl+a)
-- `Ctrl+a |` : split pane (left/right)
-- `Ctrl+a -` : split pane (top/bottom)
-- `Ctrl+a h/j/k/l` : move between panes
-- `Ctrl+a H/J/K/L` : resize panes (repeatable)
-- `Ctrl+a [` : enter copy mode (vi)
-- Copy mode: `Space` select, `y` yank → system clipboard (wl-copy)
-- `Ctrl+a r` : reload tmux config
+---
 
-## Neovim (leader = Space)
-- `Space f f` : find files (fd)
-- `Space f g` : live grep (rg)
-- `Space f b` : buffers
+## Applications
 
-## Shell (zsh drop-in: offsec.zsh)
-- `v` : open Neovim
-- `y` : open yazi; on exit, shell cwd follows yazi
-- `ff` : fuzzy pick file w/ preview (rg → fzf → bat)
+| Key | Action |
+|-----|--------|
+Super+Return| ghostty |
+
+## Window Management
+
+| Key | Action |
+|-----|--------|
+| Super+Q | Close window |
+| Super+Space | Toggle floating |
+| Super+Shift+F | Fullscreen |
+| Super+Shift+X | Maximize column |
+| Super+W | Toggle tabbed mode |
+
+## Navigation
+
+| Key | Action |
+|-----|--------|
+| Super+H/J/K/L | Focus left/down/up/right |
+| Super+Shift+H/J/K/L | Move window |
+| Super+Ctrl+H/J/K/L | Resize window |
+
+## Workspaces
+
+| Key | Action |
+|-----|--------|
+| Super+1-5 | Switch to workspace |
+| Super+Shift+1-5 | Move window to workspace |
+| Super+U/I | Previous/Next workspace |
+| Super+O | Toggle overview |
+
+## Columns & Tiling
+
+| Key | Action |
+|-----|--------|
+| Super+[ | Merge window left |
+| Super+] | Merge window right |
+| Super+, | Pull window into column |
+| Super+. | Push window out of column |
+| Super+R | Cycle column width |
+
+## Media & System
+
+| Key | Action |
+|-----|--------|
+| Print | Screenshot |
+| Shift+Print | Screenshot screen |
+| F1-F12 | Volume, brightness controls |
+| Super+Shift+Q | Quit Niri |
+
+---
+*Last updated: Sun Mar  1 05:46:28 PM PST 2026*

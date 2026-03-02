@@ -1,0 +1,53 @@
+// Niri Configuration
+// offsec-workstation - Modular Setup
+// https://github.com/ForeverLX/offsec-workstation
+
+// ========== MODULAR CONFIGURATION ==========
+// Separated for maintainability and version control
+
+include "includes/input.kdl"
+include "includes/keybinds.kdl"
+include "includes/window-rules.kdl"
+include "includes/theme-default.kdl"
+
+// Local machine-specific overrides (gitignored)
+include "includes/local.kdl"
+
+// ========== ENVIRONMENT VARIABLES ==========
+environment {
+    // Force Wayland for compatible apps
+    MOZ_ENABLE_WAYLAND "1"
+    QT_QPA_PLATFORM "wayland"
+    SDL_VIDEODRIVER "wayland"
+    _JAVA_AWT_WM_NONREPARENTING "1"
+
+    // XDG
+    XDG_CURRENT_DESKTOP "niri"
+    XDG_SESSION_TYPE "wayland"
+
+    // Editor
+    EDITOR "nvim"
+    VISUAL "nvim"
+
+    // Force Nvidia
+    __GLX_VENDOR_LIBRARY_NAME "nvidia"
+    GBM_BACKEND "nvidia-drm"
+    __GL_GSYNC_ALLOWED "1"
+    __GL_VRR_ALLOWED "0"
+    WLR_DRM_NO_ATOMIC "1"
+}
+
+// ========== STARTUP PROGRAMS ==========
+spawn-at-startup "quickshell"   // DMS
+spawn-at-startup "swaync"
+spawn-at-startup "nm-applet"
+spawn-at-startup "wl-paste --watch cliphist store"
+
+// Wallpaper handled by DMS
+// spawn-at-startup "swaybg -i /home/ForeverLX/Personal/WallPapers/anime-beach.png -m fill"
+
+// ========== DEBUG MODE ==========
+// Uncomment for verbose logging
+// debug {
+//     render-drm-device "/dev/dri/card0"
+// }

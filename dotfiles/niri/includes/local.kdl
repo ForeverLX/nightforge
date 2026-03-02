@@ -1,0 +1,34 @@
+// Local Machine Configuration
+// This file is gitignored and won't be synced
+// Use for machine-specific settings
+
+// ========== OUTPUT CONFIGURATION ==========
+// Uncomment and adjust for your monitor(s)
+// Run `niri msg outputs` to see available outputs
+
+// Example: Built-in laptop display
+// output "eDP-1" {
+//     mode "1920x1080@60.000"
+//     scale 1.0
+//     position x=0 y=0
+// }
+
+// Example: External monitor
+// output "HDMI-A-1" {
+//     mode "2560x1440@144.000"
+//     scale 1.0
+//     position x=1920 y=0
+// }
+
+// ========== CUSTOM KEYBINDS ==========
+// Add machine-specific keybinds here
+// binds {
+//     Mod+Alt+X { spawn "custom-script"; }
+// }
+
+// ========== WORKSPACE OVERRIDES ==========
+// Machine-specific workspace settings
+// workspace {
+//     name "Special"
+//     output "HDMI-A-1"
+// }

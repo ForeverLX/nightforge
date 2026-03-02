@@ -1,0 +1,53 @@
+// Local Machine Configuration
+// This file is gitignored - machine-specific settings only
+// Copy from: dotfiles/niri/includes/local.kdl.example
+
+// ========== GPU CONFIGURATION ==========
+// Force specific GPU (Nvidia fix)
+debug {
+    render-drm-device "/dev/dri/card0"
+}
+
+// ========== OUTPUT CONFIGURATION ==========
+// Uncomment and configure for your monitors
+// Run `niri msg outputs` to see available outputs and modes
+
+// Example: 180Hz gaming monitor
+// output "DP-1" {
+//     mode "2560x1440@180.000"
+//     scale 1.0
+//     position x=0 y=0
+// }
+
+// Example: Secondary monitor
+// output "HDMI-A-1" {
+//     mode "1920x1080@60.000"
+//     scale 1.0
+//     position x=2560 y=0
+// }
+
+// Example: Laptop built-in display
+// output "eDP-1" {
+//     mode "1920x1080@60.000"
+//     scale 1.5
+//     position x=0 y=0
+// }
+
+// ========== WORKSPACE OVERRIDES ==========
+// Pin specific workspaces to monitors
+// workspace {
+//     name "Code"
+//     output "DP-1"
+// }
+
+// ========== CUSTOM KEYBINDS ==========
+// Machine-specific keybinds (e.g., for specific hardware)
+// binds {
+//     Mod+Alt+X { spawn "custom-machine-script"; }
+// }
+
+// ========== ENVIRONMENT OVERRIDES ==========
+// Machine-specific environment variables
+// environment {
+//     CUSTOM_VAR "value"
+// }
