@@ -1,0 +1,82 @@
+// ========== LOCAL MACHINE-SPECIFIC CONFIG ==========
+// This is a TEMPLATE file. Copy to 'local.kdl' and customize for your hardware.
+// 
+// To configure your monitors:
+//   1. Run `niri msg outputs` to identify your monitor names
+//   2. Update the output blocks below with your actual names
+//   3. Adjust positions based on your physical layout
+//   4. Set appropriate scale values for HiDPI/4K displays
+//
+// Common monitor names:
+//   - HDMI-A-1, HDMI-A-2  : HDMI connections
+//   - DP-1, DP-2, DP-3    : DisplayPort connections
+//   - eDP-1                : Laptop internal display
+
+// ====================================================
+// EXAMPLE: Dual Monitor Setup (4K TV + Gaming Monitor)
+// ====================================================
+// This example shows a 4K TV on the left (scaled) and a 1080p monitor on the right
+/*
+// LEFT MONITOR - 4K TV (e.g., LG TV)
+output "HDMI-A-1" {
+    mode "3840x2160@60"       // 4K resolution at 60Hz
+    scale 1.5                  // Scaled for comfortable viewing from distance
+    position x=0 y=0            // Leftmost display
+    transform "normal"
+}
+
+// RIGHT MONITOR - Gaming Monitor (e.g., ASUS VG259Q3A)
+output "DP-1" {
+    mode "1920x1080@180"      // 1080p at high refresh rate
+    scale 1.0                  // Native scaling
+    // IMPORTANT: When using scaled displays, position is based on LOGICAL size
+    // For a 4K TV with scale 1.5: logical width = 3840/1.5 = 2560
+    // So the right monitor starts at x=2560, not 3840
+    position x=2560 y=0         // Positioned adjacent to scaled TV
+    transform "normal"
+}
+*/
+
+// ====================================================
+// EXAMPLE: Single Monitor Setup
+// ====================================================
+/*
+output "YOUR-MONITOR-NAME" {
+    mode "1920x1080@60"       // Replace with your preferred resolution/refresh
+    scale 1.0
+    position x=0 y=0
+    transform "normal"
+}
+*/
+
+// ====================================================
+// EXAMPLE: Laptop with External Monitor
+// ====================================================
+/*
+// Laptop internal display (usually eDP-1)
+output "eDP-1" {
+    mode "1920x1080@60"
+    scale 1.0
+    position x=0 y=1080        // Below external monitor
+    transform "normal"
+}
+
+// External monitor above laptop
+output "DP-1" {
+    mode "2560x1440@144"
+    scale 1.0
+    position x=0 y=0
+    transform "normal"
+}
+*/
+
+// ====================================================
+// NOTES ON POSITION CALCULATION
+// ====================================================
+// When using mixed scaling (e.g., one 4K scaled, one 1080p native):
+// 1. The 4K TV with scale 1.5 has LOGICAL size 2560x1440
+// 2. The 1080p monitor has LOGICAL size 1920x1080
+// 3. To place them side by side, the right monitor starts at x = (left monitor's LOGICAL width)
+// 4. Example: position x=2560 y=0 (not x=3840!)
+//
+// Run `niri msg outputs` to see your current logical positions

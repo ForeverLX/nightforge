@@ -1,55 +1,65 @@
-// Niri Configuration
-// offsec-workstation - Modular Setup
-// https://github.com/ForeverLX/offsec-workstation
+// Niri Configuration - offsec-workstation
+// Hybrid: Custom keybinds + DMS features
 
-// ========== MODULAR CONFIGURATION ==========
-// Separated for maintainability and version control
+// ========== DMS CORE ==========
+include "dms/colors.kdl"
+include "dms/layout.kdl"
+include "dms/alttab.kdl"
+include "dms/cursor.kdl"
+include "dms/outputs.kdl"
 
+// ========== CUSTOM CONFIG ==========
 include "includes/input.kdl"
 include "includes/keybinds.kdl"
 include "includes/window-rules.kdl"
-include "includes/theme-default.kdl"
-
-// Local machine-specific overrides (gitignored)
 include "includes/local.kdl"
 
-// ========== ENVIRONMENT VARIABLES ==========
+// ========== ENVIRONMENT ==========
 environment {
-    // Force Wayland for compatible apps
     MOZ_ENABLE_WAYLAND "1"
     QT_QPA_PLATFORM "wayland"
     SDL_VIDEODRIVER "wayland"
-    _JAVA_AWT_WM_NONREPARENTING "1"
-
-    // XDG
     XDG_CURRENT_DESKTOP "niri"
     XDG_SESSION_TYPE "wayland"
-
-    // Editor
     EDITOR "nvim"
     VISUAL "nvim"
-
-    // Force Nvidia
     __GLX_VENDOR_LIBRARY_NAME "nvidia"
     GBM_BACKEND "nvidia-drm"
-    __GL_GSYNC_ALLOWED "1"
-    __GL_VRR_ALLOWED "0"
-    WLR_DRM_NO_ATOMIC "1"
 }
 
-// ========== STARTUP PROGRAMS ==========
-spawn-at-startup "quickshell"   // DMS
-spawn-at-startup "swaync"
+// ========== STARTUP ==========
+spawn-at-startup "quickshell"
 spawn-at-startup "nm-applet"
 spawn-at-startup "wl-paste --watch cliphist store"
+spawn-at-startup "dms"
 
-// Wallpaper handled by DMS
-// spawn-at-startup "swaybg -i /home/ForeverLX/Personal/WallPapers/anime-beach.png -m fill"
+// ========== DMS FEATURES ==========
+prefer-no-csd
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
-// ========== DEBUG MODE ==========
-// Uncomment for verbose logging
-// debug {
-//     render-drm-device "/dev/dri/card0"
-// }
+animations {
+    workspace-switch {
+        spring damping-ratio=0.80 stiffness=523 epsilon=0.0001
+    }
+    window-open {
+        duration-ms 150
+        curve "ease-out-expo"
+    }
+    window-close {
+        duration-ms 150
+        curve "ease-out-quad"
+    }
+}
 
-include "dms/cursor.kdl"
+recent-windows {
+    binds {
+        Alt+Tab         { next-window scope="output"; }
+        Alt+Shift+Tab   { previous-window scope="output"; }
+    }
+}
+
+debug {
+    honor-xdg-activation-with-invalid-serial
+}
+
+include "dms/windowrules.kdl"
