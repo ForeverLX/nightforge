@@ -28,9 +28,7 @@ environment {
 }
 
 // ========== STARTUP ==========
-spawn-at-startup "quickshell"
 spawn-at-startup "nm-applet"
-spawn-at-startup "wl-paste --watch cliphist store"
 spawn-at-startup "dms"
 
 // ========== DMS FEATURES ==========

@@ -1,0 +1,6 @@
+brave-bin 1:1.87.192-1
+dms-shell 1.4.3-1
+dms-shell-niri 1.4.3-1
+ngrok 3.37.1-1
+openvpn-update-systemd-resolved 2.0.0-3
+yay 12.5.7-1
