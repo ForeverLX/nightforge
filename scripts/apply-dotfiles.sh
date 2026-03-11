@@ -1,55 +1,56 @@
-#!/usr/bin/env bash
+#!/bin/bash
+# apply-dotfiles.sh - Deploy dotfiles using GNU Stow
+# Usage: ./apply-dotfiles.sh [--dry-run]
+
 set -euo pipefail
 
-if [[ ${EUID:-0} -eq 0 ]]; then
-  echo "[!] Do not run this script with sudo/root. Run as your user."
-  exit 1
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+DOTFILES_DIR="$REPO_ROOT/dotfiles"
+
+# Colors
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+# Check if stow is installed
+if ! command -v stow &>/dev/null; then
+    echo -e "${RED}Error: stow is not installed.${NC}"
+    echo "Install with: sudo pacman -S stow"
+    exit 1
 fi
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-BACKUP_DIR="${HOME}/.offsec-workstation-backups/$(date +%Y%m%d_%H%M%S)"
-
-mkdir -p "$BACKUP_DIR" "$HOME/.config"
-
-backup_if_exists() {
-  local path="$1"
-  if [[ -e "$path" && ! -L "$path" ]]; then
-    mkdir -p "$BACKUP_DIR/$(dirname "$path")"
-    cp -a "$path" "$BACKUP_DIR/$path"
-  fi
-}
-
-# zsh drop-in must exist
-if [[ ! -f "$ROOT/dotfiles/zsh/offsec.zsh" ]]; then
-  echo "[!] Missing: $ROOT/dotfiles/zsh/offsec.zsh"
-  echo "[!] Create it first (repo-owned zsh drop-in)."
-  exit 1
+# Check for --dry-run flag
+DRY_RUN=""
+if [[ "${1:-}" == "--dry-run" ]]; then
+    DRY_RUN="-n"
+    echo -e "${YELLOW}Dry run mode - no changes will be made${NC}"
 fi
 
-link_force() {
-  local src="$1" dst="$2"
-  backup_if_exists "$dst"
-  mkdir -p "$(dirname "$dst")"
-  ln -sfn "$src" "$dst"
-}
+# Change to dotfiles directory
+cd "$DOTFILES_DIR" || exit 1
 
-echo "[*] Backups: $BACKUP_DIR"
+# List of packages to stow
+PACKAGES=(
+    "niri"
+    "ghostty"
+    "tmux"
+    "swappy"
+    "operator-terminal"
+    "zsh"
+    "dms"
+)
 
-# tmux
-link_force "$ROOT/dotfiles/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf"
+echo -e "${GREEN}Deploying dotfiles with stow...${NC}"
 
-# nvim
-link_force "$ROOT/dotfiles/nvim/init.lua" "$HOME/.config/nvim/init.lua"
+for pkg in "${PACKAGES[@]}"; do
+    if [[ -d "$pkg" ]]; then
+        echo -e "  → ${YELLOW}$pkg${NC}"
+        stow -v $DRY_RUN -t "$HOME" "$pkg"
+    else
+        echo -e "  ${RED}⚠ Skipping $pkg (directory not found)${NC}"
+    fi
+done
 
-# zsh: source-only drop-in (do NOT overwrite ~/.zshrc)
-mkdir -p "$HOME/.config/offsec-workstation"
-link_force "$ROOT/dotfiles/zsh/offsec.zsh" "$HOME/.config/offsec-workstation/offsec.zsh"
-
-if ! rg -q 'offsec-workstation/offsec\.zsh' "$HOME/.zshrc"; then
-  echo '[*] Adding source line to ~/.zshrc'
-  printf '\n# offsec-workstation\nsource "$HOME/.config/offsec-workstation/offsec.zsh"\n' >> "$HOME/.zshrc"
-else
-  echo "[*] ~/.zshrc already sources offsec-workstation"
-fi
-
-echo "[*] Done. Restart your shell or run: source ~/.zshrc"
+echo -e "${GREEN}✓ Dotfiles deployed successfully${NC}"

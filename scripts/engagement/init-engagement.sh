@@ -45,3 +45,34 @@ ln -sf "$ENGAGE_DIR" "$ENGAGE_ROOT/current"
 
 echo "✓ Engagement initialized: $ENGAGE_DIR"
 echo "→ cd $ENGAGE_DIR"
+
+# Create Obsidian note for engagement
+OBSIDIAN_VAULT="$HOME/Documents/Obsidian"  # Adjust path
+
+if [[ -d "$OBSIDIAN_VAULT" ]]; then
+    OBSIDIAN_NOTE="$OBSIDIAN_VAULT/Engagements/${CLIENT}.md"
+    
+    cat > "$OBSIDIAN_NOTE" << NOTE
+# ${CLIENT} Engagement
+
+**Target:** ${TARGET}
+**Date:** $(date +%Y-%m-%d)
+**Status:** Active
+
+## Reconnaissance
+
+## Exploitation
+
+## Findings
+
+## MITRE ATT&CK
+- 
+
+## Screenshots
+![[screenshot_placeholder.png]]
+
+## Notes
+NOTE
+    
+    echo "Created Obsidian note: Engagements/${CLIENT}.md"
+fi
