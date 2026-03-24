@@ -29,3 +29,5 @@ artifacts/
 docs/audits/
 docs/benchmarks/
 
+.claude/
+.claude/
