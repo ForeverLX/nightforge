@@ -44,6 +44,10 @@ draft instead. The goal is understanding, not output.
 - nftables — `/etc/nftables.conf` (never edit directly)
 
 ## Commit Convention
-Format: `type: subject` — `feat` `fix` `docs` `refactor`
+Format: `type(scope): subject` — types: `feat` `fix` `docs` `chore` `refactor` `security` `infra`
 Imperative mood, no period, under 72 characters.
 Never auto-push — stage and show diff, Darrius approves before any push.
+
+## .claude/ Note
+`.claude/` is gitignored in this repo. Backup lives at `~/Documents/azrael-ops/claude/` on Gitea.
+Never commit `.claude/` contents here.
