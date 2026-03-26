@@ -52,6 +52,11 @@ This inventory tracks the core offensive‑security and workflow tooling current
 |------|:------:|-------------|
 | Ghidra | ⚠️ | /home/paradigm/Tools/bin/ghidra (launcher present) |
 
+## AI / LLM
+| Tool | Status | Path / Notes |
+|------|:------:|-------------|
+| llmfit | ✅ | /usr/local/bin/llmfit — built from source at ~/Repos/3rd-party/llmfit, GTX 1650 4GB VRAM detected |
+
 ## Notes
 - This list focuses on offensive security and workflow tooling only.
 - Update as tools are installed, removed, or moved into PATH.
