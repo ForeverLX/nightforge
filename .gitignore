@@ -29,5 +29,21 @@ artifacts/
 docs/audits/
 docs/benchmarks/
 
-.claude/
-.claude/
+# Claude Code -- track hooks, commands, settings, CLAUDE.md only
+# Ignore runtime data, credentials, session state
+.claude/agents/
+.claude/backups/
+.claude/cache/
+.claude/debug/
+.claude/downloads/
+.claude/file-history/
+.claude/paste-cache/
+.claude/plugins/
+.claude/projects/
+.claude/session-env/
+.claude/sessions/
+.claude/shell-snapshots/
+.claude/skills/
+.claude/.credentials.json
+.claude/history.jsonl
+.claude/mcp-needs-auth-cache.json
