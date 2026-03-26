@@ -26,6 +26,9 @@ alias ff='rg --files | fzf --preview "bat --style=numbers --color=always {}"'
 # zoxide (smart directory jumping)
 eval "$(zoxide init zsh)"
 
+# uv (Python package manager and tool runner)
+eval "$(uv generate-shell-completion zsh)"
+
 # Standard line-editing keybindings (Home/End, Ctrl-Left/Right)
 # Works in most terminals; harmless if a sequence isn't emitted by a terminal.
 bindkey -e
