@@ -48,3 +48,7 @@ docs/benchmarks/
 .claude/history.jsonl
 .claude/mcp-needs-auth-cache.json
 dotfiles/niri/.config/niri/includes/theme-active.kdl
+dotfiles/nvim/.config/nvim/lazy-lock.json
+dotfiles/nvim/.config/nvim/colors/
+dotfiles/nvim/.config/nvim/plugin/
+dotfiles/nvim/.config/nvim/lua/matugen-theme.lua
