@@ -39,7 +39,6 @@ PACKAGES=(
     "swappy"
     "operator-terminal"
     "zsh"
-    "dms"
     "starship"
     # "nvim" -- pending dedicated session
 )

@@ -79,7 +79,7 @@ precmd() {
 c() {
     case "$1" in
         ad|re|web|toolbox)
-            ~/Github/offsec-workstation/modules/container/scripts/container.sh run "$1"
+            ~/Github/nightforge/modules/container/scripts/container.sh run "$1"
             ;;
         *)
             echo "Usage: c [ad|re|web|toolbox]"
