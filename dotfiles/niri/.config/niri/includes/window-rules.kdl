@@ -1,0 +1,102 @@
+// Window Rules - Zen & Functional
+// Per-application opacity for aesthetic + usability
+
+// ========== GLOBAL APPEARANCE ==========
+window-rule {
+    geometry-corner-radius 8
+    clip-to-geometry true
+}
+
+// ========== BROWSERS ==========
+window-rule {
+    match app-id=r#"brave-browser$"#
+    opacity 1.0
+}
+
+window-rule {
+    match app-id=r#"firefox$"#
+    opacity 1.0
+}
+
+window-rule {
+    match app-id=r#"brave-browser$"# title="^Picture-in-Picture$"
+    open-floating true
+    opacity 0.95
+}
+
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+    opacity 0.95
+}
+
+// ========== NOTES & WRITING (Obsidian) ==========
+window-rule {
+    match app-id=r#"obsidian$"#
+    open-on-workspace "4"
+    default-column-width { proportion 0.66667; }
+    opacity 0.90
+}
+
+// ========== DEVELOPMENT TOOLS ==========
+window-rule {
+    match app-id=r#"code$"#
+    opacity 1.0
+}
+
+// ========== SYSTEM TOOLS ==========
+window-rule {
+    match app-id=r#"yazi$"#
+    opacity 0.85
+}
+
+window-rule {
+    match app-id=r#"thunar$"#
+    opacity 0.85
+}
+
+window-rule {
+    match app-id=r#"btop$"#
+    opacity 0.80
+}
+
+// ========== FLOATING DIALOGS ==========
+window-rule {
+    match title=r#"^Open File$"#
+    open-floating true
+    opacity 0.95
+}
+
+window-rule {
+    match title=r#"^Save File$"#
+    open-floating true
+    opacity 0.95
+}
+
+window-rule {
+    match app-id=r#"pavucontrol$"#
+    open-floating true
+    opacity 0.92
+}
+
+// ========== SECURITY - BLOCK FROM SCREEN CAPTURE ==========
+window-rule {
+    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+    block-out-from "screen-capture"
+    opacity 1.0
+}
+
+// ========== TERMINALS (Ghostty) ==========
+// Unfocused: Very transparent
+window-rule {
+    match app-id=r#"^com\.mitchellh\.ghostty$"#
+    match is-focused=false
+    opacity 0.55
+}
+
+// Focused: Moderately transparent (readable but shows wallpaper)
+window-rule {
+    match app-id=r#"^com\.mitchellh\.ghostty$"#
+    match is-focused=true
+    opacity 0.55
+}
