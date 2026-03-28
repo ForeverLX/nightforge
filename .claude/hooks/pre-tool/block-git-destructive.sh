@@ -14,6 +14,12 @@ fi
 if ! echo "$COMMAND" | grep -qE '^git push'; then
   exit 0
 fi
+# Block bare git push (no remote/branch specified) -- forces explicit branch naming
+if echo "$COMMAND" | grep -qE '^git push$'; then
+  echo "BLOCKED: Bare 'git push' is not permitted. Specify explicit remote and branch: git push origin review/branch-name" >&2
+  exit 2
+fi
+
 
 # Block force push regardless of branch -- no destination is unconditionally trusted
 if echo "$COMMAND" | grep -qE 'git push.+--force'; then
