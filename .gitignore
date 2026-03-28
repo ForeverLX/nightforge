@@ -47,3 +47,4 @@ docs/benchmarks/
 .claude/.credentials.json
 .claude/history.jsonl
 .claude/mcp-needs-auth-cache.json
+dotfiles/niri/.config/niri/includes/theme-active.kdl
