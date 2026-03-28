@@ -52,3 +52,5 @@ dotfiles/nvim/.config/nvim/lazy-lock.json
 dotfiles/nvim/.config/nvim/colors/
 dotfiles/nvim/.config/nvim/plugin/
 dotfiles/nvim/.config/nvim/lua/matugen-theme.lua
+dotfiles/ghostty/.config/ghostty/themes/dankcolors
+dotfiles/niri/.config/niri/dms/colors.kdl
