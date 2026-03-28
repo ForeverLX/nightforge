@@ -40,6 +40,8 @@ PACKAGES=(
     "operator-terminal"
     "zsh"
     "dms"
+    "starship"
+    # "nvim" -- pending dedicated session
 )
 
 echo -e "${GREEN}Deploying dotfiles with stow...${NC}"

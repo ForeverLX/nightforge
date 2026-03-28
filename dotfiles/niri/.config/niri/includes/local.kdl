@@ -1,0 +1,19 @@
+// ========== LOCAL MACHINE-SPECIFIC CONFIG ==========
+// This file is gitignored - contains hardware-specific settings
+// Last updated: 2026-03-02
+
+// ViewSonic VA2247 - LEFT MONITOR
+output "HDMI-A-1" {
+    mode "1920x1080@100"      
+    scale 1.0            
+    position x=0 y=0
+    transform "normal"
+}
+
+// ASUS VG259Q3A - RIGHT MONITOR
+output "DP-1" {
+    mode "1920x1080@180"
+    scale 1.0
+    position x=1920 y=0
+    transform "normal"
+}
