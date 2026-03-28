@@ -2,39 +2,20 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- Bootstrap packer
-local ensure_packer = function()
-  local fn = vim.fn
-  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-  if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-    vim.cmd [[packadd packer.nvim]]
-    return true
-  end
-  return false
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git", "clone", "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", lazypath
+  })
 end
+vim.opt.rtp:prepend(lazypath)
 
-local packer_bootstrap = ensure_packer()
-
--- Plugin setup
-require('packer').startup(function(use)
-    use 'wbthomason/packer.nvim'
-    use 'neovim/nvim-lspconfig'
-    use {
-        'nvim-telescope/telescope.nvim',
-        requires = { {'nvim-lua/plenary.nvim'} }
-    }
-    use 'folke/which-key.nvim'
-    use {
-        'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate'
-    }
-    use { "catppuccin/nvim", as = "catppuccin" }
-
-    if packer_bootstrap then
-        require('packer').sync()
-    end
-end)
+require("lazy").setup("plugins", {
+  rocks = { enabled = false },
+})
 
 -- Basic settings
 vim.opt.number = true
@@ -49,29 +30,10 @@ vim.opt.termguicolors = true
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 
--- Modern LSP Setup (Silencing the 0.11 Framework Warning)
--- We avoid the 'lspconfig' variable entirely to prevent indexing the deprecated meta-table.
-vim.api.nvim_create_autocmd('User', {
-    pattern = 'PackerComplete',
-    callback = function()
-        local lsp = require('lspconfig')
-        lsp.pyright.setup{}
-        lsp.bashls.setup{}
-        lsp.lua_ls.setup{
-            settings = { Lua = { diagnostics = { globals = {'vim'} } } }
-        }
-    end
+vim.lsp.config('pyright', {})
+vim.lsp.config('bashls', {})
+vim.lsp.config('lua_ls', {
+  settings = { Lua = { diagnostics = { globals = { 'vim' } } } }
 })
 
--- Immediate setup for subsequent launches
-local ok, lsp = pcall(require, 'lspconfig')
-if ok then
-    lsp.pyright.setup{}
-    lsp.bashls.setup{}
-    lsp.lua_ls.setup{
-        settings = { Lua = { diagnostics = { globals = {'vim'} } } }
-    }
-end
-
--- Theme
-vim.cmd.colorscheme "catppuccin-mocha"
+vim.lsp.enable({ 'pyright', 'bashls', 'lua_ls' })
