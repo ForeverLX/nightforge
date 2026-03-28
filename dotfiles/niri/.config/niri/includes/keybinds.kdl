@@ -1,0 +1,134 @@
+// Keybindings - offsec-workstation
+// DT-inspired smart navigation + NuPhy-friendly
+
+binds {
+    // ========== HELP ==========
+    Mod+Shift+Slash { show-hotkey-overlay; }
+    Mod+Shift+C { spawn "niri" "msg" "action" "load-config-file"; }
+    Mod+Slash { spawn "sh" "-c" "~/.config/niri/scripts/keybind-cheatsheet.sh"; }
+    
+    // ========== APPLICATIONS ==========
+    Mod+Return { spawn "ghostty"; }
+    Mod+T { spawn "sh" "-c" "~/.config/operator-terminal/tmux-session-picker.sh"; }
+    
+    // Launcher (DMS standard)
+    Mod+D { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
+    
+    // Focus-or-spawn
+    Mod+B { spawn "sh" "-c" "~/.config/niri/scripts/focus-or-spawn.sh --app-id brave-browser brave"; }
+    Mod+N { spawn "dms" "ipc" "call" "notepad" "toggle"; }
+    Mod+F { spawn "ghostty" "-e" "yazi"; }
+    
+    // DMS Features
+    Mod+V { spawn "dms" "ipc" "call" "clipboard" "toggle"; }
+    Mod+M { spawn "dms" "ipc" "call" "processlist" "focusOrToggle"; }
+    Mod+Comma { spawn "dms" "ipc" "call" "settings" "focusOrToggle"; }
+    Mod+Shift+N { spawn "dms" "ipc" "call" "notifications" "toggle"; }
+    
+    // ========== WINDOW MANAGEMENT ==========
+    Mod+Q { close-window; }
+    Mod+Space repeat=false hotkey-overlay-title="Toggle overview" { toggle-overview; }
+    Mod+Shift+Space { toggle-window-floating; }
+    Mod+Shift+F { fullscreen-window; }
+    Mod+Shift+X { maximize-column; }
+    Mod+W { toggle-column-tabbed-display; }
+    Mod+G { toggle-window-floating; }
+    Mod+C { center-column; } 
+    Mod+Alt+C hotkey-overlay-title="Center Window" { center-window; } 
+    
+    // ========== SMART NAVIGATION (DT-Inspired) ==========
+    // Horizontal: Navigate columns
+    Mod+H { focus-column-left; }
+    Mod+L { focus-column-right; }
+    
+    // Vertical: Smart navigation (focus window OR switch workspace)
+    Mod+J { focus-window-or-workspace-down; }
+    Mod+K { focus-window-or-workspace-up; }
+    
+    // Workspace cycling (when no H/L workspace switching)
+    Mod+U { focus-workspace-down; }
+    Mod+I { focus-workspace-up; }
+    
+    // ========== SMART WINDOW MOVEMENT (DT-Inspired) ==========
+    // Move within workspace
+    Mod+Shift+H { move-column-left; }
+    Mod+Shift+L { move-column-right; }
+    
+    // Smart vertical movement (move window OR to workspace)
+    Mod+Shift+J { move-window-down-or-to-workspace-down; }
+    Mod+Shift+K { move-window-up-or-to-workspace-up; }
+    
+    // ========== MULTI-MONITOR (Simplified - Option A) ==========
+    // Move to monitor when at edge
+    Mod+Shift+Left { move-column-to-monitor-left; }
+    Mod+Shift+Right { move-column-to-monitor-right; }
+    
+    // Focus monitor
+    Mod+Alt+Left { focus-monitor-left; }
+    Mod+Alt+Right { focus-monitor-right; }
+    
+    // ========== COLUMN MANAGEMENT ==========
+    Mod+BracketLeft { consume-or-expel-window-left; }
+    Mod+BracketRight { consume-or-expel-window-right; }
+    Mod+Period { expel-window-from-column; }
+    
+    // ========== OVERVIEW ==========
+    Mod+Tab { toggle-overview; }
+    
+    // ========== WORKSPACES ==========
+    Mod+1 { focus-workspace "1"; }
+    Mod+2 { focus-workspace "2"; }
+    Mod+3 { focus-workspace "3"; }
+    Mod+4 { focus-workspace "4"; }
+    Mod+5 { focus-workspace "5"; }
+    
+    Mod+Shift+1 { move-column-to-workspace "1"; }
+    Mod+Shift+2 { move-column-to-workspace "2"; }
+    Mod+Shift+3 { move-column-to-workspace "3"; }
+    Mod+Shift+4 { move-column-to-workspace "4"; }
+    Mod+Shift+5 { move-column-to-workspace "5"; }
+    
+    // ========== RESIZING ==========
+    Mod+Ctrl+H { set-window-width "-10%"; }
+    Mod+Ctrl+L { set-window-width "+10%"; }
+    Mod+Ctrl+J { set-window-height "-10%"; }
+    Mod+Ctrl+K { set-window-height "+10%"; }
+    
+    Mod+R { switch-preset-column-width; }
+    
+    // ========== SCREENSHOTS (NuPhy-Friendly) ==========
+    Mod+S { spawn "sh" "-c" "~/.config/niri/scripts/screenshot.sh area-pip"; }
+    Mod+Shift+S { spawn "sh" "-c" "~/.config/niri/scripts/screenshot.sh area-clipboard"; }
+    Mod+Ctrl+S { spawn "sh" "-c" "~/.config/niri/scripts/screenshot.sh area-edit"; }
+    Mod+Alt+S { spawn "sh" "-c" "~/.config/niri/scripts/screenshot.sh screen"; }
+    Mod+Alt+Shift+S { spawn "sh" "-c" "~/.config/niri/scripts/screenshot.sh screen-clipboard"; }
+    Mod+Alt+W { screenshot-window; }
+    
+    // Rename last screenshot
+    Mod+Shift+R { spawn "sh" "-c" "~/.config/niri/scripts/rename-last-screenshot.sh"; }
+    
+    // ========== OBSIDIAN INTEGRATION ==========
+    // Daily note
+    Mod+Shift+D { spawn "obsidian" "obsidian://daily"; }
+    
+    // Search vault (changed from Mod+Shift+F to avoid conflict)
+    Mod+Shift+O { spawn "obsidian" "obsidian://search"; }
+    
+    // Open vault
+    Mod+O { spawn "obsidian" "obsidian://open?vault=CRTO-Journey-Vault"; }
+
+
+    // ======== TMUX ========
+    // Tmux layout chooser (interactive)
+    Mod+Shift+T { spawn "sh" "-c" "~/.config/operator-terminal/tmux-session-picker.sh || ~/Github/offsec-workstation/scripts/tmux-session.sh"; }
+    
+    // ========== MEDIA KEYS ==========
+    XF86AudioRaiseVolume { spawn "dms" "ipc" "call" "audio" "increment" "3"; }
+    XF86AudioLowerVolume { spawn "dms" "ipc" "call" "audio" "decrement" "3"; }
+    XF86AudioMute { spawn "dms" "ipc" "call" "audio" "mute"; }
+    XF86AudioMicMute { spawn "dms" "ipc" "call" "audio" "micmute"; }
+    
+    // ========== SYSTEM ==========
+    Mod+Escape { toggle-keyboard-shortcuts-inhibit; }
+    Mod+Shift+E { quit; }
+}
