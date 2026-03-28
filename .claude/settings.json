@@ -47,7 +47,6 @@
         { "type": "command", "command": "~/.claude/hooks/pre-tool/block-credential-access.sh" },
         { "type": "command", "command": "~/.claude/hooks/pre-tool/block-git-destructive.sh" },
         { "type": "command", "command": "~/.claude/hooks/pre-tool/block-destructive.sh" }
-          }
         ]
       }
     ]
