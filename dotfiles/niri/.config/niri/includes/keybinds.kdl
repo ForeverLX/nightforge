@@ -9,7 +9,7 @@ binds {
     
     // ========== APPLICATIONS ==========
     Mod+Return { spawn "ghostty"; }
-    Mod+T { spawn "sh" "-c" "~/.config/operator-terminal/tmux-session-picker.sh"; }
+    Mod+T { spawn "ghostty" "-e" "~/Github/nightforge/scripts/tmux-session.sh"; }
     
     // Launcher (DMS standard)
     Mod+D { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
