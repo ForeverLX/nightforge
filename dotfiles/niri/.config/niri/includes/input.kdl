@@ -28,5 +28,5 @@ input {
     warp-mouse-to-focus
 
     // Focus follows mouse
-    // focus-follows-mouse max-scroll-amount="0%"
+    focus-follows-mouse max-scroll-amount="0%"
 }
