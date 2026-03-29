@@ -6,9 +6,7 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-LAYOUT_DIR="$REPO_ROOT/dotfiles/tmux/layouts"
+LAYOUT_DIR="$HOME/.config/tmux/layouts"
 
 # Colors for output
 RED='\033[0;31m'
@@ -41,7 +39,7 @@ launch_layout() {
     # Check if tmux config is accessible
     if [[ ! -f "$HOME/.config/tmux/tmux.conf" ]]; then
         echo -e "${YELLOW}Warning: tmux config not found at ~/.config/tmux/tmux.conf${NC}"
-        echo "Create symlink: ln -s $REPO_ROOT/dotfiles/tmux/tmux.conf ~/.config/tmux/tmux.conf"
+        echo "Create symlink: ln -s ~/Github/nightforge/dotfiles/tmux/.config/tmux/tmux.conf ~/.config/tmux/tmux.conf"
     fi
     
     # Check if tmux is running
