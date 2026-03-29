@@ -1,7 +1,8 @@
-// Window Rules - Zen & Functional
-// Per-application opacity for aesthetic + usability
+// Window Rules
+// Per-application geometry, opacity, and placement
 
 // ========== GLOBAL APPEARANCE ==========
+// Note: dms/layout.kdl sets corner-radius 12 and will override this value
 window-rule {
     geometry-corner-radius 8
     clip-to-geometry true
@@ -10,12 +11,8 @@ window-rule {
 // ========== BROWSERS ==========
 window-rule {
     match app-id=r#"brave-browser$"#
-    opacity 1.0
-}
-
-window-rule {
-    match app-id=r#"firefox$"#
-    opacity 1.0
+    opacity 0.92
+    default-column-width { proportion 0.66667; }
 }
 
 window-rule {
@@ -25,23 +22,41 @@ window-rule {
 }
 
 window-rule {
+    match app-id=r#"firefox$"#
+    opacity 1.0
+}
+
+window-rule {
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
     open-floating true
     opacity 0.95
 }
 
-// ========== NOTES & WRITING (Obsidian) ==========
+// ========== TERMINALS (Ghostty) ==========
 window-rule {
-    match app-id=r#"obsidian$"#
-    open-on-workspace "4"
-    default-column-width { proportion 0.66667; }
-    opacity 0.90
+    match app-id=r#"^com\.mitchellh\.ghostty$"#
+    opacity 0.65
+    default-column-width { proportion 0.5; }
 }
 
-// ========== DEVELOPMENT TOOLS ==========
 window-rule {
-    match app-id=r#"code$"#
-    opacity 1.0
+    match app-id=r#"^com\.mitchellh\.ghostty$"# title=r#"^tmux-picker$"#
+    open-fullscreen true
+    opacity 0.65
+}
+
+// ========== NOTES (Obsidian) ==========
+window-rule {
+    match app-id=r#"obsidian$"#
+    opacity 0.90
+    default-column-width { proportion 0.5; }
+}
+
+// ========== CLAUDE DESKTOP ==========
+window-rule {
+    match app-id=r#"^electron$"# title=r#"^Claude$"#
+    opacity 0.65
+    default-column-width { proportion 0.45; }
 }
 
 // ========== SYSTEM TOOLS ==========
@@ -60,43 +75,15 @@ window-rule {
     opacity 0.80
 }
 
-// ========== FLOATING DIALOGS ==========
-window-rule {
-    match title=r#"^Open File$"#
-    open-floating true
-    opacity 0.95
-}
-
-window-rule {
-    match title=r#"^Save File$"#
-    open-floating true
-    opacity 0.95
-}
-
 window-rule {
     match app-id=r#"pavucontrol$"#
     open-floating true
     opacity 0.92
 }
 
-// ========== SECURITY - BLOCK FROM SCREEN CAPTURE ==========
+// ========== SECURITY ==========
 window-rule {
     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
     block-out-from "screen-capture"
     opacity 1.0
-}
-
-// ========== TERMINALS (Ghostty) ==========
-// Unfocused: Very transparent
-window-rule {
-    match app-id=r#"^com\.mitchellh\.ghostty$"#
-    match is-focused=false
-    opacity 0.55
-}
-
-// Focused: Moderately transparent (readable but shows wallpaper)
-window-rule {
-    match app-id=r#"^com\.mitchellh\.ghostty$"#
-    match is-focused=true
-    opacity 0.55
 }
