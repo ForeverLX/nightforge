@@ -1,0 +1,16 @@
+// Niri Configuration - offsec-workstation
+// Main config - imports modular includes
+
+include "includes/input.kdl"
+include "includes/keybinds.kdl"
+include "includes/window-rules.kdl"
+include "includes/theme-active.kdl"
+include "includes/local.kdl"
+
+include "dms/alttab.kdl"
+include "dms/colors.kdl"
+include "dms/cursor.kdl"
+include "dms/layout.kdl"
+include "dms/outputs.kdl"
+include "dms/windowrules.kdl"
+include "dms/wpblur.kdl"
