@@ -96,3 +96,16 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias ~='cd ~'
 alias -- -='cd -'
+
+# ========== VENV TOOL ACTIVATION ==========
+# Usage: use <venv-name> — adds venv bin to PATH without full activation
+# Available: impacket, pwn
+use() {
+    local venv="$HOME/Tools/venvs/$1"
+    if [[ -d "$venv" ]]; then
+        export PATH="$venv/bin:$PATH"
+        echo "activated $1"
+    else
+        echo "no venv: $1 (available: $(ls ~/Tools/venvs/))"
+    fi
+}
