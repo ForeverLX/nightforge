@@ -9,7 +9,7 @@ binds {
     
     // ========== APPLICATIONS ==========
     Mod+Return { spawn "ghostty"; }
-    Mod+T { spawn "ghostty" "--title=tmux-picker" "-e" "/home/ForeverLX/Github/nightforge/scripts/tmux-session.sh"; }
+    Mod+T hotkey-overlay-title="Tmux Layout Picker" { spawn "sh" "-c" "~/.config/niri/scripts/tmux-picker.sh"; }
 
     // Launcher (DMS standard)
     Mod+D { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
@@ -119,8 +119,6 @@ binds {
 
 
     // ======== TMUX ========
-    // Tmux layout chooser (interactive)
-    Mod+Shift+T { spawn "sh" "-c" "~/.config/operator-terminal/tmux-session-picker.sh || ~/Github/nightforge/scripts/tmux-session.sh"; }
     
     // ========== SYSTEM ==========
     Mod+Escape { toggle-keyboard-shortcuts-inhibit; }
