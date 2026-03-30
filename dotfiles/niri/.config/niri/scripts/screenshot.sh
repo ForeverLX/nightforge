@@ -1,42 +1,104 @@
 #!/bin/bash
-# Multi-mode screenshot system with filename prompt
+# screenshot.sh — Multi-mode screenshot system
+# Modes: area-pip, area-clipboard, area-edit, screen, screen-clipboard
+# Dependencies: grim, slurp, satty, wl-copy, fuzzel, notify-send
+
+set -euo pipefail
 
 MODE="${1:-area-pip}"
 SAVE_DIR="$HOME/Pictures/Screenshots"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
-# Prompt for custom filename (optional)
-if command -v zenity &>/dev/null && [[ "$MODE" != *"clipboard"* ]]; then
-    CUSTOM_NAME=$(zenity --entry \
-        --title="Screenshot Filename" \
-        --text="Enter filename (or leave blank for timestamp):" \
-        --entry-text="screenshot_${TIMESTAMP}")
-    
-    if [[ -n "$CUSTOM_NAME" ]]; then
-        FILENAME="$CUSTOM_NAME"
-    else
-        FILENAME="screenshot_${TIMESTAMP}"
-    fi
+mkdir -p "$SAVE_DIR"
+
+# Build filename prefix — tmux context if inside tmux, else timestamp
+if [[ -n "${TMUX:-}" ]]; then
+    TMUX_CONTEXT=$(tmux display -p '#S-#I' 2>/dev/null || echo "tmux")
+    DEFAULT_NAME="${TMUX_CONTEXT}_${TIMESTAMP}"
 else
-    FILENAME="screenshot_${TIMESTAMP}"
+    DEFAULT_NAME="screenshot_${TIMESTAMP}"
 fi
 
-TEMP_FILE="/tmp/${FILENAME}.png"
-FINAL_FILE="$SAVE_DIR/${FILENAME}.png"
-
-mkdir -p "$SAVE_DIR"
+# Fuzzel filename prompt for save modes
+prompt_filename() {
+    local result
+    result=$(echo "$DEFAULT_NAME" | fuzzel --dmenu \
+        --prompt="filename: " \
+        --lines=0 \
+        --width=40) || true
+    echo "${result:-$DEFAULT_NAME}"
+}
 
 case "$MODE" in
     area-pip)
-        grim -g "$(slurp)" "$TEMP_FILE"
-        if [[ -f "$TEMP_FILE" ]]; then
-            swappy -f "$TEMP_FILE" -o "$FINAL_FILE"
-            if [[ -f "$FINAL_FILE" ]]; then
-                notify-send "Screenshot Saved" "$FILENAME.png"
-            fi
-            rm -f "$TEMP_FILE"
-        fi
+        FILENAME=$(prompt_filename)
+        OUTPUT="$SAVE_DIR/${FILENAME}.png"
+        grim -g "$(slurp)" - | satty \
+            --filename - \
+            --output-filename "$OUTPUT" \
+            --copy-command wl-copy \
+            --initial-tool arrow \
+            --actions-on-enter "save-to-file,save-to-clipboard,exit" \
+            --actions-on-escape exit \
+            --early-exit \
+            --floating-hack \
+            --no-window-decoration
+        [[ -f "$OUTPUT" ]] && notify-send "Screenshot Saved" "${FILENAME}.png"
         ;;
-    
-    # ... rest of modes unchanged
+
+    area-clipboard)
+        grim -g "$(slurp)" - | satty \
+            --filename - \
+            --copy-command wl-copy \
+            --initial-tool arrow \
+            --actions-on-enter "save-to-clipboard,exit" \
+            --actions-on-escape exit \
+            --early-exit \
+            --floating-hack \
+            --no-window-decoration
+        notify-send "Screenshot Copied" "Area copied to clipboard"
+        ;;
+
+    area-edit)
+        FILENAME=$(prompt_filename)
+        OUTPUT="$SAVE_DIR/${FILENAME}.png"
+        grim -g "$(slurp)" - | satty \
+            --filename - \
+            --output-filename "$OUTPUT" \
+            --copy-command wl-copy \
+            --initial-tool brush \
+            --actions-on-enter "save-to-file,save-to-clipboard,exit" \
+            --actions-on-escape exit \
+            --early-exit \
+            --floating-hack \
+            --no-window-decoration
+        [[ -f "$OUTPUT" ]] && notify-send "Screenshot Saved" "${FILENAME}.png"
+        ;;
+
+    screen)
+        FILENAME=$(prompt_filename)
+        OUTPUT="$SAVE_DIR/${FILENAME}.png"
+        grim - | satty \
+            --filename - \
+            --output-filename "$OUTPUT" \
+            --copy-command wl-copy \
+            --initial-tool arrow \
+            --actions-on-enter "save-to-file,save-to-clipboard,exit" \
+            --actions-on-escape exit \
+            --early-exit \
+            --floating-hack \
+            --no-window-decoration
+        [[ -f "$OUTPUT" ]] && notify-send "Screenshot Saved" "${FILENAME}.png"
+        ;;
+
+    screen-clipboard)
+        grim - | wl-copy
+        notify-send "Screenshot Copied" "Full screen copied to clipboard"
+        ;;
+
+    *)
+        echo "Unknown mode: $MODE" >&2
+        echo "Usage: $0 [area-pip|area-clipboard|area-edit|screen|screen-clipboard]" >&2
+        exit 1
+        ;;
 esac
