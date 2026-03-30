@@ -122,12 +122,6 @@ binds {
     // Tmux layout chooser (interactive)
     Mod+Shift+T { spawn "sh" "-c" "~/.config/operator-terminal/tmux-session-picker.sh || ~/Github/nightforge/scripts/tmux-session.sh"; }
     
-    // ========== MEDIA KEYS ==========
-    XF86AudioRaiseVolume { spawn "dms" "ipc" "call" "audio" "increment" "3"; }
-    XF86AudioLowerVolume { spawn "dms" "ipc" "call" "audio" "decrement" "3"; }
-    XF86AudioMute { spawn "dms" "ipc" "call" "audio" "mute"; }
-    XF86AudioMicMute { spawn "dms" "ipc" "call" "audio" "micmute"; }
-    
     // ========== SYSTEM ==========
     Mod+Escape { toggle-keyboard-shortcuts-inhibit; }
     Mod+Shift+E { quit; }

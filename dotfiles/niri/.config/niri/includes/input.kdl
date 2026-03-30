@@ -9,6 +9,8 @@ input {
         
         // Enable numlock on startup
         numlock
+        repeat-delay 250
+        repeat-rate 40
     }
 
     touchpad {
