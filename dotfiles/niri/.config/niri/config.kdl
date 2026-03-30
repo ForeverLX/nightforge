@@ -1,5 +1,6 @@
 // Niri Configuration - offsec-workstation
 // Main config - imports modular includes
+spawn-at-startup "dms" "run" "-d"
 
 include "includes/input.kdl"
 include "includes/keybinds.kdl"
