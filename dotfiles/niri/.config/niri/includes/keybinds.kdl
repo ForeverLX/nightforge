@@ -115,12 +115,12 @@ binds {
     Mod+Shift+O { spawn "obsidian" "obsidian://search"; }
     
     // Open vault
-    Mod+O { spawn "obsidian" "obsidian://open?vault=CRTO-Journey-Vault"; }
+    Mod+O { spawn "obsidian" "obsidian://open?vault=azrael-vault"; }
 
 
     // ======== TMUX ========
     // Tmux layout chooser (interactive)
-    Mod+Shift+T { spawn "sh" "-c" "~/.config/operator-terminal/tmux-session-picker.sh || ~/Github/offsec-workstation/scripts/tmux-session.sh"; }
+    Mod+Shift+T { spawn "sh" "-c" "~/.config/operator-terminal/tmux-session-picker.sh || ~/Github/nightforge/scripts/tmux-session.sh"; }
     
     // ========== MEDIA KEYS ==========
     XF86AudioRaiseVolume { spawn "dms" "ipc" "call" "audio" "increment" "3"; }
