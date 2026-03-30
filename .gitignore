@@ -55,3 +55,4 @@ dotfiles/nvim/.config/nvim/lua/matugen-theme.lua
 dotfiles/ghostty/.config/ghostty/themes/dankcolors
 dotfiles/niri/.config/niri/dms/colors.kdl
 dotfiles/nvim/.config/nvim/lua/plugins/dankcolors.lua
+.config/
