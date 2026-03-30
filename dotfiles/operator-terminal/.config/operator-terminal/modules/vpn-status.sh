@@ -2,11 +2,11 @@
 # VPN / mesh status — WireGuard wg0 detection
 
 # Check if wg0 interface exists and is UP (no sudo required)
-if ip link show wg0 2>/dev/null | grep -q "state UP"; then
+if ip -4 addr show wg0 2>/dev/null | grep -q "inet"; then
     WG_IP=$(ip -4 addr show wg0 2>/dev/null | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
     echo -e "\033[0;32m[✓] Mesh:\033[0m wg0 UP ($WG_IP)"
 elif ip link show wg0 &>/dev/null; then
-    echo -e "\033[0;33m[~] Mesh:\033[0m wg0 exists but not UP"
+    echo -e "\033[0;33m[~] Mesh:\033[0m wg0 exists, no IP"
 else
     echo -e "\033[0;31m[✗] Mesh:\033[0m wg0 not found — run wgup"
 fi

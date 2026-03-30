@@ -1,6 +1,6 @@
 #!/bin/bash
-# Red Team Operator Terminal Framework
-# offsec-workstation
+# Azrael Security Operator Terminal
+
 
 # Prevent multiple loads
 [[ -n "$OPERATOR_TERMINAL_LOADED" ]] && return
@@ -11,11 +11,7 @@ export OPERATOR_TERMINAL_LOADED=1
 
 # cmatrix splash — brief animation on terminal open
 if command -v cmatrix &>/dev/null && [[ -t 1 ]]; then
-    TERM=xterm-256color cmatrix -b -C red &
-    CMATRIX_PID=$!
-    sleep 3
-    kill "$CMATRIX_PID" 2>/dev/null
-    wait "$CMATRIX_PID" 2>/dev/null
+    TERM=xterm-256color timeout 3 cmatrix -b -C red 2>/dev/null || true
     clear
 fi
 
