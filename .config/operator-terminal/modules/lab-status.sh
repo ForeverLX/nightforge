@@ -1,0 +1,1 @@
+../../../dotfiles/operator-terminal/.config/operator-terminal/modules/lab-status.sh

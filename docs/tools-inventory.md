@@ -104,3 +104,22 @@ Complete tooling snapshot for NightForge operator workstation. All tools are eit
 | Tool | Status | Notes |
 |------|:------:|-------|
 | wireshark-qt | ❌ | GUI frontend for packet analysis; install if GUI workflow needed (CLI tools already present) |
+
+## ~/Repos/3rd-party/ Inventory
+Last audited: 2026-03-29 (S040)
+
+| Repo | Purpose | Status | Notes |
+|---|---|---|---|
+| caido | Caido web proxy API scripts, prompts, workflow examples | Keep — reference | Extract when web assessment work starts |
+| ccsm | Claude Code session manager TUI (tmux-aware) | Active | Installed and documented |
+| DT-Wallpapers | DistroTube wallpaper collection (327 nature/landscape images) | Keep | matugen-compatible |
+| gef | GDB Enhanced Features — exploit dev and RE | Active — RE track | Multi-arch, Python3 API, preferred over pwndbg |
+| gstack | YC/Garry Tan Claude Code workflow patterns | Reference — read-only | /investigate and /review extracted S029 |
+| llmfit | LLM hardware fit scoring tool | Active | Installed at /usr/local/bin/llmfit, GTX 1650 4GB detected |
+| maxhu08-dotfiles | Stow-managed dotfiles reference (tmux, zsh, nvim configs) | Reference | Compare before removing |
+| maxhu08-wallpapers | Anime wallpaper collection | Keep | |
+| Mythic | Mythic C2 framework upstream source | Reference | v3.4.0.45, tracking upstream master — reference for Tairn deployment updates |
+| obsidian-skills | kepano/obsidian-skills agent skills for vault work | Active | Source clone, installed at azrael-vault/.claude/skills/ |
+| recon-ng | Web-based OSINT reconnaissance framework | Active | Red team / threat intel E-shape depth |
+| Rubeus | C# Kerberos interaction and abuse toolset (harmj0y) | Active — CRTA | Kerberoasting, AS-REP roasting, ticket operations |
+| RustHound-CE | BloodHound Community Edition collector in Rust | Active — CRTA | AD enumeration, cross-platform |

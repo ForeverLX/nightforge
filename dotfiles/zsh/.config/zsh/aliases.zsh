@@ -8,13 +8,6 @@ alias lta='eza --tree -a --level=2 --icons'
 alias cat='bat --paging=never'
 alias catp='bat'
 
-alias grep='rg'
-alias grepi='rg -i'
-
-alias find='fd'
-
-alias du='ncdu'
-
 alias top='htop'
 
 # ========== SAFETY ALIASES ==========
@@ -61,6 +54,30 @@ alias gc='git commit'
 alias gp='git push'
 alias gl='git log --oneline --graph'
 
+# ========== WIREGUARD ==========
+alias wgup='sudo resolvconf -u && sudo wg-quick up wg0'
+alias wgdown='sudo wg-quick down wg0'
+alias wgstat='sudo wg show'
+alias mesh='sudo wg show && echo "---" && ping -c 1 -W 1 10.0.0.1 && ping -c 1 -W 1 10.0.0.4 && ping -c 1 -W 1 10.0.0.5'
+
+# ========== NFTABLES ==========
+alias nftstat='sudo nft list ruleset'
+alias nftreload='sudo nft -f /etc/nftables.conf'
+
+# ========== AUR (paru) ==========
+alias aur='paru -S'
+alias aurupdate='paru -Sua'
+alias aurinfo='paru -Si'
+alias aurupgrade='paru'
+
+# ========== VAULT AND OPS NAVIGATION ==========
+alias vault='cd ~/Documents/azrael-vault'
+alias ops='cd ~/Documents/azrael-ops'
+alias research='cd ~/Github/security-research'
+
+# ========== STOW ==========
+alias stow='stow --dir ~/Github/nightforge/dotfiles --target ~'
+
 # Tmux shortcuts
 alias ts='~/Github/nightforge/scripts/tmux-session.sh'
 alias ta='tmux attach -t'
@@ -71,7 +88,7 @@ alias tn='tmux new-session -s'
 alias new-engagement='~/Github/nightforge/scripts/engagement/init-engagement.sh'
 
 # System update
-alias update='sudo reflector --latest 10 --protocol https --sort rate --save /etc/pacman.d/mirrorlist && sudo pacman -Syu'
+alias update='sudo reflector --latest 10 --protocol https --sort rate --save /etc/pacman.d/mirrorlist && sudo pacman -Syu && paru -Sua'
 
 # ========== NAVIGATION SHORTCUTS ==========
 alias ..='cd ..'
