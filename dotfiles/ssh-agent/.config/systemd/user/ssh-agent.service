@@ -1,0 +1,14 @@
+[Unit]
+Description=SSH key agent
+Documentation=man:ssh-agent(1)
+ConditionEnvironment=!SSH_AGENT_PID
+
+[Service]
+Type=simple
+Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
+ExecStart=/usr/bin/ssh-agent -D -a %t/ssh-agent.socket
+PassEnvironment=SSH_AGENT_PID
+SuccessExitStatus=2
+
+[Install]
+WantedBy=default.target

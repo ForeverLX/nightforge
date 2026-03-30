@@ -9,8 +9,18 @@ export OPERATOR_TERMINAL_LOADED=1
 # Performance: disable if SSH session
 [[ -n "$SSH_CLIENT" ]] && return
 
+# cmatrix splash — brief animation on terminal open
+if command -v cmatrix &>/dev/null && [[ -t 1 ]]; then
+    TERM=xterm-256color cmatrix -b -C red &
+    CMATRIX_PID=$!
+    sleep 3
+    kill "$CMATRIX_PID" 2>/dev/null
+    wait "$CMATRIX_PID" 2>/dev/null
+    clear
+fi
+
 # Random banner choice
-BANNERS=("RED TEAM OPERATOR" "ADVERSARIAL THREAT HUNTER")
+BANNERS=("AZRAEL SECURITY" "BELOW THE ABSTRACTION")
 BANNER="${BANNERS[$((RANDOM % 2))]}"
 
 # Banner (always show)
