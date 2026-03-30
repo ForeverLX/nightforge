@@ -5,7 +5,7 @@ spawn-at-startup "dms" "run" "-d"
 include "includes/input.kdl"
 include "includes/keybinds.kdl"
 include "includes/window-rules.kdl"
-include "includes/theme-active.kdl"
+include "includes/compositor.kdl"
 include "includes/local.kdl"
 
 include "dms/alttab.kdl"
