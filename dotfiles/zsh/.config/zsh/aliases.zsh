@@ -24,6 +24,9 @@ alias loot='cd ~/engage/current/loot'
 alias recon='cd ~/engage/current/recon'
 alias notes='cd ~/engage/current/notes'
 
+# Personal Tools
+alias aw='~/Github/azrael-workflow/azrael-workflow'
+
 # Container management
 alias ctb='~/Github/nightforge/modules/container/scripts/container.sh'
 alias cad='ctb run ad'
