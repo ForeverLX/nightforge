@@ -29,7 +29,6 @@ binds {
     Mod+Q { close-window; }
     Mod+Space repeat=false hotkey-overlay-title="Toggle overview" { toggle-overview; }
     Mod+Shift+Space { toggle-window-floating; }
-    Mod+Shift+F { fullscreen-window; }
     Mod+Shift+X { maximize-column; }
     Mod+W { toggle-column-tabbed-display; }
     Mod+G { toggle-window-floating; }
@@ -120,6 +119,10 @@ binds {
 
     // ======== TMUX ========
     
+    // ========== FOCUS MODE ==========
+    Mod+Shift+F { spawn "focus-mode" "start"; }
+    Mod+Ctrl+Shift+F { spawn "focus-mode" "stop"; }
+
     // ========== SYSTEM ==========
     Mod+Escape { toggle-keyboard-shortcuts-inhibit; }
     Mod+Shift+E { quit; }
