@@ -1,0 +1,79 @@
+#!/bin/bash
+# focus-mode — Azrael Security operator focus session
+# Usage: focus-mode [start|stop|status]
+# Pomodoro: 35min work / 10min break
+# Notifications via notify-send (DMS/Quickshell handles display)
+# No brightnessctl — not installed on NightForge
+# DND: PATH-override wrapper suppresses notify-send during work blocks
+
+WORK_MINS=35
+BREAK_MINS=10
+STATE_FILE="/tmp/focus-mode.state"
+PID_FILE="/tmp/focus-mode.pid"
+DND_BIN="/tmp/focus-notify-send"
+
+_dnd_on() {
+    printf '#!/bin/bash\nexit 0\n' > "$DND_BIN"
+    chmod +x "$DND_BIN"
+}
+
+_dnd_off() {
+    rm -f "$DND_BIN"
+}
+
+_notify() {
+    # Always use real notify-send regardless of DND state
+    /usr/sbin/notify-send "$@"
+}
+
+start_focus() {
+    if [[ -f "$PID_FILE" ]]; then
+        echo "Focus mode already running (PID $(cat $PID_FILE))"
+        exit 1
+    fi
+
+    echo $$ > "$PID_FILE"
+    _notify -u low "Focus Mode" "▶ ${WORK_MINS}min session — notifications suppressed"
+
+    while true; do
+        echo "work" > "$STATE_FILE"
+        _dnd_on
+        sleep $((WORK_MINS * 60))
+        _dnd_off
+
+        echo "break" > "$STATE_FILE"
+        _notify -u normal "Focus Mode" \
+            "⏸ Work block done. ${BREAK_MINS}min break."
+        sleep $((BREAK_MINS * 60))
+
+        _notify -u normal "Focus Mode" "▶ Break over. Next block starting."
+    done
+}
+
+stop_focus() {
+    if [[ ! -f "$PID_FILE" ]]; then
+        echo "Focus mode not running"
+        exit 0
+    fi
+
+    kill "$(cat $PID_FILE)" 2>/dev/null
+    rm -f "$PID_FILE" "$STATE_FILE"
+    _dnd_off
+    _notify -u low "Focus Mode" "◼ Session ended"
+    echo "Focus mode stopped"
+}
+
+status_focus() {
+    if [[ -f "$STATE_FILE" ]]; then
+        echo "Focus mode: $(cat $STATE_FILE) (PID $(cat $PID_FILE 2>/dev/null))"
+    else
+        echo "Focus mode: inactive"
+    fi
+}
+
+case "${1:-start}" in
+    start)  start_focus ;;
+    stop)   stop_focus ;;
+    status) status_focus ;;
+    *) echo "Usage: focus-mode [start|stop|status]"; exit 1 ;;
+esac

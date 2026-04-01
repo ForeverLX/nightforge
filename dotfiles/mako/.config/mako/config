@@ -1,0 +1,23 @@
+# ~/.config/mako/config
+# Mako notification daemon configuration
+# Wayland-native, minimal notification server
+
+# Output and positioning
+anchor=top-right
+margin=10,10
+
+# Styling
+background-color=#0f0f12dd
+text-color=#e6e6e6ff
+border-size=2
+border-radius=8
+border-color=#8B6FEFff
+
+# Font
+font=MesloLGS NF 12
+
+# Timeout (seconds - multiply by 1000 for milliseconds)
+default-timeout=5
+
+# Grouped notifications
+group-by=summary

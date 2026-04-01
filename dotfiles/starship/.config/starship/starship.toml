@@ -15,6 +15,7 @@ $git_status\
 $docker_context\
 $python\
 $golang\
+$custom.tmux\
 [](fg:#1d2230)\
 \n$character"""
 
@@ -82,3 +83,9 @@ format = "[ took $duration](bold yellow)"
 disabled = false
 style = "bold red"
 format = "[$status ]($style)"
+
+[custom.tmux]
+command = "tmux display-message -p '#S:#W' 2>/dev/null"
+when = "test -n \"$TMUX\""
+format = "[ 󰉋 $output]($style) "
+style = "bg:#1d2230 fg:#8B6FEF"
