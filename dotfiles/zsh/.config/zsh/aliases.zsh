@@ -24,9 +24,6 @@ alias loot='cd ~/engage/current/loot'
 alias recon='cd ~/engage/current/recon'
 alias notes='cd ~/engage/current/notes'
 
-# Personal Tools
-alias aw='~/Github/azrael-workflow/azrael-workflow'
-
 # Container management
 alias ctb='~/Github/nightforge/modules/container/scripts/container.sh'
 alias cad='ctb run ad'
@@ -102,7 +99,7 @@ alias -- -='cd -'
 
 # ========== VENV TOOL ACTIVATION ==========
 # Usage: use <venv-name> — adds venv bin to PATH without full activation
-# Available: impacket, pwn
+# # Available: impacket, pwn, yt-dlp, huggingface-tools
 use() {
     local venv="$HOME/Tools/venvs/$1"
     if [[ -d "$venv" ]]; then
