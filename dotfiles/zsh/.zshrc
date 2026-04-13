@@ -53,15 +53,11 @@ bindkey -M vicmd 'j' history-substring-search-down
 bindkey '^R' history-incremental-search-backward
 bindkey '^ ' autosuggest-accept
 
-# ========== ENVIRONMENT ==========
-export EDITOR='nvim'
-export VISUAL='nvim'
-export PAGER='less'
-export LESS='-R'
-export PATH="$HOME/.local/bin:$PATH"
-export DOCKER_HOST=unix:///run/user/1002/podman/podman.sock
-export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
-export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+ # ========== ENVIRONMENT ==========
+ export PAGER='less'
+ export LESS='-R'
+ export PATH="$HOME/.local/bin:$PATH"
+ export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 
 # ========== OFFSEC ==========
 export OFFSEC_ENGAGE_ROOT="$HOME/engage"
