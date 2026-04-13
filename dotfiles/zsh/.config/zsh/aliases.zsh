@@ -1,4 +1,4 @@
-# ========== MODERN COMMAND REPLACEMENTS ==========
+# === MODERN COMMAND REPLACEMENTS ===
 alias ls='eza --icons --group-directories-first'
 alias ll='eza -l --icons --group-directories-first'
 alias la='eza -la --icons --group-directories-first'
@@ -10,7 +10,7 @@ alias catp='bat'
 
 alias top='htop'
 
-# ========== SAFETY ALIASES ==========
+# === SAFETY ALIASES ===
 # Choose one: interactive rm or trash
 alias rm='rm -i'                     # interactive deletion
 # alias rm='trash-put'                # uncomment if you install trash-cli
@@ -18,7 +18,7 @@ alias rm='rm -i'                     # interactive deletion
 alias cp='cp -i'
 alias mv='mv -i'
 
-# ========== OFFENSIVE SECURITY & ENGAGEMENT ==========
+# === OFFENSIVE SECURITY & ENGAGEMENT ===
 alias engage='cd ~/engage/current'
 alias loot='cd ~/engage/current/loot'
 alias recon='cd ~/engage/current/recon'
@@ -54,28 +54,28 @@ alias gc='git commit'
 alias gp='git push'
 alias gl='git log --oneline --graph'
 
-# ========== WIREGUARD ==========
+# === WIREGUARD ===
 alias wgup='sudo resolvconf -u && sudo wg-quick up wg0'
 alias wgdown='sudo wg-quick down wg0'
 alias wgstat='sudo wg show'
 alias mesh='sudo wg show && echo "---" && ping -c 1 -W 1 10.0.0.1 && ping -c 1 -W 1 10.0.0.4 && ping -c 1 -W 1 10.0.0.5'
 
-# ========== NFTABLES ==========
+# === NFTABLES ===
 alias nftstat='sudo nft list ruleset'
 alias nftreload='sudo nft -f /etc/nftables.conf'
 
-# ========== AUR (paru) ==========
+# === AUR (paru) ===
 alias aur='paru -S'
 alias aurupdate='paru -Sua'
 alias aurinfo='paru -Si'
 alias aurupgrade='paru'
 
-# ========== VAULT AND OPS NAVIGATION ==========
+# === VAULT AND OPS NAVIGATION ===
 alias vault='cd ~/Documents/azrael-vault'
 alias ops='cd ~/Documents/azrael-ops'
 alias research='cd ~/Github/security-research'
 
-# ========== STOW ==========
+# === STOW ===
 alias stow='stow --dir ~/Github/nightforge/dotfiles --target ~'
 
 # Tmux shortcuts
@@ -90,16 +90,21 @@ alias new-engagement='~/Github/nightforge/scripts/engagement/init-engagement.sh'
 # System update
 alias update='sudo reflector --latest 10 --protocol https --sort rate --save /etc/pacman.d/mirrorlist && sudo pacman -Syu && paru -Sua'
 
-# ========== NAVIGATION SHORTCUTS ==========
+# === NAVIGATION SHORTCUTS ===
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias ~='cd ~'
 alias -- -='cd -'
 
-# ========== VENV TOOL ACTIVATION ==========
+# === LOCAL LLM ===
+alias llm-serve='~/Tools/scripts/llm-serve.sh'
+alias llm-status='ss -tlpn | grep 49200'
+alias llm-stop='pkill -f llama-server'
+
+# === VENV TOOL ACTIVATION ===
 # Usage: use <venv-name> — adds venv bin to PATH without full activation
-# # Available: impacket, pwn, yt-dlp, huggingface-tools
+# # Available: impacket, pwn, yt-dlp, huggingface-tools (use 'hf' CLI)
 use() {
     local venv="$HOME/Tools/venvs/$1"
     if [[ -d "$venv" ]]; then
