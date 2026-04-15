@@ -42,11 +42,59 @@
       {
         "matcher": "Bash",
         "hooks": [
-        { "type": "command", "command": "~/.claude/hooks/pre-tool/block-network-execution.sh" },
-        { "type": "command", "command": "~/.claude/hooks/pre-tool/block-infra-commands.sh" },
-        { "type": "command", "command": "~/.claude/hooks/pre-tool/block-credential-access.sh" },
-        { "type": "command", "command": "~/.claude/hooks/pre-tool/block-git-destructive.sh" },
-        { "type": "command", "command": "~/.claude/hooks/pre-tool/block-destructive.sh" }
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/pre-tool/block-network-execution.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/pre-tool/block-infra-commands.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/pre-tool/block-credential-access.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/pre-tool/block-git-destructive.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/pre-tool/block-destructive.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {    
+            "type": "command",
+            "command": "~/.claude/hooks/pre-tool/block-path-boundary.sh"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/home/ForeverLX/.claude/hooks/caveman-activate.js\"",
+            "timeout": 5,
+            "statusMessage": "Loading caveman mode..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/home/ForeverLX/.claude/hooks/caveman-mode-tracker.js\"",
+            "timeout": 5,
+            "statusMessage": "Tracking caveman mode..."
+          }
         ]
       }
     ]
@@ -62,7 +110,9 @@
     "sharp-edges@trailofbits": true,
     "static-analysis@trailofbits": true,
     "variant-analysis@trailofbits": true,
-    "claude-hud@claude-hud": true
+    "claude-hud@claude-hud": true,
+    "lua-lsp@claude-plugins-official": true,
+    "andrej-karpathy-skills@karpathy-skills": true
   },
   "extraKnownMarketplaces": {
     "trailofbits": {
@@ -75,6 +125,12 @@
       "source": {
         "source": "github",
         "repo": "jarrodwatts/claude-hud"
+      }
+    },
+    "karpathy-skills": {
+      "source": {
+        "source": "github",
+        "repo": "forrestchang/andrej-karpathy-skills"
       }
     }
   },
