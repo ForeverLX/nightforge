@@ -7,13 +7,13 @@ CHEATSHEET="/tmp/niri-keybinds.html"
 MATUGEN_CSS="$HOME/.config/matugen/colors.css"
 
 if [[ -f "$MATUGEN_CSS" ]]; then
-    BG=$(grep -oP '(?<=background: )#[0-9a-fA-F]{6}' "$MATUGEN_CSS" | head -1 || echo "#1e1e2e")
-    FG=$(grep -oP '(?<=foreground: )#[0-9a-fA-F]{6}' "$MATUGEN_CSS" | head -1 || echo "#cdd6f4")
-    ACCENT=$(grep -oP '(?<=primary: )#[0-9a-fA-F]{6}' "$MATUGEN_CSS" | head -1 || echo "#f38ba8")
+    BG=$(grep -oP '(?<=background: )#[0-9a-fA-F]{6}' "$MATUGEN_CSS" | head -1 || echo "#0D0F1A")
+    FG=$(grep -oP '(?<=foreground: )#[0-9a-fA-F]{6}' "$MATUGEN_CSS" | head -1 || echo "#E6EAF0")
+    ACCENT=$(grep -oP '(?<=primary: )#[0-9a-fA-F]{6}' "$MATUGEN_CSS" | head -1 || echo "#8B6FEF")
 else
-    BG="#1e1e2e"
-    FG="#cdd6f4"
-    ACCENT="#f38ba8"
+    BG="#0D0F1A"
+    FG="#E6EAF0"
+    ACCENT="#8B6FEF"
 fi
 
 cat > "$CHEATSHEET" << HTML
@@ -68,7 +68,7 @@ cat > "$CHEATSHEET" << HTML
         <tr><td><span class="k">Mod+J / K</span></td><td>Focus down/up or workspace down/up</td></tr>
         <tr><td><span class="k">Mod+U / I</span></td><td>Workspace previous / next</td></tr>
         <tr><td><span class="k">Mod+1–5</span></td><td>Focus workspace 1–5</td></tr>
-        <tr><td><span class="k">Mod+Tab</span></td><td>Toggle overview</td></tr>
+        <tr><td><span class="k">Mod+Tab</span></td><td>Next workspace</td></tr>
         <tr><td><span class="k">Mod+Space</span></td><td>Toggle overview</td></tr>
         <tr><td><span class="k">Mod+Alt+Left / Right</span></td><td>Focus monitor left / right</td></tr>
     </table>
@@ -200,11 +200,30 @@ cat > "$CHEATSHEET" << HTML
         <tr><td><span class="k">scan-deep</span></td><td class="cmd">nmap -T4 -A -p-</td></tr>
     </table>
 
+    <h2>Tmux — Prefix: Ctrl+a</h2>
+    <table>
+        <tr><th>Keybind</th><th>Action</th></tr>
+        <tr><td><span class="k">C-a |</span></td><td>Split horizontal</td></tr>
+        <tr><td><span class="k">C-a -</span></td><td>Split vertical</td></tr>
+        <tr><td><span class="k">C-a h/j/k/l</span></td><td>Navigate panes</td></tr>
+        <tr><td><span class="k">C-a H/J/K/L</span></td><td>Resize panes</td></tr>
+        <tr><td><span class="k">C-a c</span></td><td>New window (current path)</td></tr>
+        <tr><td><span class="k">C-a Tab</span></td><td>Last window</td></tr>
+        <tr><td><span class="k">C-a C-h / C-l</span></td><td>Previous / next window</td></tr>
+        <tr><td><span class="k">C-a [</span></td><td>Scroll / copy mode</td></tr>
+        <tr><td><span class="k">C-a x</span></td><td>Kill pane</td></tr>
+        <tr><td><span class="k">C-a &amp;</span></td><td>Kill window</td></tr>
+        <tr><td><span class="k">C-a r</span></td><td>Reload config</td></tr>
+        <tr><td><span class="k">C-a D</span></td><td>Daily layout</td></tr>
+        <tr><td><span class="k">C-a E</span></td><td>Engagement layout</td></tr>
+        <tr><td><span class="k">C-a V</span></td><td>Research layout</td></tr>
+    </table>
+
     <h2>Aliases — Git &amp; Tmux</h2>
     <table>
         <tr><th>Alias</th><th>Expands to</th></tr>
         <tr><td><span class="k">gs / ga / gc / gp / gl</span></td><td class="cmd">git status / add / commit / push / log</td></tr>
-        <tr><td><span class="k">ts</span></td><td class="cmd">tmux-session.sh picker</td></tr>
+        <tr><td><span class="k">ts</span></td><td class="cmd">tmux session picker</td></tr>
         <tr><td><span class="k">ta / tl / tn</span></td><td class="cmd">tmux attach / list / new</td></tr>
     </table>
 
@@ -213,7 +232,6 @@ cat > "$CHEATSHEET" << HTML
         <tr><th>Alias</th><th>Expands to</th></tr>
         <tr><td><span class="k">cls / clsa</span></td><td class="cmd">podman ps / ps -a</td></tr>
         <tr><td><span class="k">cstop / crm</span></td><td class="cmd">stop all / remove all containers</td></tr>
-        <tr><td><span class="k">cad / cre / cweb</span></td><td class="cmd">container run ad / re / web</td></tr>
     </table>
 
     </div>
