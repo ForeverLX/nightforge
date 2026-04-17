@@ -1,0 +1,83 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "autoupdate": false,
+  "default_agent": "build",
+  "agent": {
+    "build": {
+      "description": "Primary coding agent. Multi-file edits, implementation, debugging.",
+      "mode": "primary",
+      "color": "#8B6FEF",
+      "steps": 50,
+      "permission": {
+        "read": "allow",
+        "edit": "allow",
+        "bash": "ask",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "external_directory": "ask"
+      }
+    },
+    "plan": {
+      "description": "Planning and architecture. Read-only analysis, no edits.",
+      "mode": "primary",
+      "color": "#E6B450",
+      "steps": 30,
+      "permission": {
+        "read": "allow",
+        "edit": "deny",
+        "bash": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "webfetch": "allow",
+        "websearch": "allow",
+        "external_directory": "deny"
+      }
+    },
+    "commit": {
+      "description": "Commit message generation only. No edits, no bash.",
+      "mode": "subagent",
+      "hidden": true,
+      "color": "#8B93A6",
+      "steps": 5,
+      "permission": {
+        "read": "allow",
+        "edit": "deny",
+        "bash": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "external_directory": "deny"
+      }
+    },
+    "review": {
+      "description": "Security and code review. Read-only, no modifications.",
+      "mode": "primary",
+      "color": "#E6B450",
+      "steps": 20,
+      "permission": {
+        "read": "allow",
+        "edit": "deny",
+        "bash": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "webfetch": "allow",
+        "websearch": "allow",
+        "external_directory": "deny"
+      }
+    }
+  },
+  "mcp": {
+    "agentmemory": {
+      "type": "local",
+      "command": ["npx", "-y", "@agentmemory/mcp"],
+      "enabled": false
+    }
+  }
+}
