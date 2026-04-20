@@ -9,8 +9,7 @@ binds {
 
     // ========== APPLICATIONS ==========
     Mod+Return { spawn "ghostty"; }
-    Mod+T hotkey-overlay-title="Tmux Layout Picker" { spawn "sh" "-c" "~/.config/niri/scripts/tmux-picker.sh"; }
-
+    
     // Launcher (DMS standard)
     Mod+D { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
 
