@@ -20,6 +20,12 @@ NightForge 10.0.0.3  operator workstation, all code written here
 Tairn      10.0.0.4  NixOS, Mythic C2, WireGuard-only access
 Hermes     10.0.0.5  Alpine redirector, disposable
 
+## Model Mappings
+- **plan**: openrouter/deepseek/deepseek-v3.2 (reasoning)
+- **build**: openrouter/mistralai/codestral-2508 (execution)
+- **review**: openrouter/nvidia/nemotron-3-super-120b-a12b:free (agentic)
+- **commit**: openrouter/google/gemini-2.5-flash (qa/ci)
+
 ## Git
 - Commit messages: multi-line, bullet breakdown explaining why not what
 - Branch policy: MUST use review/* prefix — operator reviews before merge to main

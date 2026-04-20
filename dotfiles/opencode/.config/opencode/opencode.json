@@ -1,83 +1,44 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "autoupdate": false,
-  "default_agent": "build",
-  "agent": {
-    "build": {
-      "description": "Primary coding agent. Multi-file edits, implementation, debugging.",
-      "mode": "primary",
-      "color": "#8B6FEF",
-      "steps": 50,
-      "permission": {
-        "read": "allow",
-        "edit": "allow",
-        "bash": "ask",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "webfetch": "deny",
-        "websearch": "deny",
-        "external_directory": "ask"
-      }
-    },
-    "plan": {
-      "description": "Planning and architecture. Read-only analysis, no edits.",
-      "mode": "primary",
-      "color": "#E6B450",
-      "steps": 30,
-      "permission": {
-        "read": "allow",
-        "edit": "deny",
-        "bash": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "webfetch": "allow",
-        "websearch": "allow",
-        "external_directory": "deny"
-      }
-    },
-    "commit": {
-      "description": "Commit message generation only. No edits, no bash.",
-      "mode": "subagent",
-      "hidden": true,
-      "color": "#8B93A6",
-      "steps": 5,
-      "permission": {
-        "read": "allow",
-        "edit": "deny",
-        "bash": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "webfetch": "deny",
-        "websearch": "deny",
-        "external_directory": "deny"
-      }
-    },
-    "review": {
-      "description": "Security and code review. Read-only, no modifications.",
-      "mode": "primary",
-      "color": "#E6B450",
-      "steps": 20,
-      "permission": {
-        "read": "allow",
-        "edit": "deny",
-        "bash": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "webfetch": "allow",
-        "websearch": "allow",
-        "external_directory": "deny"
+  "model": "openrouter/mistralai/codestral-2508",
+  "small_model": "openrouter/google/gemini-2.5-flash",
+  "provider": {
+    "openrouter": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenRouter",
+      "options": {
+        "baseURL": "https://openrouter.ai/api/v1",
+        "apiKey": "{env:OPENROUTER_API_KEY}"
+      },
+      "models": {
+        "mistralai/codestral-2508": {
+          "name": "Codestral 2508 (Execution)"
+        },
+        "deepseek/deepseek-v3.2": {
+          "name": "DeepSeek V3.2 (Reasoning)"
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "name": "Nemotron 3 Super Free (Agentic)"
+        },
+        "nvidia/nemotron-3-super-120b-a12b": {
+          "name": "Nemotron 3 Super (Escalation)"
+        },
+        "google/gemini-2.5-flash": {
+          "name": "Gemini 2.5 Flash (QA/CI)"
+        },
+        "qwen/qwen3-235b-a22b": {
+          "name": "Qwen3 235B (Long-Context/Review)"
+        },
+        "anthropic/claude-opus-4.6": {
+          "name": "Opus 4.6 (Hard Escalation)"
+        }
       }
     }
   },
-  "mcp": {
-    "agentmemory": {
-      "type": "local",
-      "command": ["npx", "-y", "@agentmemory/mcp"],
-      "enabled": false
-    }
+  "autoupdate": false,
+  "permission": {
+    "edit": "ask",
+    "bash": "ask",
+    "webfetch": "ask"
   }
 }
