@@ -37,3 +37,21 @@ Hermes     10.0.0.5  Alpine redirector, disposable
 - Commit tokens, keys, passwords, or credentials
 - Push directly to main
 - Generate code the operator should be writing themselves (write-first rule applies to skill work)
+
+## Output Rules (All Agents)
+- Output diffs only unless prose explanation is explicitly requested
+- Limit explanations to 3 bullets maximum
+- Never summarize what you just did — the diff is the summary
+- Prefer single atomic commits over batched multi-concern commits
+- Format code output as fenced blocks with language tag always
+
+## Token Constraints
+- Maximum 32K tokens input context per call
+- If context approaches limit, summarize prior tool outputs before continuing
+- Do not re-read files already in context — reference by filename only
+
+## OPSEC Rules (All Agents)
+- Never write credentials, API keys, or tokens to any file
+- Never commit files in ~/.ssh/, /etc/wireguard/, or /etc/nftables.conf
+- Always confirm before any destructive bash operation
+- Redact IP addresses in the 10.0.0.0/24 and 192.168.1.0/24 ranges from any output intended for external submission
