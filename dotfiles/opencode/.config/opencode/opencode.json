@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "openrouter/mistralai/codestral-2508",
+  "model": "openrouter/deepseek/deepseek-v3.2",
   "small_model": "openrouter/google/gemini-2.5-flash",
   "snapshot": true,
   "autoupdate": false,
@@ -16,13 +16,13 @@
         "apiKey": "{env:OPENROUTER_API_KEY}"
       },
       "models": {
-        "mistralai/codestral-2508": { "name": "Codestral 2508 (Execution)" },
+        "mistralai/devstral-2512": { "name": "Devstral 2 2512 (Execution)" },
         "deepseek/deepseek-v3.2": { "name": "DeepSeek V3.2 (Reasoning)" },
-        "nvidia/nemotron-3-super-120b-a12b:free": { "name": "Nemotron 3 Super Free (Agentic)" },
-        "nvidia/nemotron-3-super-120b-a12b": { "name": "Nemotron 3 Super (Escalation)" },
+        "qwen/qwen3-coder-480b-a35b:free": { "name": "Qwen3 Coder 480B Free (Agentic)" },
+        "nvidia/nemotron-3-super-120b-a12b:free": { "name": "Nemotron 3 Super Free (Fallback)" },
         "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash (QA/CI)" },
-        "qwen/qwen3-235b-a22b": { "name": "Qwen3 235B (Long-Context/Review)" },
-        "anthropic/claude-opus-4.6": { "name": "Opus 4.6 (Hard Escalation)" }
+        "qwen/qwen3-235b-a22b-2507-instruct": { "name": "Qwen3 235B 2507 (Long-Context)" },
+        "anthropic/claude-opus-4.7": { "name": "Opus 4.7 (Hard Escalation)" }
       }
     }
   },
