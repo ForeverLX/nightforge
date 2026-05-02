@@ -1,175 +1,218 @@
-// WallpaperPicker Module - ilyamiro-styled wallpaper grid
-import QtQuick
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Io
-import QtQuick.Layouts
+import QtQuick
 
 import "../services"
 
 PanelWindow {
-    id: wallpaperPicker
-    visible: false
-    color: "transparent"
+    id: menu
 
-    anchors {
-        top: true
-        bottom: true
-        left: true
-        right: true
-    }
+    anchors.top: true; anchors.left: true; anchors.right: true; anchors.bottom: true
+    color: "transparent"
+    visible: false
 
     MatugenColors { id: mocha }
 
-    // Click outside to close
-    MouseArea {
-        anchors.fill: parent
-        onClicked: wallpaperPicker.visible = false
+    readonly property string wallpaperDir: "/home/ForeverLX/Pictures/wallpapers"
+    readonly property string cacheDir:     "/home/ForeverLX/.cache/qs-wallpapers"
+    property var    wallpapers: []
+    property var    _buf: []
+    property string currentWall: ""
+
+    onVisibleChanged: {
+        if (!visible) return
+        menu._buf = []
+        menu.wallpapers = []
+        mkCache.running = false
+        mkCache.running = true
     }
+
+    Process {
+        id: mkCache
+        command: ["mkdir", "-p", menu.cacheDir]
+        running: false
+        onRunningChanged: if (!running) { wallScan.running = false; wallScan.running = true }
+    }
+
+    Process {
+        id: wallScan
+        command: ["sh", "-c",
+            "find \"" + menu.wallpaperDir + "\" -maxdepth 2 -type f " +
+            "\\( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' " +
+            "-o -iname '*.webp' -o -iname '*.bmp' \\) | sort | while read f; do " +
+            "  base=$(basename \"$f\"); " +
+            "  thumb=\"" + menu.cacheDir + "/${base%.*}.png\"; " +
+            "  [ -f \"$thumb\" ] || magick \"$f\" -resize 260x200^ -gravity center -extent 260x200 \"$thumb\" 2>/dev/null; " +
+            "  [ -f \"$thumb\" ] && echo \"$f|$thumb|$base\"; " +
+            "done"]
+        running: false
+        stdout: SplitParser {
+            onRead: data => {
+                var line = data.trim()
+                if (!line) return
+                var parts = line.split("|")
+                if (parts.length < 2) return
+                var b = menu._buf.slice()
+                b.push({ orig: parts[0], thumb: parts[1], name: parts[2] })
+                menu._buf = b
+                menu.wallpapers = b
+            }
+        }
+        onRunningChanged: if (!running) { queryCurrent.running = false; queryCurrent.running = true }
+    }
+
+    Process {
+        id: queryCurrent
+        command: ["cat", "/home/ForeverLX/.cache/current_wallpaper"]
+        running: false
+        stdout: StdioCollector { onStreamFinished: { menu.currentWall = text.trim() } }
+    }
+
+    function setWallpaper(path) {
+        menu.currentWall = path
+        var awwwProc = Qt.createQmlObject('import Quickshell.Io; Process {}', menu)
+        awwwProc.command = ["sh", "-c", "awww img '" + path + "' --transition-type wipe --transition-duration 1 && echo '" + path + "' > /home/ForeverLX/.cache/current_wallpaper"]
+        awwwProc.running = true
+        var matugenProc = Qt.createQmlObject('import Quickshell.Io; Process {}', menu)
+        matugenProc.command = ["bash", "/home/ForeverLX/.local/bin/matugen-sync.sh", path]
+        matugenProc.running = true
+        menu.visible = false
+    }
+
+    MouseArea { anchors.fill: parent; onClicked: menu.visible = false }
 
     Rectangle {
         anchors.centerIn: parent
-        width: 700
-        height: 500
-        radius: 20
-        color: mocha.crust
-        border.color: mocha.surface0
-        border.width: 1
+        width: 820; height: 620; radius: 20
+        color: Qt.rgba(mocha.mantle.r, mocha.mantle.g, mocha.mantle.b, 0.95)
+        border.color: mocha.surface0; border.width: 1
 
-        MouseArea {
-            anchors.fill: parent
-        }
+        MouseArea { anchors.fill: parent }
 
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: 20
-            spacing: 16
+        Column {
+            anchors.fill: parent; anchors.margins: 20; spacing: 14
 
             // Header
-            RowLayout {
-                Layout.fillWidth: true
-
+            Item { width: parent.width; height: 28
                 Text {
-                    text: "🖼 Wallpaper"
-                    color: mocha.mauve
-                    font.pixelSize: 18
-                    font.bold: true
-                    Layout.fillWidth: true
+                    anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter
+                    text: "\u{1f5bc} Wallpaper"; color: mocha.mauve; font.pixelSize: 18; font.bold: true
                 }
-
                 Rectangle {
-                    width: 28
-                    height: 28
-                    radius: 14
-                    color: mocha.surface0
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "✕"
-                        color: mocha.subtext0
-                        font.pixelSize: 12
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: wallpaperPicker.visible = false
-                    }
+                    anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
+                    width: 28; height: 28; radius: 14; color: mocha.surface1
+                    Text { anchors.centerIn: parent; text: "\u2715"; color: mocha.subtext0; font.pixelSize: 12 }
+                    MouseArea { anchors.fill: parent; onClicked: menu.visible = false }
                 }
             }
 
-            // Wallpaper grid
-            GridView {
-                id: grid
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                clip: true
-                cellWidth: 140
-                cellHeight: 110
-                model: wallpaperModel
+            // Thumbnail row
+            Rectangle {
+                width: parent.width; height: 566; radius: 12; color: "transparent"; clip: true
 
-                delegate: Rectangle {
-                    width: grid.cellWidth - 8
-                    height: grid.cellHeight - 8
-                    radius: 8
-                    color: mocha.mantle
-                    border.color: wpMouse.containsMouse ? mocha.surface0 : "transparent"
-                    border.width: 1
+                Flickable {
+                    id: flick
+                    anchors.fill: parent; anchors.margins: 6
+                    contentWidth: wallRow.implicitWidth
+                    contentHeight: height
+                    clip: true
+                    flickableDirection: Flickable.HorizontalFlick
+                    leftMargin: 4; rightMargin: 4
 
-                    Image {
-                        anchors.fill: parent
-                        anchors.margins: 4
-                        source: "file://" + modelData.path
-                        fillMode: Image.PreserveAspectCrop
-                        sourceSize.width: 200
-                        sourceSize.height: 150
-                        asynchronous: true
+                    WheelHandler {
+                        orientation: Qt.Horizontal
+                        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                        rotationScale: -5
+                        target: flick
+                        property: "contentX"
+                    }
+                    WheelHandler {
+                        orientation: Qt.Vertical
+                        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                        rotationScale: -5
+                        target: flick
+                        property: "contentX"
                     }
 
-                    Text {
-                        anchors.bottom: parent.bottom
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.margins: 4
-                        text: modelData.name
-                        color: mocha.text
-                        font.pixelSize: 10
-                        elide: Text.ElideRight
-                        horizontalAlignment: Text.AlignHCenter
-                        style: Text.Outline
-                        styleColor: "#000"
-                    }
+                    Row {
+                        id: wallRow
+                        spacing: 10
+                        height: parent.height
 
-                    MouseArea {
-                        id: wpMouse
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: {
-                            setWallpaper(modelData.path)
+                        Repeater {
+                            model: menu.wallpapers
+
+                            Item {
+                                id: card
+                                required property var modelData
+                                readonly property bool active: menu.currentWall === modelData.orig
+
+                                width: 164; height: 120
+
+                                Rectangle {
+                                    anchors.fill: parent
+                                    radius: 7; clip: true; color: mocha.surface0
+                                    Image {
+                                        anchors.fill: parent
+                                        source: "file://" + card.modelData.thumb
+                                        fillMode: Image.PreserveAspectCrop
+                                        smooth: true
+                                        asynchronous: true
+                                    }
+                                }
+
+                                Rectangle {
+                                    anchors.fill: parent
+                                    radius: 7
+                                    color: "transparent"
+                                    border.width: card.active ? 3 : (ma.containsMouse ? 2 : 0)
+                                    border.color: card.active ? mocha.mauve : (ma.containsMouse ? mocha.surface2 : "transparent")
+                                }
+
+                                Rectangle {
+                                    visible: card.active
+                                    width: 10; height: 10; radius: 5
+                                    color: mocha.mauve
+                                    anchors.bottom: parent.bottom
+                                    anchors.right: parent.right
+                                    anchors.margins: 7
+                                }
+
+                                Text {
+                                    visible: card.active
+                                    anchors.bottom: parent.bottom
+                                    anchors.left: parent.left
+                                    anchors.margins: 7
+                                    text: modelData.name
+                                    color: mocha.text
+                                    font.pixelSize: 9
+                                    elide: Text.ElideRight
+                                    width: parent.width - 24
+                                }
+
+                                MouseArea {
+                                    id: ma
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: menu.setWallpaper(card.modelData.orig)
+                                }
+                            }
+                        }
+
+                        Text {
+                            visible: menu.wallpapers.length === 0
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: "Scanning wallpapers..."
+                            color: mocha.subtext0
+                            font.pixelSize: 14
+                            anchors.left: parent.left
+                            anchors.leftMargin: 20
                         }
                     }
                 }
             }
         }
-    }
-
-    property var wallpaperModel: []
-
-    onVisibleChanged: {
-        if (visible) refreshWallpapers()
-    }
-
-    Process {
-        id: wallpaperScan
-        command: ["sh", "-c", "find /home/ForeverLX/Pictures/wallpapers -type f \\( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \\) | sort | head -50"]
-        running: false
-        stdout: StdioCollector {
-            onStreamFinished: {
-                var lines = text.trim().split("\n")
-                var items = []
-                for (var i = 0; i < lines.length; i++) {
-                    var path = lines[i].trim()
-                    if (path === "") continue
-                    var name = path.substring(path.lastIndexOf("/") + 1)
-                    items.push({ path: path, name: name })
-                }
-                wallpaperPicker.wallpaperModel = items
-            }
-        }
-    }
-
-    function refreshWallpapers() {
-        wallpaperScan.running = true
-    }
-
-    function setWallpaper(path) {
-        var swwwProc = Qt.createQmlObject('import Quickshell.Io; Process {}', wallpaperPicker)
-        swwwProc.command = ["sh", "-c", "command -v awww >/dev/null 2>&1 && awww img '" + path + "' || cp '" + path + "' /home/ForeverLX/.cache/current_wallpaper.jpg"]
-        swwwProc.running = true
-
-        var matugenProc = Qt.createQmlObject('import Quickshell.Io; Process {}', wallpaperPicker)
-        matugenProc.command = ["bash", "/home/ForeverLX/.local/bin/matugen-sync.sh", path]
-        matugenProc.running = true
-
-        wallpaperPicker.visible = false
     }
 }
