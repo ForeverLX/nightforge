@@ -1,0 +1,39 @@
+# SwayOSD Configuration - NightForge
+# On-screen display for volume/brightness (replaces DMS overlays)
+# GPU: Nvidia GTX 1650
+
+[general]
+# Position and style
+position = "top"
+offset_y = 48
+offset_x = 0
+alignment = "center"
+
+# Timeout
+timeout = 1000
+
+# Color scheme (synced with Matugen via script)
+# Default colors - will be overridden by matugen-sync.sh
+bar_color_override = "#2a2a3e"
+bar_color_override_osd = "#3a3a4e"
+bar_color_override_progress = "#5a5aae"
+
+# Font
+font_family = "JetBrainsMono Nerd Font Mono"
+font_size = 14
+
+# Opacity
+opacity = 0.95
+
+# Animations (keep snappy for GTX 1650)
+animation_duration = 200
+
+# Modules to show
+show_volume = true
+show_brightness = true
+show_capslock = true
+show_numlock = false
+show_scrolllock = false
+
+# Media player info (requires playerctl)
+show_media_player = true

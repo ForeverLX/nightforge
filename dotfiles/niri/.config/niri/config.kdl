@@ -1,17 +1,32 @@
-// Niri Configuration - offsec-workstation
-// Main config - imports modular includes
-spawn-at-startup "dms" "run" "-d"
+// Niri Configuration - NightForge Operator Workstation
+// Migrated from DMS to Quickshell + Matugen stack
+// GPU: Nvidia GTX 1650 (nvidia-open-dkms)
 
+// === MATUGEN ENVIRONMENT ===
+// Colors injected via /tmp/matugen/colors.json
+// Sync: ~/.local/bin/matugen-sync.sh [wallpaper]
+
+// === AUTOSTART (replace DMS) ===
+// Wallpaper daemon (awww)
+spawn-at-startup "awww-daemon"
+
+// Quickshell bar (modular shell)
+spawn-at-startup "bash" "-c" "quickshell &"
+
+// Matugen sync on startup (if wallpaper exists)
+spawn-at-startup "bash" "-c" "sleep 2 && $HOME/.local/bin/matugen-sync.sh $HOME/Pictures/wallpapers/current.jpg"
+
+// Podman services (NightForge operator stack)
+spawn-at-startup "systemctl" "--user" "start" "podman-restart.service"
+
+// MPD user service
+spawn-at-startup "systemctl" "--user" "start" "mpd.service"
+
+// === MODULAR INCLUDES ===
 include "includes/input.kdl"
 include "includes/keybinds.kdl"
 include "includes/window-rules.kdl"
 include "includes/compositor.kdl"
 include "includes/local.kdl"
 
-include "dms/alttab.kdl"
-include "dms/colors.kdl"
-include "dms/cursor.kdl"
-include "dms/layout.kdl"
-include "dms/outputs.kdl"
-include "dms/windowrules.kdl"
-include "dms/wpblur.kdl"
+// NOTE: All DMS configs removed — migrated to Quickshell

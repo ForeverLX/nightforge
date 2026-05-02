@@ -1,0 +1,32 @@
+/* Rofi Configuration - NightForge
+ * Replaces DMS spotlight launcher
+ * Matugen-themed via matugen-theme.rasi (auto-generated)
+ */
+
+configuration {
+    modi: "drun,run,window,clipboard";
+    clipboard: "cliphist";
+    show-icons: true;
+    icon-theme: "Papirus-Dark";
+    monitor: -1;
+    font: "JetBrainsMono Nerd Font Mono 12";
+    
+    // Layout
+    display-drun: "Apps";
+    display-run: "Run";
+    display-window: "Windows";
+    display-clipboard: "Clipboard";
+    
+    // Behavior
+    matching: "fuzzy";
+    sort: true;
+    case-sensitive: false;
+    levenshtein-sort: true;
+    
+    // Performance (GTX 1650)
+    threads: 4;
+    scroll-method: 1;
+}
+
+/* Theme - loads Matugen colors */
+@theme "~/.config/rofi/matugen-theme.rasi"

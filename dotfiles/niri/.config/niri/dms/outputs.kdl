@@ -10,3 +10,9 @@ output "DP-1" {
     }
 }
 
+output "HDMI-A-1" {
+    mode "3840x2160@60.000"
+    scale 1.5
+    position x=1920 y=0
+}
+

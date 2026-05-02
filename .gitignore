@@ -56,3 +56,7 @@ dotfiles/niri/.config/niri/dms/colors.kdl
 dotfiles/nvim/.config/nvim/lua/plugins/dankcolors.lua
 /.config/
 dotfiles/zsh/.zshrc
+
+# Generated files
+*.qslog
+/tmp/

@@ -1,0 +1,4 @@
+singleton MatugenColors 1.0 MatugenColors.qml
+singleton MpdClient 1.0 MpdClient.qml
+singleton VpnStatus 1.0 VpnStatus.qml
+singleton PodmanStatus 1.0 PodmanStatus.qml

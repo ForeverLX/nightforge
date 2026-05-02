@@ -1,0 +1,10 @@
+[Unit]
+Description=Matugen color sync on login
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/matugen-sync.sh %h/Pictures/wallpapers/current.jpg
+
+[Install]
+WantedBy=graphical-session.target
