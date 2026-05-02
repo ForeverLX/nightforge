@@ -1,0 +1,8 @@
+# Swaylock-effects config - NightForge
+# Secure lock screen with matugen color support
+
+ignore-empty-password
+show-failed-attempts
+daemonize
+clock
+color=1a1a2e

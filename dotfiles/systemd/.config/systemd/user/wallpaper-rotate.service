@@ -1,0 +1,12 @@
+[Unit]
+Description=Wallpaper rotation service (DMS replacement)
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/wallpaper-rotate.sh
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

@@ -14,15 +14,15 @@ layout {
 
     default-column-width { proportion 0.5; }
 
-    // Border (always visible)
-    border {
-        off  // Using focus ring instead
+    struts {
+        top 30
+    }
 
-        // Uncomment to use border instead of focus ring:
-        // width 2
-        // active-color "#2a2026"
-        // inactive-color "#17171a"
-        // urgent-color "#3a0f18"
+    // Border colors for window focus
+    border {
+        width 1
+        active-color "#8B6FEF"
+        inactive-color "#1a120e"
     }
 
     // Shadows (disabled for performance)
@@ -60,7 +60,7 @@ animations {
     }
 
     workspace-switch {
-        duration-ms 100
+        duration-ms 80
         curve "ease-out-cubic"
     }
 }
