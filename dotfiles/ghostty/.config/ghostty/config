@@ -1,3 +1,7 @@
+# === Ghostty Configuration - NightForge ===
+# Matugen-themed (auto-synced via matugen-sync.sh)
+# Font: JetBrainsMono Nerd Font Mono
+
 # === Font ===
 font-size = 12
 font-family = "JetBrainsMono Nerd Font Mono"
@@ -44,5 +48,12 @@ unfocused-split-fill = #0D0F1A
 # === Tab bar ===
 gtk-titlebar = false
 
-# === Theme ===
-theme = dankcolors
+# === Theme (Matugen auto-generated) ===
+# Colors are synced by ~/.local/bin/matugen-sync.sh
+# Manual override (commented out by default):
+# theme = dankcolors
+
+# === MATUGEN COLORS (auto-injected by matugen-sync.sh) ===
+# background = <surface>
+# foreground = <onSurface>
+# cursor-color = <primary>

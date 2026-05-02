@@ -1,13 +1,35 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "openrouter/deepseek/deepseek-v3.2",
-  "small_model": "openrouter/google/gemini-2.5-flash",
+  "model": "opencode-zen/kimi-k2.6",
+  "small_model": "opencode-zen/openkili/big-pickle",
   "snapshot": true,
   "autoupdate": false,
   "plugin": [
     "@tarquinen/opencode-dcp@latest"
   ],
+  "mcp": {
+    "agentmemory": {
+      "command": "npx",
+      "args": ["-y", "@agentmemory/mcp"],
+      "env": {
+        "AGENTMEMORY_URL": "http://127.0.0.1:3111"
+      }
+    }
+  },
   "provider": {
+    "opencode-go": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenCode Go",
+      "options": {
+        "apiKey": "{env:OPENCODE_API_KEY}",
+        "baseURL": "https://api.opencode.go/v1"
+      },
+      "models": {
+        "kimi-k2.6": { "name": "Kimi K2.6 (Reasoning)" },
+        "GLM-5.1": { "name": "GLM-5.1 (Premium)" },
+        "openkili/big-pickle": { "name": "Big Pickle (Free)" }
+      }
+    },
     "openrouter": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "OpenRouter",
@@ -23,6 +45,14 @@
         "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash (QA/CI)" },
         "qwen/qwen3-235b-a22b-2507-instruct": { "name": "Qwen3 235B 2507 (Long-Context)" },
         "anthropic/claude-opus-4.7": { "name": "Opus 4.7 (Hard Escalation)" }
+      }
+    },
+    "opencode-zen": {
+      "npm": "@opencode/provider-zen",
+      "name": "OpenCode Zen",
+      "options": {
+        "baseURL": "https://opencode.ai/zen/api/v1",
+        "apiKey": "{env:OPENCODE_ZEN_API_KEY}"
       }
     }
   },

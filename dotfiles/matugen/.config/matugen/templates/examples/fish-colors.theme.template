@@ -1,0 +1,27 @@
+{
+    "name": "matugen",
+    "preferred_background": "{{colors.surface.default.hex}}",
+    "colors": {
+        "fish_color_normal": "{{colors.on_surface.default.hex}}",
+        "fish_color_command": "{{colors.primary.default.hex}}",
+        "fish_color_quote": "{{colors.secondary.default.hex}}",
+        "fish_color_redirection": "{{colors.tertiary.default.hex}}",
+        "fish_color_end": "{{colors.outline.default.hex}}",
+        "fish_color_error": "{{colors.error.default.hex}}",
+        "fish_color_param": "{{colors.on_surface_variant.default.hex}}",
+        "fish_color_comment": "{{colors.outline.default.hex}}",
+        "fish_color_match": "{{colors.primary.default.hex}}",
+        "fish_color_search_match": "{{colors.primary.default.hex}} --background={{colors.surface_container_high.default.hex}}",
+        "fish_color_operator": "{{colors.secondary.default.hex}}",
+        "fish_color_escape": "{{colors.tertiary.default.hex}}",
+        "fish_color_cwd": "{{colors.primary.default.hex}}",
+        "fish_color_cwd_root": "{{colors.error.default.hex}}",
+        "fish_color_valid_path": "{{colors.primary.default.hex}} --underline",
+        "fish_color_autosuggestion": "{{colors.outline.default.hex}}",
+        "fish_color_user": "{{colors.primary.default.hex}}",
+        "fish_color_host": "{{colors.secondary.default.hex}}",
+        "fish_color_host_remote": "{{colors.tertiary.default.hex}}",
+        "fish_color_cancel": "{{colors.error.default.hex}}",
+        "fish_color_selection": "{{colors.on_primary.default.hex}} --background={{colors.primary.default.hex}}"
+    }
+}

@@ -1,0 +1,70 @@
+[config]
+reload_apps = false
+
+[templates.quickshell]
+input_path = "~/.config/matugen/templates/qs_colors.json.template"
+output_path = "/tmp/qs_colors.json"
+
+[templates.nightforge-colors]
+input_path = "~/.config/matugen/templates/nightforge-colors.json.template"
+output_path = "/tmp/matugen/colors.json"
+
+[templates.ghostty]
+input_path = "~/.config/matugen/templates/ghostty.conf.template"
+output_path = "/tmp/matugen/ghostty-colors.conf"
+
+[templates.rofi]
+input_path = "~/.config/matugen/templates/rofi.rasi.template"
+output_path = "/tmp/matugen/rofi-theme.rasi"
+
+[templates.gtk]
+input_path = "~/.config/matugen/templates/gtk.css.template"
+output_path = "/tmp/matugen/gtk-colors.css"
+
+[templates.qt5ct]
+input_path = "~/.config/matugen/templates/qtct.conf.template"
+output_path = "/tmp/matugen/qt5ct-colors.conf"
+
+[templates.qt6ct]
+input_path = "~/.config/matugen/templates/qtct.conf.template"
+output_path = "/tmp/matugen/qt6ct-colors.conf"
+
+[templates.qt5_style]
+input_path = "~/.config/matugen/templates/qt-style.qss.template"
+output_path = "/tmp/matugen/qt5-style.qss"
+
+[templates.qt6_style]
+input_path = "~/.config/matugen/templates/qt-style.qss.template"
+output_path = "/tmp/matugen/qt6-style.qss"
+
+[templates.cava]
+input_path = "~/.config/matugen/templates/cava-colors.ini.template"
+output_path = "/tmp/matugen/cava-colors.ini"
+
+[templates.swayosd]
+input_path = "~/.config/matugen/templates/swayosd.css.template"
+output_path = "/tmp/matugen/swayosd-style.css"
+
+[templates.neovim]
+input_path = "~/.config/matugen/templates/nvim-colors.lua.template"
+output_path = "/tmp/matugen/nvim-colors.lua"
+
+[templates.btop]
+input_path = "~/.config/matugen/templates/btop-colors.theme.template"
+output_path = "/tmp/matugen/btop-colors.theme"
+
+[templates.starship]
+input_path = "~/.config/matugen/templates/starship.toml.template"
+output_path = "/tmp/matugen/starship-colors.toml"
+
+[templates.mako]
+input_path = "~/.config/matugen/templates/mako.config.template"
+output_path = "/tmp/matugen/mako.config"
+
+[templates.hyprlock]
+input_path = "~/.config/matugen/templates/hyprlock.conf.template"
+output_path = "/tmp/matugen/hyprlock.conf"
+
+[templates.fastfetch]
+input_path = "~/.config/matugen/templates/fastfetch-config.jsonc.template"
+output_path = "/tmp/matugen/fastfetch-config.jsonc"
