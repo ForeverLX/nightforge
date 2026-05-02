@@ -62,6 +62,10 @@ Scope {
 
                 if (cmd === "controlcenter") {
                     controlCenter.visible = !controlCenter.visible
+                } else if (cmd === "launcher") {
+                    var fuzzelProc = Qt.createQmlObject('import Quickshell.Io; Process {}', shell)
+                    fuzzelProc.command = ["fuzzel"]
+                    fuzzelProc.running = true
                 } else if (cmd === "music") {
                     musicPopup.visible = !musicPopup.visible
                 } else if (cmd === "wallpaper") {
