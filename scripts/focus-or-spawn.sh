@@ -2,7 +2,7 @@
 # focus-or-spawn.sh - Focus an existing window or spawn a new one
 # Supports: --app-id, -t (scratchpad), -l N (instance limit), --verbose
 # Usage:
-#   focus-or-spawn.sh --app-id brave-browser brave
+#   focus-or-spawn.sh --app-id firefox
 #   focus-or-spawn.sh -t --app-id ghostty ghostty
 #   focus-or-spawn.sh -l 3 --app-id obsidian obsidian
 

@@ -1,16 +1,16 @@
-import Quickshell
-import Quickshell.Wayland
-import Quickshell.Io
 import QtQuick
+import Quickshell
+import Quickshell.Io
 
-import "../services"
+import "../../components"
+import "../../services"
 
-PanelWindow {
+Item {
     id: menu
+    property string widgetName: "wallpaper"
 
-    anchors.top: true; anchors.left: true; anchors.right: true; anchors.bottom: true
-    color: "transparent"
-    visible: false
+    implicitWidth: 820
+    implicitHeight: 620
 
     MatugenColors { id: mocha }
 
@@ -20,10 +20,9 @@ PanelWindow {
     property var    _buf: []
     property string currentWall: ""
 
-    onVisibleChanged: {
-        if (!visible) return
-        menu._buf = []
-        menu.wallpapers = []
+    Component.onCompleted: {
+        _buf = []
+        wallpapers = []
         mkCache.running = false
         mkCache.running = true
     }
@@ -77,48 +76,48 @@ PanelWindow {
         var matugenProc = Qt.createQmlObject('import Quickshell.Io; Process {}', menu)
         matugenProc.command = ["bash", "/home/ForeverLX/.local/bin/matugen-sync.sh", path]
         matugenProc.running = true
-        menu.visible = false
     }
 
-    MouseArea { anchors.fill: parent; onClicked: menu.visible = false }
-
-    Rectangle {
-        anchors.centerIn: parent
-        width: 820; height: 620; radius: 20
-        color: Qt.rgba(mocha.mantle.r, mocha.mantle.g, mocha.mantle.b, 0.95)
-        border.color: mocha.surface0; border.width: 1
-
-        MouseArea { anchors.fill: parent }
+    GlassPanel {
+        anchors.fill: parent
+        matugen: mocha
+        glassRadius: 20
 
         Column {
-            anchors.fill: parent; anchors.margins: 20; spacing: 14
+            anchors.fill: parent
+            anchors.margins: 20
+            spacing: 14
 
-            // Header
-            Item { width: parent.width; height: 28
+            Item {
+                width: parent.width
+                height: 28
                 Text {
-                    anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter
-                    text: "\u{1f5bc} Wallpaper"; color: mocha.mauve; font.pixelSize: 18; font.bold: true
-                }
-                Rectangle {
-                    anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
-                    width: 28; height: 28; radius: 14; color: mocha.surface1
-                    Text { anchors.centerIn: parent; text: "\u2715"; color: mocha.subtext0; font.pixelSize: 12 }
-                    MouseArea { anchors.fill: parent; onClicked: menu.visible = false }
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "\u{1f5bc} Wallpaper"
+                    color: mocha.mauve
+                    font.pixelSize: 18
+                    font.bold: true
                 }
             }
 
-            // Thumbnail row
             Rectangle {
-                width: parent.width; height: 566; radius: 12; color: "transparent"; clip: true
+                width: parent.width
+                height: 566
+                radius: 12
+                color: "transparent"
+                clip: true
 
                 Flickable {
                     id: flick
-                    anchors.fill: parent; anchors.margins: 6
+                    anchors.fill: parent
+                    anchors.margins: 6
                     contentWidth: wallRow.implicitWidth
                     contentHeight: height
                     clip: true
                     flickableDirection: Flickable.HorizontalFlick
-                    leftMargin: 4; rightMargin: 4
+                    leftMargin: 4
+                    rightMargin: 4
 
                     WheelHandler {
                         orientation: Qt.Horizontal
@@ -148,11 +147,14 @@ PanelWindow {
                                 required property var modelData
                                 readonly property bool active: menu.currentWall === modelData.orig
 
-                                width: 164; height: 120
+                                width: 164
+                                height: 120
 
                                 Rectangle {
                                     anchors.fill: parent
-                                    radius: 7; clip: true; color: mocha.surface0
+                                    radius: 7
+                                    clip: true
+                                    color: mocha.surface0
                                     Image {
                                         anchors.fill: parent
                                         source: "file://" + card.modelData.thumb
@@ -172,7 +174,9 @@ PanelWindow {
 
                                 Rectangle {
                                     visible: card.active
-                                    width: 10; height: 10; radius: 5
+                                    width: 10
+                                    height: 10
+                                    radius: 5
                                     color: mocha.mauve
                                     anchors.bottom: parent.bottom
                                     anchors.right: parent.right

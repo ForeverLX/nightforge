@@ -12,245 +12,460 @@ Variants {
 
     delegate: Component {
         PanelWindow {
-            id: bar
+            id: win
 
             required property var modelData
             screen: modelData
 
             anchors { top: true; left: true; right: true }
-
-            Scaler {
-                id: scaler
-                currentWidth: bar.width
-            }
-
-            function s(val) { return scaler.s(val); }
-
-            property int barHeight: 48
-            property bool isExpanded: false
-
-            implicitHeight: bar.currentHeight
-            margins { top: 0; bottom: 0; left: 4; right: 4 }
-            exclusiveZone: barHeight
             color: "transparent"
+            WlrLayershell.namespace: "nightforge-bar"
 
             MatugenColors { id: mocha }
 
-            property string performanceMode: "high"
-            property bool lowPerf: performanceMode === "low"
+            implicitHeight: 46
+            exclusiveZone: 46
 
-            property string clock: ""
-            property string dateStr: ""
+            // === PROPERTIES ===
+            property int  volPct:  0
+            property bool volMute: false
             property string battery: "N/A"
-            property string vpnStatus: "Down"
-            property string podmanStatus: "Down"
-            property string volume: "0"
-            property string windowTitle: ""
+            property string kbLayout: "us"
+            property string networkStatus: "Down"
+            property string btStatus: "off"
+            property var workspaces: []
+            property int activeWsId: 1
+            property string dateStr: ""
 
-            property int currentHeight: 4
+            // Media state
+            property string mediaTitle: ""
+            property string mediaArtist: ""
+            property string mediaArt: ""
+            property bool mediaPlaying: false
 
-            Behavior on currentHeight {
-                NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+            // Startup animation
+            property bool startupComplete: false
+
+            Component.onCompleted: startupTimer.start()
+
+            Timer {
+                id: startupTimer
+                interval: 100
+                onTriggered: win.startupComplete = true
             }
 
+            // === IPC DISPATCH ===
+            function dispatch(cmd) {
+                var p = Qt.createQmlObject('import Quickshell.Io; Process {}', win)
+                p.command = ["sh", "-c", "/home/ForeverLX/Github/nightforge/dotfiles/quickshell/.config/quickshell/scripts/qs_manager.sh " + cmd]
+                p.running = true
+            }
+
+            // === WORKSPACE POLLING ===
             Process {
-                id: perfPoll
-                command: ["cat", "/home/ForeverLX/.config/nightforge/performance-mode"]
+                id: wsProc
+                command: ["sh", "-c", "niri msg --json workspaces | jq '[.[] | {id: .id, name: (.name | tostring), active: false, occupied: (.windows > 0)}]'"]
                 running: true
                 stdout: StdioCollector {
                     onStreamFinished: {
-                        var txt = text.trim()
-                        bar.performanceMode = txt === "low" ? "low" : "high"
+                        try {
+                            var data = JSON.parse(text)
+                            // Update active flag based on activeWsId
+                            for (var i = 0; i < data.length; i++) {
+                                data[i].active = (data[i].id === win.activeWsId)
+                            }
+                            win.workspaces = data
+                        } catch(e) {}
                     }
                 }
             }
-            Timer { interval: 5000; running: true; repeat: true; onTriggered: { perfPoll.running = false; perfPoll.running = true } }
+            Timer { interval: 500; running: true; repeat: true; onTriggered: wsProc.running = true }
 
+            Process {
+                id: activeWsProc
+                command: ["sh", "-c", "niri msg --json active-workspace | jq '.id'"]
+                running: true
+                stdout: StdioCollector {
+                    onStreamFinished: {
+                        try {
+                            var id = parseInt(text.trim())
+                            if (!isNaN(id)) {
+                                win.activeWsId = id
+                                // Update workspaces array active flags
+                                var updated = []
+                                for (var i = 0; i < win.workspaces.length; i++) {
+                                    var ws = win.workspaces[i]
+                                    updated.push({
+                                        id: ws.id,
+                                        name: ws.name,
+                                        active: ws.id === id,
+                                        occupied: ws.occupied
+                                    })
+                                }
+                                win.workspaces = updated
+                            }
+                        } catch(e) {}
+                    }
+                }
+            }
+            Timer { interval: 500; running: true; repeat: true; onTriggered: activeWsProc.running = true }
+
+            // === VOLUME POLLING ===
+            Process {
+                id: volProc
+                command: ["sh", "-c", "wpctl get-volume @DEFAULT_SINK@ 2>/dev/null || pamixer --get-volume-human 2>/dev/null"]
+                running: true
+                stdout: SplitParser {
+                    onRead: function(data) {
+                        if (!data) return
+                        win.volMute = data.indexOf("MUTED") !== -1
+                        var m = data.match(/([\d.]+)/)
+                        if (m) win.volPct = Math.round(parseFloat(m[1]) * 100)
+                    }
+                }
+                Component.onCompleted: running = true
+            }
+            Timer { interval: 1000; running: true; repeat: true; onTriggered: volProc.running = true }
+
+            // === BATTERY POLLING ===
+            Process {
+                id: batProc
+                command: ["sh", "-c",
+                    "out=$(cat /sys/class/power_supply/BAT*/capacity 2>/dev/null | head -1); " +
+                    "[ -n \"$out\" ] && echo \"${out}%\" || echo 'N/A'"]
+                running: true
+                stdout: StdioCollector {
+                    onStreamFinished: { var txt = text.trim(); if (txt !== "") win.battery = txt }
+                }
+                Component.onCompleted: running = true
+            }
+            Timer { interval: 60000; running: true; repeat: true; onTriggered: batProc.running = true }
+
+            // === NETWORK POLLING ===
+            Process {
+                id: netProc
+                command: ["sh", "-c",
+                    "nmcli -t -f TYPE,STATE d 2>/dev/null | grep -q '^ethernet:connected$' && echo ETH && exit 0; " +
+                    "nmcli -t -f TYPE,STATE d 2>/dev/null | grep -q '^wifi:connected$' && echo WiFi && exit 0; " +
+                    "echo Down"]
+                running: true
+                stdout: StdioCollector {
+                    onStreamFinished: { var t = text.trim(); if (t) win.networkStatus = t }
+                }
+                Component.onCompleted: running = true
+            }
+            Timer { interval: 5000; running: true; repeat: true; onTriggered: netProc.running = true }
+
+            // === BLUETOOTH POLLING ===
+            Process {
+                id: btProc
+                command: ["sh", "-c", "bluetoothctl show 2>/dev/null | grep -q 'Powered: yes' && echo on || echo off"]
+                running: true
+                stdout: StdioCollector {
+                    onStreamFinished: { win.btStatus = text.trim() === "on" ? "on" : "off" }
+                }
+                Component.onCompleted: running = true
+            }
+            Timer { interval: 5000; running: true; repeat: true; onTriggered: btProc.running = true }
+
+            // === KEYBOARD LAYOUT POLLING ===
+            Process {
+                id: kbProc
+                command: ["sh", "-c", "setxkbmap -query 2>/dev/null | grep layout | awk '{print $2}' || localectl status 2>/dev/null | grep 'X11 Layout' | awk -F: '{print $2}' | xargs || echo 'us'"]
+                running: true
+                stdout: StdioCollector {
+                    onStreamFinished: { var t = text.trim(); if (t) win.kbLayout = t }
+                }
+                Component.onCompleted: running = true
+            }
+            Timer { interval: 10000; running: true; repeat: true; onTriggered: kbProc.running = true }
+
+            // === MEDIA POLLING (MPRIS) ===
+            Process {
+                id: mediaProc
+                command: ["sh", "-c", "playerctl -s metadata --format '{{title}}\\n{{artist}}\\n{{status}}\\n{{mpris:artUrl}}' 2>/dev/null || echo ''"]
+                running: true
+                stdout: StdioCollector {
+                    onStreamFinished: {
+                        var lines = text.trim().split('\n')
+                        if (lines.length >= 3 && lines[0] !== "") {
+                            win.mediaTitle = lines[0] || ""
+                            win.mediaArtist = lines[1] || ""
+                            win.mediaPlaying = lines[2] === "Playing"
+                            win.mediaArt = lines[3] || ""
+                        } else {
+                            win.mediaTitle = ""
+                            win.mediaArtist = ""
+                            win.mediaPlaying = false
+                            win.mediaArt = ""
+                        }
+                    }
+                }
+                Component.onCompleted: running = true
+            }
+            Timer { interval: 2000; running: true; repeat: true; onTriggered: mediaProc.running = true }
+
+            // === CLOCK ===
             Timer {
-                interval: 1000; running: true; repeat: true
+                interval: 1000; running: true; repeat: true; triggeredOnStart: true
                 onTriggered: {
-                    bar.clock = Qt.formatDateTime(new Date(), "hh:mm")
-                    bar.dateStr = Qt.formatDateTime(new Date(), "MMM dd")
+                    var n = new Date()
+                    var M = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+                    var D = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
+                    win.dateStr = D[n.getDay()] + ", " + M[n.getMonth()] + " " +
+                                  n.getDate().toString().padStart(2,'0')
                 }
             }
 
-            Process {
-                id: batteryPoll
-                command: ["sh", "-c", "cat /sys/class/power_supply/BAT*/capacity 2>/dev/null | head -1"]
-                running: true
-                stdout: StdioCollector { onStreamFinished: { var txt = this.text.trim(); if (txt !== "") bar.battery = txt + "%" } }
-            }
-            Timer { interval: 60000; running: true; repeat: true; onTriggered: batteryPoll.running = true }
-
-            Process {
-                id: volumePoll
-                command: ["sh", "-c", "pamixer --get-volume 2>/dev/null || wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null | awk '{print int($2*100)}'"]
-                running: true
-                stdout: StdioCollector { onStreamFinished: { var txt = this.text.trim(); if (txt !== "") bar.volume = txt } }
-            }
-            Timer { interval: 10000; running: true; repeat: true; onTriggered: volumePoll.running = true }
-
-            Process {
-                id: vpnPoll
-                command: ["sh", "-c", "wg show wg0 2>/dev/null | grep -q 'interface' && echo 'Up' || echo 'Down'"]
-                running: true
-                stdout: StdioCollector { onStreamFinished: { bar.vpnStatus = this.text.trim() } }
-            }
-            Timer { interval: 10000; running: true; repeat: true; onTriggered: vpnPoll.running = true }
-
-            Process {
-                id: podmanPoll
-                command: ["sh", "-c", "podman ps --quiet 2>/dev/null | wc -l"]
-                running: true
-                stdout: StdioCollector { onStreamFinished: { var count = parseInt(this.text.trim()) || 0; bar.podmanStatus = count > 0 ? "Active (" + count + ")" : "Down" } }
-            }
-            Timer { interval: 10000; running: true; repeat: true; onTriggered: podmanPoll.running = true }
-
-            Process {
-                id: windowPoll
-                command: ["sh", "-c", "niri msg --json windows 2>/dev/null | jq -r '.[] | select(.is_focused == true) | .title' | head -1 || echo ''"]
-                running: true
-                stdout: StdioCollector { onStreamFinished: { bar.windowTitle = this.text.trim() } }
-            }
-            Timer { interval: 1000; running: true; repeat: true; onTriggered: windowPoll.running = true }
-
-            Timer {
-                id: collapseTimer
-                interval: 1000
-                onTriggered: { bar.currentHeight = 4; bar.isExpanded = false }
-            }
-
-            FocusScope {
+            // === GLASS BACKGROUND ===
+            Rectangle {
+                id: barBg
                 anchors.fill: parent
+                anchors.topMargin: 8
+                anchors.leftMargin: 8
+                anchors.rightMargin: 8
+                radius: 14
+                color: Qt.rgba(mocha.base.r, mocha.base.g, mocha.base.b, 0.75)
+                border.width: 1
+                border.color: Qt.rgba(mocha.text.r, mocha.text.g, mocha.text.b, 0.08)
 
-                // Bar background
-                Rectangle {
-                    id: barBg
-                    anchors.fill: parent
-                    color: bar.isExpanded
-                        ? Qt.rgba(mocha.mantle.r, mocha.mantle.g, mocha.mantle.b, 0.92)
-                        : Qt.rgba(mocha.mantle.r, mocha.mantle.g, mocha.mantle.b, 0.85)
-                    radius: s(14)
-                    border.width: 1
-                    border.color: Qt.rgba(mocha.surface0.r, mocha.surface0.g, mocha.surface0.b, 0.5)
+                // === LEFT BUTTONS ===
+                Row {
+                    id: leftButtons
+                    anchors.left: parent.left
+                    anchors.leftMargin: 12
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 8
+                    opacity: win.startupComplete ? 1 : 0
+                    scale: win.startupComplete ? 1 : 0.9
 
-                    Behavior on color { ColorAnimation { duration: 200 } }
+                    Behavior on opacity { NumberAnimation { duration: 400; easing.type: Easing.OutCubic } }
+                    Behavior on scale { NumberAnimation { duration: 400; easing.type: Easing.OutBack } }
 
-                    MouseArea {
-                        id: barMouseArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        acceptedButtons: Qt.LeftButton | Qt.RightButton
-
-                        onEntered: { collapseTimer.stop(); bar.currentHeight = bar.barHeight; bar.isExpanded = true }
-                        onExited: { collapseTimer.start() }
-                        onClicked: { if (mouse.button === Qt.RightButton) statusMonitor.visible = !statusMonitor.visible }
+                    BarButton {
+                        icon: "\uF297"
+                        mocha: win.mocha
+                        onClicked: win.dispatch("help")
                     }
+                    BarButton {
+                        icon: "\uF002"
+                        mocha: win.mocha
+                        onClicked: win.dispatch("launcher")
+                    }
+                    BarButton {
+                        icon: "\uF013"
+                        mocha: win.mocha
+                        onClicked: win.dispatch("controlcenter")
+                    }
+                }
 
-                    Item {
-                        anchors.fill: parent
-                        anchors.leftMargin: bar.isExpanded ? s(8) : 0
-                        anchors.rightMargin: bar.isExpanded ? s(8) : 0
-                        clip: true
-                        opacity: bar.isExpanded ? 1.0 : 0.0
-                        Behavior on opacity { NumberAnimation { duration: 150 } }
+                // === WORKSPACE PILLS ===
+                Row {
+                    id: wsRow
+                    anchors.left: leftButtons.right
+                    anchors.leftMargin: 16
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 4
+                    opacity: win.startupComplete ? 1 : 0
+                    scale: win.startupComplete ? 1 : 0.9
 
-                        RowLayout {
-                            anchors.fill: parent
-                            spacing: s(8)
+                    Behavior on opacity { NumberAnimation { duration: 400; easing.type: Easing.OutCubic; delay: 50 } }
+                    Behavior on scale { NumberAnimation { duration: 400; easing.type: Easing.OutBack; delay: 50 } }
 
-                            // === LEFT CAPSULE: App button + Window title ===
-                            Rectangle {
-                                Layout.alignment: Qt.AlignLeft
-                                height: s(36); radius: s(10)
-                                color: mocha.surface0
-                                visible: bar.isExpanded
-                                width: leftInner.implicitWidth + s(12)
+                    Repeater {
+                        id: wsRepeater
+                        model: win.workspaces
 
-                                Row {
-                                    id: leftInner
-                                    anchors.centerIn: parent
-                                    spacing: s(6)
+                        delegate: Rectangle {
+                            width: wsText.implicitWidth + 16
+                            height: 28
+                            radius: 8
+                            color: modelData.active ? mocha.mauve : "transparent"
 
-                                    Rectangle {
-                                        width: s(28); height: s(28); radius: s(8)
-                                        color: appBtn.containsMouse ? mocha.surface1 : "transparent"
-                                        Text { anchors.centerIn: parent; text: "\u2630"; color: mocha.text; font.pixelSize: s(14) }
-                                        MouseArea {
-                                            id: appBtn; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor
-                                            onClicked: {
-                                                var p = Qt.createQmlObject('import Quickshell.Io; Process {}', bar)
-                                                p.command = ["sh", "-c", "echo launcher > /tmp/quickshell-toggle"]
-                                                p.running = true
-                                            }
-                                        }
-                                    }
+                            Behavior on color { ColorAnimation { duration: 300 } }
+                            Behavior on x { NumberAnimation { duration: 600; easing.type: Easing.OutExpo } }
 
-                                    Rectangle {
-                                        width: s(200); height: s(28); radius: s(6); color: "transparent"
-                                        visible: bar.windowTitle !== ""
-                                        Text {
-                                            anchors.verticalCenter: parent.verticalCenter; anchors.left: parent.left; anchors.leftMargin: s(2)
-                                            text: bar.windowTitle; color: mocha.subtext0; font.pixelSize: s(11)
-                                            elide: Text.ElideRight; width: parent.width
-                                        }
-                                    }
-                                }
+                            Text {
+                                id: wsText
+                                anchors.centerIn: parent
+                                text: modelData.name || modelData.id
+                                color: modelData.active ? mocha.base : (modelData.occupied ? mocha.text : mocha.overlay0)
+                                font.pixelSize: 12
+                                font.bold: modelData.active
                             }
 
-                            // === CENTER CAPSULE: Clock ===
-                            Rectangle {
-                                Layout.alignment: Qt.AlignCenter
-                                height: s(36); radius: s(10)
-                                color: mocha.surface0
-                                visible: bar.isExpanded
-                                width: centerInner.implicitWidth + s(14)
-
-                                Row {
-                                    id: centerInner
-                                    anchors.centerIn: parent
-                                    spacing: s(6)
-                                    Text { text: bar.clock; color: mocha.text; font.pixelSize: s(13); font.bold: true }
-                                    Text { text: "|"; color: mocha.surface1; font.pixelSize: s(12) }
-                                    Text { text: bar.dateStr; color: mocha.subtext0; font.pixelSize: s(11) }
-                                }
-                            }
-
-                            // === RIGHT CAPSULE: Status icons ===
-                            Rectangle {
-                                Layout.alignment: Qt.AlignRight
-                                height: s(36); radius: s(10)
-                                color: mocha.surface0
-                                visible: bar.isExpanded
-                                width: rightInner.implicitWidth + s(12)
-
-                                Row {
-                                    id: rightInner
-                                    anchors.centerIn: parent
-                                    spacing: s(10)
-
-                                    Text {
-                                        text: "\uD83D\uDCE6" + bar.podmanStatus.replace("Active", "")
-                                        color: bar.podmanStatus.indexOf("Active") !== -1 ? mocha.green : mocha.subtext0
-                                        font.pixelSize: s(11)
-                                    }
-                                    Text {
-                                        text: "\uD83D\uDD12" + bar.vpnStatus
-                                        color: bar.vpnStatus === "Up" ? mocha.green : mocha.red
-                                        font.pixelSize: s(11)
-                                    }
-                                    Text {
-                                        text: "\uD83D\uDD0A" + bar.volume + "%"
-                                        color: mocha.text; font.pixelSize: s(11)
-                                    }
-                                    Text {
-                                        text: "\uD83D\uDD0B" + bar.battery
-                                        color: mocha.text; font.pixelSize: s(11)
-                                    }
+                            MouseArea {
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: {
+                                    var p = Qt.createQmlObject('import Quickshell.Io; Process {}', win)
+                                    p.command = ["niri", "msg", "action", "focus-workspace", modelData.id.toString()]
+                                    p.running = true
                                 }
                             }
                         }
                     }
+                }
+
+                // === INLINE MEDIA ===
+                Row {
+                    id: mediaRow
+                    anchors.left: wsRow.right
+                    anchors.leftMargin: 16
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 8
+                    visible: win.mediaTitle !== ""
+                    opacity: win.startupComplete && visible ? 1 : 0
+                    scale: win.startupComplete && visible ? 1 : 0.9
+
+                    Behavior on opacity { NumberAnimation { duration: 400; easing.type: Easing.OutCubic; delay: 100 } }
+                    Behavior on scale { NumberAnimation { duration: 400; easing.type: Easing.OutBack; delay: 100 } }
+
+                    // Album art
+                    Rectangle {
+                        width: 32; height: 32; radius: 6
+                        color: mocha.surface0
+                        Image {
+                            anchors.fill: parent
+                            source: win.mediaArt
+                            fillMode: Image.PreserveAspectCrop
+                            visible: win.mediaArt !== "" && win.mediaArt.indexOf("file://") === 0
+                        }
+                        Text {
+                            anchors.centerIn: parent
+                            text: "\uD83C\uDFB5"
+                            font.pixelSize: 14
+                            visible: win.mediaArt === "" || win.mediaArt.indexOf("file://") !== 0
+                        }
+                    }
+
+                    // Track info
+                    Column {
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: 2
+                        Text {
+                            text: win.mediaTitle
+                            color: mocha.text
+                            font.pixelSize: 11
+                            font.bold: true
+                            elide: Text.ElideRight
+                            width: Math.min(180, implicitWidth)
+                        }
+                        Text {
+                            text: win.mediaArtist
+                            color: mocha.subtext0
+                            font.pixelSize: 10
+                            elide: Text.ElideRight
+                            width: Math.min(180, implicitWidth)
+                        }
+                    }
+
+                    // Media controls
+                    Row {
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: 4
+
+                        BarButton {
+                            icon: "\u23EE"
+                            size: 22
+                            mocha: win.mocha
+                            onClicked: {
+                                var p = Qt.createQmlObject('import Quickshell.Io; Process {}', win)
+                                p.command = ["playerctl", "previous"]
+                                p.running = true
+                            }
+                        }
+                        BarButton {
+                            icon: win.mediaPlaying ? "\u23F8" : "\u25B6"
+                            size: 26
+                            accentColor: mocha.mauve
+                            mocha: win.mocha
+                            onClicked: {
+                                var p = Qt.createQmlObject('import Quickshell.Io; Process {}', win)
+                                p.command = ["playerctl", "play-pause"]
+                                p.running = true
+                            }
+                        }
+                        BarButton {
+                            icon: "\u23ED"
+                            size: 22
+                            mocha: win.mocha
+                            onClicked: {
+                                var p = Qt.createQmlObject('import Quickshell.Io; Process {}', win)
+                                p.command = ["playerctl", "next"]
+                                p.running = true
+                            }
+                        }
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: win.dispatch("music")
+                    }
+                }
+
+                // === STATUS PILLS ===
+                Row {
+                    id: statusRow
+                    anchors.right: dateText.left
+                    anchors.rightMargin: 12
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 6
+                    opacity: win.startupComplete ? 1 : 0
+                    scale: win.startupComplete ? 1 : 0.9
+
+                    Behavior on opacity { NumberAnimation { duration: 400; easing.type: Easing.OutCubic; delay: 150 } }
+                    Behavior on scale { NumberAnimation { duration: 400; easing.type: Easing.OutBack; delay: 150 } }
+
+                    StatusPill {
+                        icon: "\uF1EB"
+                        value: win.networkStatus
+                        color: win.networkStatus === "Down" ? mocha.red : mocha.green
+                        mocha: win.mocha
+                        onClicked: win.dispatch("network")
+                    }
+                    StatusPill {
+                        icon: "\uF294"
+                        value: win.btStatus === "on" ? "On" : "Off"
+                        color: win.btStatus === "on" ? mocha.blue : mocha.overlay0
+                        mocha: win.mocha
+                    }
+                    StatusPill {
+                        icon: win.volMute ? "\uF6A9" : "\uF028"
+                        value: win.volMute ? "Mute" : (win.volPct + "%")
+                        color: win.volMute ? mocha.red : mocha.mauve
+                        mocha: win.mocha
+                        onClicked: win.dispatch("controlcenter")
+                    }
+                    StatusPill {
+                        icon: "\uF240"
+                        value: win.battery
+                        color: mocha.text
+                        mocha: win.mocha
+                    }
+                    StatusPill {
+                        icon: "\uF11C"
+                        value: win.kbLayout.toUpperCase()
+                        color: mocha.subtext0
+                        mocha: win.mocha
+                    }
+                }
+
+                // === DATE ===
+                Text {
+                    id: dateText
+                    anchors.right: parent.right
+                    anchors.rightMargin: 12
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: win.dateStr
+                    color: mocha.subtext0
+                    font.pixelSize: 13
+                    opacity: win.startupComplete ? 1 : 0
+                    scale: win.startupComplete ? 1 : 0.9
+
+                    Behavior on opacity { NumberAnimation { duration: 400; easing.type: Easing.OutCubic; delay: 200 } }
+                    Behavior on scale { NumberAnimation { duration: 400; easing.type: Easing.OutBack; delay: 200 } }
                 }
             }
         }
