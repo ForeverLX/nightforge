@@ -1,5 +1,5 @@
-// Window Rules
-// Per-application geometry, opacity, and placement
+// Window Rules - NightForge Operator Workstation
+// Per-application geometry, opacity, placement, and behavior
 
 // ========== GLOBAL APPEARANCE ==========
 window-rule {
@@ -7,31 +7,50 @@ window-rule {
     clip-to-geometry true
 }
 
+// ========== POPUP / MODAL FLOATING ==========
+window-rule {
+    match title=r#"^.*Preferences$"#
+    open-floating true
+}
+
+window-rule {
+    match title=r#"^.*Settings$"#
+    open-floating true
+}
+
+window-rule {
+    match title=r#"^.*Save As$"#
+    open-floating true
+}
+
+// ========== QUICKSHELL POPUPS (floating, no focus) ==========
+window-rule {
+    match app-id=r#"^qs-"#
+    open-floating true
+    // Quickshell overlay window — allow click-through where possible
+}
+
+window-rule {
+    match app-id=r#"^nightforge"#
+    open-floating true
+}
+
 // ========== BROWSERS ==========
 window-rule {
-    match app-id=r#"brave-browser$"#
+    match app-id=r#"firefox$"#
     opacity 0.92
     default-column-width { proportion 0.66667; }
 }
 
 window-rule {
-    match app-id=r#"brave-browser$"# title="^Picture-in-Picture$"
-    open-floating true
-    opacity 0.95
-}
-
-window-rule {
     match app-id=r#"firefox$"#
-    opacity 1.0
-}
-
-window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match title=r#"^.*Picture-in-Picture$"#
     open-floating true
-    opacity 0.95
+    max-width 400
+    max-height 300
 }
 
-// ========== TERMINALS (Ghostty) ==========
+// ========== TERMINALS ==========
 window-rule {
     match app-id=r#"^com\.mitchellh\.ghostty$"#
     opacity 0.65
@@ -51,7 +70,19 @@ window-rule {
     default-column-width { proportion 0.5; }
 }
 
-// ========== CLAUDE DESKTOP ==========
+// ========== AI TOOLS ==========
+window-rule {
+    match app-id=r#"^opencode$"#
+    opacity 0.92
+    default-column-width { proportion 0.5; }
+}
+
+window-rule {
+    match app-id=r#"^code$"# title=r#"^.*OpenCode.*$"#
+    opacity 0.92
+    default-column-width { proportion 0.5; }
+}
+
 window-rule {
     match app-id=r#"^electron$"# title=r#"^Claude$"#
     opacity 0.65
@@ -80,9 +111,77 @@ window-rule {
     opacity 0.92
 }
 
+window-rule {
+    match app-id=r#"satty$"#
+    open-floating true
+    opacity 0.95
+    default-column-width { proportion 0.5; }
+}
+
+window-rule {
+    match app-id=r#"fuzzel$"#
+    open-floating true
+    // Launcher overlay
+}
+
+// ========== SCREENSHOT / RECORDING ==========
+window-rule {
+    match app-id=r#"^wf-recorder$"#
+    open-floating true
+    opacity 0.0
+}
+
+// ========== CONTAINER / VM TOOLS ==========
+window-rule {
+    match app-id=r#"podman$"#
+    opacity 0.85
+}
+
+window-rule {
+    match app-id=r#"virt-viewer$"#
+    open-floating true
+    opacity 0.92
+}
+
+window-rule {
+    match app-id=r#"^org\.remmina\.Remmina$"#
+    open-floating true
+    opacity 0.92
+}
+
 // ========== SECURITY ==========
 window-rule {
     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
     block-out-from "screen-capture"
     opacity 1.0
+}
+
+window-rule {
+    match app-id=r#"^org\.gnupg\.pinentry$"#
+    open-floating true
+    opacity 1.0
+}
+
+window-rule {
+    match app-id=r#"^ssh$"#
+    opacity 0.85
+}
+
+// ========== COMMUNICATION ==========
+window-rule {
+    match app-id=r#"^discord$"#
+    opacity 0.90
+}
+
+
+window-rule {
+    match app-id=r#"signal$"#
+    opacity 0.90
+    default-column-width { proportion 0.5; }
+}
+
+window-rule {
+    match app-id=r#"element$"#
+    opacity 0.90
+    default-column-width { proportion 0.5; }
 }
