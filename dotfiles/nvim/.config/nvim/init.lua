@@ -37,3 +37,4 @@ vim.lsp.config('lua_ls', {
 })
 
 vim.lsp.enable({ 'pyright', 'bashls', 'lua_ls' })
+require("matugen-theme")
