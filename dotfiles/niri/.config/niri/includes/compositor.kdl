@@ -1,6 +1,9 @@
 // Default Theme
 // offsec-workstation dark theme (matches Sway colors)
 
+// Prefer CSD — apps draw their own decorations, Niri draws no borders
+prefer-no-csd
+
 layout {
     gaps 8
 
@@ -15,14 +18,12 @@ layout {
     default-column-width { proportion 0.5; }
 
     struts {
-        top 30
+        top 48
     }
 
-    // Border colors for window focus
+    // Border / decorations: off for all windows (CSD apps handle their own)
     border {
-        width 1
-        active-color "#8B6FEF"
-        inactive-color "#1a120e"
+        width 0
     }
 
     // Shadows (disabled for performance)
@@ -65,8 +66,7 @@ animations {
     }
 }
 
-// Request no client-side decorations
-prefer-no-csd
+// Let apps choose their own decorations (ghostty, firefox use CSD)
 
 // Screenshot settings
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"

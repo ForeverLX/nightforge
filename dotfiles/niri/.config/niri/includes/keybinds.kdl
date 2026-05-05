@@ -1,56 +1,60 @@
 // Keybindings - NightForge Operator Workstation
-// Quickshell + Rofi + SwayOSD (replaces DMS keybinds)
 // Mod = Super (Windows key)
+// IPC: Quickshell reads /tmp/qs_widget_state for widget toggles
 
 binds {
     // ========== HELP ==========
     Mod+Shift+Slash { show-hotkey-overlay; }
-    Mod+Shift+C { spawn "sh" "-c" "echo controlcenter > /tmp/quickshell-toggle"; }
     Mod+Slash { spawn "sh" "-c" "~/.config/niri/scripts/keybind-cheatsheet.sh"; }
 
     // ========== APPLICATIONS ==========
     Mod+Return { spawn "ghostty"; }
-
-    // Rofi launcher (replaces DMS spotlight)
-    Mod+D { spawn "rofi" "-show" "drun" "-theme" "~/.config/rofi/matugen-theme.rasi"; }
+    Mod+D { spawn "fuzzel"; }
 
     // Focus-or-spawn
-    Mod+B { spawn "sh" "-c" "~/.config/niri/scripts/focus-or-spawn.sh --app-id brave-browser brave"; }
+    Mod+B { spawn "sh" "-c" "~/.config/niri/scripts/focus-or-spawn.sh firefox"; }
     Mod+F { spawn "ghostty" "-e" "yazi"; }
 
-    // ========== QUICKSHELL CONTROLS ==========
-    // Toggle Quickshell bar visibility (if supported)
-    Mod+Shift+B { spawn "pkill" "-USR1" "quickshell"; }
+    // ========== QUICKSHELL WIDGET TOGGLES ==========
+    // IPC: writes to /tmp/qs_widget_state — Quickshell reads this
+    Mod+Shift+C { spawn "sh" "-c" "echo settings > /tmp/qs_widget_state"; }
+    Mod+M      { spawn "sh" "-c" "echo music > /tmp/qs_widget_state"; }
+    Mod+Shift+N { spawn "sh" "-c" "echo network > /tmp/qs_widget_state"; }
+    Mod+Shift+W { spawn "sh" "-c" "echo wallpaper > /tmp/qs_widget_state"; }
+    Mod+Shift+M { spawn "sh" "-c" "echo monitor > /tmp/qs_widget_state"; }
+    Mod+Comma  { spawn "sh" "-c" "echo settings > /tmp/qs_widget_state"; }
+    Mod+Shift+V { spawn "sh" "-c" "echo clipboard > /tmp/qs_widget_state"; }
+    Mod+Escape { spawn "sh" "-c" "echo close > /tmp/qs_widget_state"; }
+    Escape { spawn "sh" "-c" "echo close > /tmp/qs_widget_state"; }
+
+    // ========== SCREENSHOTS ==========
+    // Full screen: Print
+    Print { screenshot; }
+    // Active window: Alt+Print
+    Alt+Print { screenshot-window; }
+    // Area select: Mod+S → opens Satty for copy/save
+    Mod+S { spawn "sh" "-c" "~/.config/niri/scripts/screenshot.sh area-clipboard"; }
+    // Screen record toggle (wf-recorder)
+    Mod+Shift+R { spawn "sh" "-c" "~/.config/niri/scripts/screen-record.sh"; }
 
     // ========== SWAYOSD OVERLAYS ==========
-    // Volume controls (SwayOSD)
     XF86AudioRaiseVolume allow-when-locked=true { spawn "swayosd-client" "--output-volume" "raise"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn "swayosd-client" "--output-volume" "lower"; }
     XF86AudioMute allow-when-locked=true { spawn "swayosd-client" "--output-volume" "toggle"; }
     XF86AudioMicMute allow-when-locked=true { spawn "swayosd-client" "--input-volume" "toggle"; }
 
-    // Brightness controls (SwayOSD)
     XF86MonBrightnessUp allow-when-locked=true { spawn "swayosd-client" "--brightness" "raise"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "swayosd-client" "--brightness" "lower"; }
 
-    // Media keys
     XF86AudioPlay allow-when-locked=true { spawn "playerctl" "play-pause"; }
     XF86AudioPrev allow-when-locked=true { spawn "playerctl" "previous"; }
     XF86AudioNext allow-when-locked=true { spawn "playerctl" "next"; }
 
-    // Music popup toggle (MPD)
-    Mod+M { spawn "sh" "-c" "echo music > /tmp/quickshell-toggle"; }
-
     // ========== CLIPBOARD / NOTIFICATIONS ==========
-    // Replace DMS clipboard with cliphist + rofi
-    Mod+V { spawn "rofi" "-modi" "clipboard:cliphist" "-show" "clipboard" "-theme" "~/.config/rofi/matugen-theme.rasi"; }
-
-    // Notification center (swaync)
-    // Mod+Shift+N removed — mako does not provide a notification center UI
+    Mod+V { spawn "sh" "-c" "~/.local/bin/clipboard-picker.sh"; }
 
     // ========== POWER / LOCK ==========
-    Mod+Alt+L { spawn "hyprlock"; }
-    // Note: Idle lock is handled by hypridle, not a keybind
+    Mod+Alt+L { spawn "sh" "-c" "~/.config/quickshell/scripts/lock-screen.sh"; }
     Mod+Alt+Q { quit; }
     Mod+Shift+E { spawn "bash" "/home/ForeverLX/Github/nightforge/scripts/engagement-edit.sh"; }
 
@@ -64,25 +68,17 @@ binds {
     Mod+C { center-column; }
     Mod+Alt+C hotkey-overlay-title="Center Window" { center-window; }
 
-    // ========== SMART NAVIGATION (DT-Inspired) ==========
-    // Horizontal: Navigate columns
+    // ========== SMART NAVIGATION ==========
     Mod+H { focus-column-left; }
     Mod+L { focus-column-right; }
-
-    // Vertical: Smart navigation (focus window OR switch workspace)
     Mod+J { focus-window-or-workspace-down; }
     Mod+K { focus-window-or-workspace-up; }
-
-    // Workspace cycling
     Mod+U { focus-workspace-down; }
     Mod+I { focus-workspace-up; }
 
-    // ========== SMART WINDOW MOVEMENT ==========
-    // Move within workspace
+    // ========== WINDOW MOVEMENT ==========
     Mod+Shift+H { move-column-left; }
     Mod+Shift+L { move-column-right; }
-
-    // Smart vertical movement (move window OR to workspace)
     Mod+Shift+J { move-window-down-or-to-workspace-down; }
     Mod+Shift+K { move-window-up-or-to-workspace-up; }
 
@@ -96,21 +92,31 @@ binds {
     Mod+BracketLeft { consume-or-expel-window-left; }
     Mod+BracketRight { consume-or-expel-window-right; }
     Mod+Period { expel-window-from-column; }
-
-    // ========== OVERVIEW & WORKSPACES ==========
     Mod+Tab { focus-workspace-previous; }
 
+    // ========== AUDIO ==========
+    Mod+A { spawn "sh" "-c" "~/.local/bin/audio-switch.sh toggle"; }
+
+    // ========== WORKSPACES ==========
     Mod+1 { focus-workspace "1"; }
     Mod+2 { focus-workspace "2"; }
     Mod+3 { focus-workspace "3"; }
     Mod+4 { focus-workspace "4"; }
     Mod+5 { focus-workspace "5"; }
+    Mod+6 { focus-workspace "6"; }
+    Mod+7 { focus-workspace "7"; }
+    Mod+8 { focus-workspace "8"; }
+    Mod+9 { focus-workspace "9"; }
 
     Mod+Shift+1 { move-column-to-workspace "1"; }
     Mod+Shift+2 { move-column-to-workspace "2"; }
     Mod+Shift+3 { move-column-to-workspace "3"; }
     Mod+Shift+4 { move-column-to-workspace "4"; }
     Mod+Shift+5 { move-column-to-workspace "5"; }
+    Mod+Shift+6 { move-column-to-workspace "6"; }
+    Mod+Shift+7 { move-column-to-workspace "7"; }
+    Mod+Shift+8 { move-column-to-workspace "8"; }
+    Mod+Shift+9 { move-column-to-workspace "9"; }
 
     // ========== RESIZING ==========
     Mod+Ctrl+H { set-window-width "-10%"; }
@@ -119,38 +125,18 @@ binds {
     Mod+Ctrl+K { set-window-height "+10%"; }
     Mod+R { switch-preset-column-width; }
 
-    // ========== SCREENSHOTS ==========
-    Mod+S { spawn "sh" "-c" "~/.config/niri/scripts/screenshot.sh area-pip"; }
-    Mod+Shift+S { spawn "sh" "-c" "~/.config/niri/scripts/screenshot.sh area-clipboard"; }
-    Mod+Ctrl+S { spawn "sh" "-c" "~/.config/niri/scripts/screenshot.sh area-edit"; }
-    Mod+Alt+S { spawn "sh" "-c" "~/.config/niri/scripts/screenshot.sh screen"; }
-    Mod+Alt+Shift+S { spawn "sh" "-c" "~/.config/niri/scripts/screenshot.sh screen-clipboard"; }
-    Mod+Alt+W { screenshot-window; }
-    Mod+Shift+R { spawn "sh" "-c" "~/.config/niri/scripts/rename-last-screenshot.sh"; }
-
     // ========== OBSIDIAN (NightForge vaults) ==========
     Mod+Shift+D { spawn "obsidian" "obsidian://daily"; }
     Mod+Shift+O { spawn "obsidian" "obsidian://search"; }
     Mod+O { spawn "obsidian" "obsidian://open?vault=azrael-vault"; }
 
-
-
     // ========== SYSTEM ==========
-    Mod+Escape { toggle-keyboard-shortcuts-inhibit; }
     Mod+Shift+P { spawn "bash" "/home/ForeverLX/Github/nightforge/scripts/toggle-performance-mode.sh"; }
 
-    // ========== WALLPAPER ROTATION (replaces DMS auto-switch) ==========
-    // Manual rotation trigger + systemd timer for 15-min auto-rotate
+    // ========== WALLPAPER ROTATION ==========
     Mod+Alt+R { spawn "bash" "-c" "~/.local/bin/wallpaper-rotate.sh --notify && ~/.local/bin/matugen-sync.sh $(cat ~/.cache/current_wallpaper)"; }
 
-    // ========== NIGHTFORGE OPERATOR SHORTCUTS ==========
-    // Quick VPN toggle (WireGuard mesh) - click the bar indicator or use a script
-    Mod+Shift+W { spawn "sh" "-c" "echo wallpaper > /tmp/quickshell-toggle"; }
-
-    // Engagement status check
+    // ========== OPERATOR SHORTCUTS ==========
     Mod+Shift+G { spawn "ghostty" "-e" "cat ~/.config/nightforge/engagement-context 2>/dev/null || echo 'No active engagement'"; }
-
-    // Podman container status
     Mod+Shift+T { spawn "ghostty" "-e" "podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'"; }
-
 }

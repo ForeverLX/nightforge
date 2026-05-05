@@ -147,7 +147,7 @@ cat > "$CHEATSHEET" << HTML
         <tr><td><span class="k">Mod+Return</span></td><td>Terminal (Ghostty)</td></tr>
         <tr><td><span class="k">Mod+T</span></td><td>Tmux session picker</td></tr>
         <tr><td><span class="k">Mod+D</span></td><td>Launcher (DMS spotlight)</td></tr>
-        <tr><td><span class="k">Mod+B</span></td><td>Browser (Brave)</td></tr>
+        <tr><td><span class="k">Mod+B</span></td><td>Browser (Firefox)</td></tr>
         <tr><td><span class="k">Mod+F</span></td><td>File manager (Yazi)</td></tr>
         <tr><td><span class="k">Mod+N</span></td><td>DMS notepad</td></tr>
         <tr><td><span class="k">Mod+V</span></td><td>DMS clipboard</td></tr>
