@@ -10,14 +10,23 @@
 // Wallpaper daemon (awww)
 spawn-at-startup "awww-daemon"
 
-// Quickshell bar (modular shell)
+// Quickshell overlay (widgets, StackView)
 spawn-at-startup "bash" "-c" "quickshell &"
+
+// Quickshell TopBar (per-screen bar)  
+spawn-at-startup "bash" "-c" "sleep 1 && quickshell -p $HOME/.config/quickshell/TopBar.qml &"
 
 // Matugen sync on startup (if wallpaper exists)
 spawn-at-startup "bash" "-c" "sleep 2 && $HOME/.local/bin/matugen-sync.sh $HOME/Pictures/wallpapers/current.jpg"
 
 // Podman services (NightForge operator stack)
 spawn-at-startup "systemctl" "--user" "start" "podman-restart.service"
+
+// Wallpaper rotation (15 min)
+spawn-at-startup "systemctl" "--user" "enable" "--now" "wallpaper-rotate.timer"
+
+// Screensharing env (dbus activation)
+spawn-at-startup "bash" "-c" "sleep 2 && dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri"
 
 // MPD user service
 spawn-at-startup "systemctl" "--user" "start" "mpd.service"
@@ -27,6 +36,8 @@ include "includes/input.kdl"
 include "includes/keybinds.kdl"
 include "includes/window-rules.kdl"
 include "includes/compositor.kdl"
-include "includes/local.kdl"
 
-// NOTE: All DMS configs removed — migrated to Quickshell
+// Auto-generated border colors (from matugen)
+include "includes/colors.kdl"
+
+include "includes/local.kdl"
