@@ -29,7 +29,7 @@ PanelWindow {
     }
 
     Timer { id: hideTimer; interval: 2000; onTriggered: { osdOpacity = 0; fadeTimer.start() } }
-    Timer { id: fadeTimer; interval: 300; onTriggered: osd.visible = false; osdOpacity = 1.0 }
+    Timer { id: fadeTimer; interval: 300; onTriggered: { osd.visible = false; osdOpacity = 1.0 } }
 
     property real osdOpacity: 1.0
     Behavior on osdOpacity { NumberAnimation { duration: 250 } }
