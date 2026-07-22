@@ -1,0 +1,47 @@
+# GN Harness — Default Configuration
+# ~/.config/harness/config.toml
+
+[terminal]
+font = "JetBrainsMono Nerd Font"
+font_size = 13
+theme = "dark"
+
+[panes]
+default_layout = [
+  { type = "horizontal", panes = ["omp", "hermes"] },
+  { type = "vertical", panes = ["zero"] }
+]
+
+[agents.omp]
+command = ["omp", "--profile", "cr1ms0n", "acp"]
+env = { OMP_LOCAL_LLAMA_KEY = "" }
+working_dir = "~"
+
+[agents.hermes]
+command = ["hermes", "acp", "--profile", "cr1ms0n"]
+env = { BWS_ACCESS_TOKEN = "" }
+working_dir = "~"
+
+[agents.zero]
+command = ["zero", "acp"]
+working_dir = "~"
+
+[keybindings]
+new_tab = "Ctrl+Shift+T"
+close_pane = "Ctrl+Shift+W"
+next_pane = "Ctrl+Tab"
+prev_pane = "Ctrl+Shift+Tab"
+split_horizontal = "Ctrl+Shift+H"
+split_vertical = "Ctrl+Shift+V"
+gnhf_run = "Ctrl+G"
+gate_run = "Ctrl+M"
+
+[gnhf]
+agent = "acp:omp"
+max_iterations = 200
+stop_condition = "10-layer architecture fully implemented and tested"
+worktree_dir = "~/Documents/ai-lab-vault-gnhf-worktrees"
+
+[no_mistakes]
+repo_path = "~/Documents/ai-lab-vault"
+gate_on_merge = true
