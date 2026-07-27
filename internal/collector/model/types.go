@@ -96,3 +96,37 @@ type UsageRecord struct {
 	Period       string  `json:"period"` // "day", "week", or "month"
 	RequestCount int64   `json:"request_count"`
 }
+
+// HistoryPoint is a time-series health snapshot stored in history.
+type HistoryPoint struct {
+	Timestamp string `json:"timestamp"`
+	Health    Health `json:"health"`
+}
+
+// AlertSeverity indicates how critical an alert is.
+type AlertSeverity string
+
+const (
+	AlertWarn  AlertSeverity = "warning"
+	AlertCrit  AlertSeverity = "critical"
+	AlertInfo  AlertSeverity = "info"
+)
+
+// ActiveAlert represents a currently-triggered alert condition.
+type ActiveAlert struct {
+	ID        string        `json:"id"`
+	Severity  AlertSeverity `json:"severity"`
+	Message   string        `json:"message"`
+	Detail    string        `json:"detail,omitempty"`
+	Triggered string        `json:"triggered"`
+}
+
+// AlertThreshold defines a named threshold configuration.
+type AlertThreshold struct {
+	Name     string  `json:"name"`
+	Metric   string  `json:"metric"`
+	Operator string  `json:"operator"` // "gt", "lt", "eq"
+	Value    float64 `json:"value"`
+	Severity AlertSeverity `json:"severity"`
+	Message  string  `json:"message"`
+}

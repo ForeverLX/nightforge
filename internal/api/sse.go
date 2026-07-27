@@ -37,6 +37,9 @@ func snapshot() []byte {
 		"services": collector.GetServices(),
 		"ports":    collector.GetPorts(),
 		"tasks":    collector.GetTasks(),
+		"analysis": collector.GetAnalysis(),
+		"layers":   collector.GetLayers(),
+		"alerts":   collector.GetAlerts(collector.GetHealth(), collector.GetServices()),
 	}
 
 	// Log files list (non-fatal if it fails).
