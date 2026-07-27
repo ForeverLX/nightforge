@@ -8,8 +8,8 @@ theme = "dark"
 
 [panes]
 default_layout = [
-  { type = "horizontal", panes = ["omp", "hermes"] },
-  { type = "vertical", panes = ["zero"] }
+  { type = "horizontal", panes = ["omp", "hermes", "c4"] },
+  { type = "vertical", panes = ["zero", "pi"] }
 ]
 
 [agents.omp]
@@ -19,11 +19,19 @@ working_dir = "~"
 
 [agents.hermes]
 command = ["hermes", "acp", "--profile", "cr1ms0n"]
-env = { BWS_ACCESS_TOKEN = "" }
 working_dir = "~"
 
 [agents.zero]
 command = ["zero", "acp"]
+working_dir = "~"
+
+[agents.pi]
+command = ["omp", "--profile", "cr1ms0n", "acp"]
+env = { OMP_LOCAL_LLAMA_KEY = "" }
+working_dir = "~"
+
+[agents.c4]
+command = ["c4", "status"]
 working_dir = "~"
 
 [keybindings]
@@ -37,7 +45,7 @@ gnhf_run = "Ctrl+G"
 gate_run = "Ctrl+M"
 
 [gnhf]
-agent = "acp:omp"
+agent = "acp:pi"
 max_iterations = 200
 stop_condition = "10-layer architecture fully implemented and tested"
 worktree_dir = "~/Documents/ai-lab-vault-gnhf-worktrees"

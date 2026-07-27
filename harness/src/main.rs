@@ -1,5 +1,7 @@
+mod agent;
 mod config;
 mod herdr;
+mod presets;
 mod terminal;
 
 use anyhow::Result;
