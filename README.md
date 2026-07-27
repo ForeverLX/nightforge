@@ -722,6 +722,18 @@ nightforge/
 
 ---
 
+## 10-Layer Self-Improving Harness
+
+NightForge hosts the 10-layer autonomous improvement harness (design docs in `10-Stack/`):
+- **L10 Weight Update** — Adjust proposal success weights (`10-Stack/Research/l9-l10-design.md`)
+- **L9 Benefit Measurement** — Quantify proposal impact on system metrics
+- **L8 Routing & Variants** — A/B test different agent configurations ✅
+- **L7-L1** — Versioning, validation, mining, state, tracing, substrate ✅
+
+See `AGENTS.md` for the full layer stack and `10-Stack/10-layer-harness-build.md` for implementation details.
+
+---
+
 ## Disclaimer
 
 All tooling is for authorized security research and engagement work only. Sensitive configurations and live operational details are intentionally excluded from this repository.

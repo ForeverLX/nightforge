@@ -177,6 +177,42 @@ func snapshotsHandler(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]any{"snapshots": snapshots})
 }
 
+// ---- alerts ----
+
+func alertsHandler(w http.ResponseWriter, r *http.Request) {
+	health := collector.GetHealth()
+	services := collector.GetServices()
+	alerts := collector.GetAlerts(health, services)
+	if alerts == nil {
+		alerts = []model.ActiveAlert{}
+	}
+	writeJSON(w, http.StatusOK, map[string]any{
+		"alerts":       alerts,
+		"alert_count":  len(alerts),
+		"generated_at": time.Now().UTC().Format(time.RFC3339),
+	})
+}
+
+// ---- history ----
+
+func historyHandler(w http.ResponseWriter, r *http.Request) {
+	days := 1
+	if d := r.URL.Query().Get("days"); d != "" {
+		if v, err := strconv.Atoi(d); err == nil && v > 0 && v <= 30 {
+			days = v
+		}
+	}
+	points := collector.GetHistory(days)
+	if points == nil {
+		points = []model.HistoryPoint{}
+	}
+	writeJSON(w, http.StatusOK, map[string]any{
+		"points":       points,
+		"count":        len(points),
+		"generated_at": time.Now().UTC().Format(time.RFC3339),
+	})
+}
+
 // ---- helpers ----
 
 // writeJSON marshals v to JSON and writes it with the given status code.

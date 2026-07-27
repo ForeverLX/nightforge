@@ -24,6 +24,7 @@
           <li class="nav-item"><a class="nav-link" data-section="ports" href="#">Ports</a></li>
           <li class="nav-item"><a class="nav-link" data-section="analysis" href="#">Analysis</a></li>
           <li class="nav-item"><a class="nav-link" data-section="logs" href="#">Logs</a></li>
+          <li class="nav-item"><a class="nav-link" data-section="layers" href="#">Layers</a></li>
           <li class="nav-item"><a class="nav-link" data-section="api-usage" href="#">API Usage</a></li>
         </ul>
         <span class="navbar-text ms-auto">
@@ -35,6 +36,9 @@
   </nav>
 
   <main class="container-fluid py-3">
+    <!-- Alert Banner -->
+    <div id="alertBanner" class="d-none mb-3"></div>
+
     <!-- Overview -->
     <section id="section-overview" class="section-content">
       <div class="row g-3 mb-3" id="serviceCards"></div>
@@ -77,9 +81,44 @@
       </div><div class="card-body"><pre class="log-viewer" id="logContent">Select a log file.</pre></div></div>
     </section>
 
+    <!-- Layers -->
+    <section id="section-layers" class="section-content d-none">
+      <div class="card mb-3">
+        <div class="card-header">10-Layer Architecture</div>
+        <div class="card-body">
+          <p class="text-muted small mb-3">Status: <span class="badge bg-success">implemented</span> <span class="badge bg-warning text-dark">available</span> <span class="badge bg-secondary">not_implemented</span></p>
+          <div class="row g-3" id="layerCards"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">L4-L7 Details</div>
+        <div class="card-body">
+          <ul class="nav nav-tabs" id="layerDetailTabs">
+            <li class="nav-item"><button class="nav-link active" data-layer-tab="l4">L4 Failures</button></li>
+            <li class="nav-item"><button class="nav-link" data-layer-tab="l5">L5 Proposals</button></li>
+            <li class="nav-item"><button class="nav-link" data-layer-tab="l6">L6 Gates</button></li>
+            <li class="nav-item"><button class="nav-link" data-layer-tab="l7">L7 Snapshots</button></li>
+          </ul>
+          <div id="layerDetailContent" class="mt-3"><p class="text-muted">Loading...</p></div>
+        </div>
+      </div>
+    </section>
+
     <!-- API Usage -->
     <section id="section-api-usage" class="section-content d-none">
-      <div class="card"><div class="card-header">API Token Usage</div><div class="card-body p-0"><div class="table-responsive"><table class="table table-striped mb-0"><thead><tr><th>Provider</th><th>Model</th><th>Tokens</th><th>Period</th></tr></thead><tbody id="apiUsageBody"></tbody></table></div></div></div>
+      <div class="card mb-3">
+        <div class="card-header">API Token Usage</div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-4 mb-3"><canvas id="chartUsageTokens"></canvas></div>
+            <div class="col-lg-8"><canvas id="chartUsageCost"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">Per-Provider Breakdown</div>
+        <div class="card-body p-0"><div class="table-responsive"><table class="table table-striped mb-0"><thead><tr><th>Provider</th><th>Model</th><th>Tokens In</th><th>Tokens Out</th><th>Cost</th><th>Requests</th><th>Period</th></tr></thead><tbody id="apiUsageBody"></tbody></table></div></div>
+      </div>
     </section>
   </main>
 
