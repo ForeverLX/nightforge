@@ -43,3 +43,56 @@ type LogFile struct {
 	Name string `json:"name"`
 	Path string `json:"path"`
 }
+
+// Layer represents one of the 10-layer architecture tiers.
+type Layer struct {
+	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	Status      string `json:"status"` // "implemented", "available", "not_implemented"
+	Description string `json:"description"`
+	LastRun     string `json:"last_run"`
+}
+
+// FailureReport is a parsed L4 failure mining report.
+type FailureReport struct {
+	ID       string `json:"id"`
+	Category string `json:"category"`
+	Count    int    `json:"count"`
+	Summary  string `json:"summary"`
+}
+
+// Proposal is a parsed L5 proposal engine entry.
+type Proposal struct {
+	ID          string `json:"id"`
+	Title       string `json:"title"`
+	ImpactScore int    `json:"impact_score"`
+	EffortScore int    `json:"effort_score"`
+	Status      string `json:"status"`
+}
+
+// GateResult is a parsed L6 validation gate check result.
+type GateResult struct {
+	Name     string  `json:"name"`
+	Status   string  `json:"status"` // "PASS", "FAIL", "SKIP"
+	Duration float64 `json:"duration"`
+	Error    string  `json:"error,omitempty"`
+}
+
+// Snapshot is a parsed L7 config snapshot entry.
+type Snapshot struct {
+	ID        string `json:"id"`
+	Timestamp string `json:"timestamp"`
+	Path      string `json:"path"`
+	Size      int64  `json:"size"`
+}
+
+// UsageRecord tracks API usage for a provider/model combination over a period.
+type UsageRecord struct {
+	Provider     string  `json:"provider"`
+	Model        string  `json:"model"`
+	TokensIn     int64   `json:"tokens_in"`
+	TokensOut    int64   `json:"tokens_out"`
+	Cost         float64 `json:"cost"`
+	Period       string  `json:"period"` // "day", "week", or "month"
+	RequestCount int64   `json:"request_count"`
+}
