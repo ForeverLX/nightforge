@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/ForeverLX/nightforge-dashboard/internal/collector"
+	"github.com/ForeverLX/nightforge-dashboard/internal/collector/model"
 )
 
 // ---- health ----
@@ -128,15 +129,52 @@ func logsHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// ---- usage (placeholder) ----
+// ---- usage ----
 
 func usageHandler(w http.ResponseWriter, r *http.Request) {
+	usage := collector.GetUsage()
 	writeJSON(w, http.StatusOK, map[string]any{
-		"api_calls_today": 0,
-		"bytes_served":    0,
-		"uptime_seconds":  0,
-		"note":            "usage tracking not yet implemented",
+		"records": usage,
 	})
+}
+
+// ---- layers ----
+
+func layersHandler(w http.ResponseWriter, r *http.Request) {
+	layers := collector.GetLayers()
+	writeJSON(w, http.StatusOK, map[string]any{"layers": layers})
+}
+
+func failuresHandler(w http.ResponseWriter, r *http.Request) {
+	reports := collector.GetFailureReports()
+	if reports == nil {
+		reports = []model.FailureReport{}
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"failures": reports})
+}
+
+func proposalsHandler(w http.ResponseWriter, r *http.Request) {
+	proposals := collector.GetProposals()
+	if proposals == nil {
+		proposals = []model.Proposal{}
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"proposals": proposals})
+}
+
+func gatesHandler(w http.ResponseWriter, r *http.Request) {
+	gates := collector.GetGates()
+	if gates == nil {
+		gates = []model.GateResult{}
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"gates": gates})
+}
+
+func snapshotsHandler(w http.ResponseWriter, r *http.Request) {
+	snapshots := collector.GetSnapshots()
+	if snapshots == nil {
+		snapshots = []model.Snapshot{}
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"snapshots": snapshots})
 }
 
 // ---- helpers ----

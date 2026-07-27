@@ -31,6 +31,11 @@ func NewRouter() http.Handler {
 		r.Get("/analysis", analysisHandler)
 		r.Get("/logs", logsHandler)
 		r.Get("/usage", usageHandler)
+		r.Get("/layers", layersHandler)
+		r.Get("/layers/l4/failures", failuresHandler)
+		r.Get("/layers/l5/proposals", proposalsHandler)
+		r.Get("/layers/l6/gates", gatesHandler)
+		r.Get("/layers/l7/snapshots", snapshotsHandler)
 	})
 
 	// SSE hub.
