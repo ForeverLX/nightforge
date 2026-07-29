@@ -85,3 +85,13 @@ package.json
 package-lock.json
 # Aider (removed)
 .aider*
+
+# Deleted/removed components (prevent accidental reintroduction)
+/cmd/
+/harness/
+/session-tracker/
+/dashboard-ctl/
+/.claude/
+/.dmux/
+/.codegraph/
+/.gitnexus/
