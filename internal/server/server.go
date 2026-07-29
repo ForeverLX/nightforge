@@ -20,6 +20,7 @@ func New(frontend embed.FS) http.Handler {
 	mux.HandleFunc("GET /api/v1/sessions", handler.HandleSessions)
 	mux.HandleFunc("GET /api/v1/snapshots", handler.HandleSnapshots)
 	mux.HandleFunc("GET /api/v1/routes", handler.HandleRoutes)
+	mux.HandleFunc("GET /api/v1/cost", handler.HandleCost)
 
 	// Static frontend
 	frontendFS, err := fs.Sub(frontend, "frontend")

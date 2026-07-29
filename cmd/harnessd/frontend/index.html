@@ -179,6 +179,7 @@
   <button class="tab-btn" data-tab="gates">L6 Gates</button>
   <button class="tab-btn" data-tab="snapshots">L7 Snapshots</button>
   <button class="tab-btn" data-tab="routes">L8 Routes</button>
+  <button class="tab-btn" data-tab="cost">Cost/Tokens</button>
 </div>
 
 <div class="content">
@@ -189,8 +190,8 @@
   </div>
   <div class="tab-panel" id="panel-proposals"><div id="proposalsContent"></div></div>
   <div class="tab-panel" id="panel-gates"><div id="gatesContent"></div></div>
-  <div class="tab-panel" id="panel-snapshots"><div id="snapshotsContent"></div></div>
   <div class="tab-panel" id="panel-routes"><div id="routesContent"></div></div>
+  <div class="tab-panel" id="panel-cost"><div id="costContent"></div></div>
   <div class="timestamp" id="lastUpdate"></div>
 </div>
 
@@ -215,6 +216,7 @@ function loadTab(name) {
     case 'gates': loadGates(); break;
     case 'snapshots': loadSnapshots(); break;
     case 'routes': loadRoutes(); break;
+    case 'cost': loadCost(); break;
   }
 }
 
@@ -329,6 +331,49 @@ async function loadRoutes() {
       </div>`;
   } catch (e) {
     document.getElementById('routesContent').innerHTML = '<div class="error">Failed to load routes</div>';
+  }
+}
+
+// --- Cost/Tokens ---
+async function loadCost() {
+  try {
+    const res = await fetch(API + '/cost');
+    if (!res.ok) {
+      document.getElementById('costContent').innerHTML = '<div class="card"><div class="error">No token data yet — run scripts/harness/token-tracker.sh</div></div>';
+      return;
+    }
+    const data = await res.json();
+    const pm = data.per_model || [];
+    const tot = data.totals || {};
+    const daily = data.daily || [];
+
+    let html = '<div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">';
+    html += '<div class="card"><h3>Total Tokens (30d)</h3><div class="value" style="font-size:22px">' + (tot.total_tokens_in || 0).toLocaleString() + '</div><div class="sub">input</div></div>';
+    html += '<div class="card"><h3>Output Tokens</h3><div class="value" style="font-size:22px">' + (tot.total_tokens_out || 0).toLocaleString() + '</div><div class="sub">' + pm.length + ' models</div></div>';
+    html += '<div class="card"><h3>Estimated Cost</h3><div class="value" style="font-size:22px">$' + (tot.total_cost_usd || 0).toFixed(4) + '</div><div class="sub">' + (tot.total_sessions || 0) + ' sessions</div></div>';
+    html += '<div class="card"><h3>Last Updated</h3><div class="value" style="font-size:16px">' + (data.last_updated ? data.last_updated.slice(0, 16).replace('T', ' ') : '?') + '</div><div class="sub">UTC</div></div>';
+    html += '</div>';
+
+    // Per-model table
+    html += '<div class="card"><h3>Per-Model Usage (last 30d)</h3><table><thead><tr><th>Model</th><th>Tokens In</th><th>Tokens Out</th><th>Cost</th><th>Sessions</th><th>Provider</th></tr></thead><tbody>';
+    pm.forEach(m => {
+      const cost = m.cost_usd > 0 ? '$' + m.cost_usd.toFixed(6) : 'free';
+      html += '<tr><td class="model-cell">' + m.model + '</td><td>' + (m.tokens_in || 0).toLocaleString() + '</td><td>' + (m.tokens_out || 0).toLocaleString() + '</td><td>' + cost + '</td><td>' + (m.sessions || 0) + '</td><td>' + (m.provider || '') + '</td></tr>';
+    });
+    html += '</tbody></table></div>';
+
+    // Daily table
+    if (daily.length > 0) {
+      html += '<div class="card"><h3>Daily Usage</h3><table><thead><tr><th>Date</th><th>Tokens In</th><th>Tokens Out</th><th>Cost</th><th>Sessions</th></tr></thead><tbody>';
+      daily.forEach(d => {
+        html += '<tr><td>' + d.date + '</td><td>' + (d.tokens_in || 0).toLocaleString() + '</td><td>' + (d.tokens_out || 0).toLocaleString() + '</td><td>' + (d.cost_usd > 0 ? '$' + d.cost_usd.toFixed(6) : 'free') + '</td><td>' + (d.sessions || 0) + '</td></tr>';
+      });
+      html += '</tbody></table></div>';
+    }
+
+    document.getElementById('costContent').innerHTML = html;
+  } catch (e) {
+    document.getElementById('costContent').innerHTML = '<div class="error">Failed to load cost data</div>';
   }
 }
 
