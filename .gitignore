@@ -62,6 +62,8 @@ session-tracker/target/
 
 # Go binaries
 niri-modifications/scripts/dashboard-ctl
+harnessd
+nightforged
 
 # Generated files
 *.qslog
@@ -87,7 +89,6 @@ package-lock.json
 .aider*
 
 # Deleted/removed components (prevent accidental reintroduction)
-/cmd/
 /harness/
 /session-tracker/
 /dashboard-ctl/
