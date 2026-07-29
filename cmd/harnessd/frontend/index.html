@@ -233,37 +233,55 @@ async function loadHealth() {
 
 function renderHealth(data) {
   const h = data.current?.health;
-  if (!h) return;
-  document.getElementById('healthDot').style.background = h.disk_root_pct > 95 || h.mem_pct > 90 ? 'var(--danger)' : 'var(--success)';
-  const cards = [
-    { title: 'Disk (/)', value: h.disk_root_pct + '%', sub: h.disk_root_used + ' used / ' + h.disk_root_free + ' free', pct: h.disk_root_pct, color: h.disk_root_pct > 90 ? 'red' : h.disk_root_pct > 75 ? 'yellow' : 'green' },
-    { title: 'Disk (/home)', value: h.disk_home_pct + '%', sub: h.disk_home_used + ' used / ' + h.disk_home_free + ' free', pct: h.disk_home_pct, color: h.disk_home_pct > 90 ? 'red' : h.disk_home_pct > 75 ? 'yellow' : 'green' },
-    { title: 'Memory', value: h.mem_pct + '%', sub: h.mem_used + ' / ' + h.mem_total, pct: h.mem_pct, color: h.mem_pct > 85 ? 'red' : h.mem_pct > 70 ? 'yellow' : 'green' },
-    { title: 'GPU', value: (h.gpu_mem / 1024).toFixed(1) + 'G', sub: h.gpu_mem + 'MB / ' + h.gpu_total + 'MB', pct: Math.round(h.gpu_mem / h.gpu_total * 100), color: h.gpu_mem / h.gpu_total > 0.9 ? 'red' : h.gpu_mem / h.gpu_total > 0.7 ? 'yellow' : 'green' },
-  ];
-  document.getElementById('healthCards').innerHTML = cards.map(c => `
-    <div class="card">
-      <h3>${c.title}</h3>
-      <div class="value">${c.value}</div>
-      <div class="sub">${c.sub}</div>
-      <div class="bar"><div class="bar-fill ${c.color}" style="width:${c.pct}%"></div></div>
-    </div>
-  `).join('');
-
-  // Load chart
-  document.getElementById('loadCard').querySelector('h3').textContent = `Load: ${h.load.join('  ')}`;
-
-  // 24h trend bar
+  const s = data.daily_summary || {};
   const history = data.history || [];
-  const trendContainer = document.getElementById('trendBar');
+  if (!h) return;
+
+  document.getElementById('healthDot').style.background = h.disk_root_pct > 95 || h.mem_pct > 90 ? 'var(--danger)' : 'var(--success)';
+
+  // KPI summary row with 24h delta
+  const kpi = (label, value, delta, unit) => {
+    const d = delta > 0 ? '+' + delta : delta;
+    const dColor = delta > 5 ? 'var(--danger)' : delta < -5 ? 'var(--success)' : 'var(--muted)';
+    return '<div class="card"><h3>' + label + '</h3><div class="value" style="font-size:24px">' + value + '</div><div class="sub" style="color:' + dColor + '">24h Δ ' + d + ' ' + unit + '</div></div>';
+  };
+  const drAvg = s.disk_root ? Math.round(s.disk_root.avg) : '?';
+  const dhAvg = s.disk_home ? Math.round(s.disk_home.avg) : '?';
+  const memAvg = s.mem_pct ? Math.round(s.mem_pct.avg) : '?';
+  const gpuAvg = s.gpu_mem_mb ? Math.round(s.gpu_mem_mb.avg) : '?';
+  document.getElementById('healthCards').innerHTML =
+    kpi('Disk (/)', h.disk_root_pct + '%', h.disk_root_pct - drAvg, 'pp') +
+    kpi('Disk (/home)', h.disk_home_pct + '%', h.disk_home_pct - dhAvg, 'pp') +
+    kpi('Memory', h.mem_pct + '%', h.mem_pct - memAvg, 'pp') +
+    kpi('GPU', (h.gpu_mem / 1024).toFixed(1) + 'G', Math.round((h.gpu_mem - gpuAvg) / 102.4) / 10 + 'G', '');
+
+  // Load card
+  document.getElementById('loadCard').querySelector('h3').textContent = 'Load: ' + h.load.join('  ');
+
   if (history.length > 1) {
+    // Helper: build sparkline bars for a metric
+    const sparkline = (values, maxVal, color) => {
+      const mx = maxVal || Math.max(...values, 1);
+      return '<div class="trend-bar">' + values.map(v => '<div class="col" style="height:' + Math.round(v/mx*36) + 'px;background:' + color + '"></div>').join('') + '</div>';
+    };
+
+    const diskPcts = history.map(s => s.health.disk_root_pct);
+    const memPcts = history.map(s => s.health.mem_pct);
+    const gpuMBs = history.map(s => s.health.gpu_mem);
     const loads = history.map(s => Math.max(...s.health.load));
-    const max = Math.max(...loads, 1);
-    trendContainer.innerHTML = loads.map(l => `<div class="col" style="height:${Math.round(l/max*40)}px"></div>`).join('');
+
+    // Sparkline row
+    document.getElementById('trendBar').innerHTML =
+      '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px">' +
+      '<div class="card"><h3>Disk / 24h</h3>' + sparkline(diskPcts, 100, 'var(--warn)') + '<div class="sub" style="margin-top:4px">' + Math.min(...diskPcts) + '% – ' + Math.max(...diskPcts) + '%</div></div>' +
+      '<div class="card"><h3>Memory / 24h</h3>' + sparkline(memPcts, 100, 'var(--primary)') + '<div class="sub" style="margin-top:4px">' + Math.min(...memPcts) + '% – ' + Math.max(...memPcts) + '%</div></div>' +
+      '<div class="card"><h3>GPU / 24h</h3>' + sparkline(gpuMBs, Math.max(...gpuMBs, 1), 'var(--success)') + '<div class="sub" style="margin-top:4px">' + Math.min(...gpuMBs) + 'MB – ' + Math.max(...gpuMBs) + 'MB</div></div>' +
+      '<div class="card"><h3>Load / 24h</h3>' + sparkline(loads, Math.max(...loads, 1), 'var(--danger)') + '<div class="sub" style="margin-top:4px">' + Math.min(...loads).toFixed(1) + ' – ' + Math.max(...loads).toFixed(1) + '</div></div>' +
+      '</div>';
   }
 
   // History count
-  document.getElementById('historyContent').innerHTML = `<span style="color:var(--muted)">${history.length} data points collected (5min intervals, rolling 24h)</span>`;
+  document.getElementById('historyContent').innerHTML = '<span style="color:var(--muted)">' + history.length + ' data points · ' + (s.samples || '?') + ' samples in 24h rolling window</span>';
   document.getElementById('lastUpdate').textContent = 'Last updated: ' + new Date().toLocaleTimeString();
 }
 

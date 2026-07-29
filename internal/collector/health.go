@@ -65,6 +65,100 @@ func GetHealth() (HealthSnapshot, []HealthSnapshot) {
 	return history[len(history)-1], history
 }
 
+// DailySummary holds min/max/avg stats over the current 24h history.
+type DailySummary struct {
+	Samples  int       `json:"samples"`
+	DiskRoot AvgMinMax `json:"disk_root"`
+	DiskHome AvgMinMax `json:"disk_home"`
+	MemPct   AvgMinMax `json:"mem_pct"`
+	GPUMemMB AvgMinMax `json:"gpu_mem_mb"`
+	Load1m   AvgMinMax `json:"load_1m"`
+}
+
+// AvgMinMax holds average, minimum, and maximum values.
+type AvgMinMax struct {
+	Avg float64 `json:"avg"`
+	Min float64 `json:"min"`
+	Max float64 `json:"max"`
+}
+
+// GetDailySummary computes min/max/avg over the current in-memory history.
+func GetDailySummary() DailySummary {
+	mu.RLock()
+	defer mu.RUnlock()
+
+	if len(history) == 0 {
+		return DailySummary{}
+	}
+
+	diskRoot := AvgMinMax{Min: 100, Max: 0}
+	diskHome := AvgMinMax{Min: 100, Max: 0}
+	mem := AvgMinMax{Min: 100, Max: 0}
+	gpu := AvgMinMax{Min: 1 << 30, Max: 0}
+	load1m := AvgMinMax{Min: 1e9, Max: 0}
+
+	for _, h := range history {
+		d := h.Health
+		if v := float64(d.DiskRootPct); v < diskRoot.Min {
+			diskRoot.Min = v
+		}
+		if v := float64(d.DiskRootPct); v > diskRoot.Max {
+			diskRoot.Max = v
+		}
+		diskRoot.Avg += float64(d.DiskRootPct)
+
+		if v := float64(d.DiskHomePct); v < diskHome.Min {
+			diskHome.Min = v
+		}
+		if v := float64(d.DiskHomePct); v > diskHome.Max {
+			diskHome.Max = v
+		}
+		diskHome.Avg += float64(d.DiskHomePct)
+
+		if v := float64(d.MemPct); v < mem.Min {
+			mem.Min = v
+		}
+		if v := float64(d.MemPct); v > mem.Max {
+			mem.Max = v
+		}
+		mem.Avg += float64(d.MemPct)
+
+		if v := float64(d.GPUMem); v < gpu.Min {
+			gpu.Min = v
+		}
+		if v := float64(d.GPUMem); v > gpu.Max {
+			gpu.Max = v
+		}
+		gpu.Avg += float64(d.GPUMem)
+
+		if v := d.Load[0]; v < load1m.Min {
+			load1m.Min = v
+		}
+		if v := d.Load[0]; v > load1m.Max {
+			load1m.Max = v
+		}
+		load1m.Avg += d.Load[0]
+	}
+
+	n := float64(len(history))
+	if n > 0 {
+		diskRoot.Avg /= n
+		diskHome.Avg /= n
+		mem.Avg /= n
+		gpu.Avg /= n
+		load1m.Avg /= n
+	}
+
+	return DailySummary{
+		Samples:  len(history),
+		DiskRoot: diskRoot,
+		DiskHome: diskHome,
+		MemPct:   mem,
+		GPUMemMB: gpu,
+		Load1m:   load1m,
+	}
+}
+
 // --- collection ---
 
 func collect() {
