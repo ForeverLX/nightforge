@@ -371,6 +371,27 @@ async function loadCost() {
       html += '</tbody></table></div>';
     }
 
+
+    // Pi session costs (from /api/v1/sessions)
+    try {
+      const sessRes = await fetch(API + '/sessions');
+      if (sessRes.ok) {
+        const sessData = await sessRes.json();
+        const pi = sessData.pi_costs || [];
+        if (pi.length > 0) {
+          const totalPiCost = pi.reduce((s, p) => s + p.cost, 0);
+          const totalPiTokens = pi.reduce((s, p) => s + p.tokens_in, 0);
+          html += '<div class="card"><h3>Pi Session Costs (' + pi.length + ' sessions, $' + totalPiCost.toFixed(4) + ')</h3><div style="max-height:300px;overflow-y:auto"><table><thead><tr><th>Session</th><th>Model</th><th>Tokens In</th><th>Cost</th><th>Messages</th></tr></thead><tbody>';
+          // Last 20 sessions
+          pi.slice(-20).reverse().forEach(s => {
+            const label = s.session_id ? s.session_id.slice(-8) : s.session_file.slice(0, 16);
+            html += '<tr><td class="model-cell">' + label + '</td><td>' + (s.model || '?') + '</td><td>' + (s.tokens_in || 0).toLocaleString() + '</td><td>' + (s.cost > 0 ? '$' + s.cost.toFixed(6) : 'free') + '</td><td>' + (s.message_count || 0) + '</td></tr>';
+          });
+          html += '</tbody></table></div></div>';
+        }
+      }
+    } catch (e) {}
+
     document.getElementById('costContent').innerHTML = html;
   } catch (e) {
     document.getElementById('costContent').innerHTML = '<div class="error">Failed to load cost data</div>';
