@@ -1,6 +1,11 @@
 package handler
 
-import "net/http"
+import (
+	"encoding/json"
+	"net/http"
+	"os"
+	"path/filepath"
+)
 
 // Layer describes one layer of the 10-layer harness.
 type Layer struct {
@@ -23,9 +28,31 @@ var layers = []Layer{
 	{ID: "L10", Name: "Weight Update", Status: "not-designed"},
 }
 
-// HandleLayers returns the 10-layer implementation status.
+// HandleLayers returns the 10-layer implementation status with proposals and gates detail.
 func HandleLayers(w http.ResponseWriter, r *http.Request) {
+	home, _ := os.UserHomeDir()
+	base := filepath.Join(home, "Github", "nightforge", "data")
+
+	proposals := readJSONFile(filepath.Join(base, "proposals", "proposals.json"))
+	gates := readJSONFile(filepath.Join(base, "gates", "gates.json"))
+	failures := readJSONFile(filepath.Join(base, "failures", "failures.json"))
+
 	writeJSON(w, http.StatusOK, map[string]any{
-		"layers": layers,
+		"layers":    layers,
+		"proposals": proposals,
+		"gates":     gates,
+		"failures":  failures,
 	})
+}
+
+func readJSONFile(path string) any {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil
+	}
+	var v any
+	if err := json.Unmarshal(data, &v); err != nil {
+		return nil
+	}
+	return v
 }
