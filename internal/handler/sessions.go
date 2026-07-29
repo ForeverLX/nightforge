@@ -17,11 +17,31 @@ type Session struct {
 	Model     string `json:"model,omitempty"`
 }
 
-// HandleSessions returns recent agent sessions from Hermes and OMP dirs.
+// PiCostSession represents parsed cost data from a Pi session.
+type PiCostSession struct {
+	SessionFile string  `json:"session_file"`
+	SessionID   string  `json:"session_id"`
+	StartedAt   string  `json:"started_at"`
+	EndedAt     string  `json:"ended_at,omitempty"`
+	Title       string  `json:"title,omitempty"`
+	Model       string  `json:"model,omitempty"`
+	Provider    string  `json:"provider,omitempty"`
+	API         string  `json:"api,omitempty"`
+	TokensIn    int     `json:"tokens_in"`
+	TokensOut   int     `json:"tokens_out"`
+	TotalTokens int     `json:"total_tokens"`
+	Cost        float64 `json:"cost"`
+	MessageCount int    `json:"message_count"`
+	ToolCalls   int     `json:"tool_calls"`
+	LastStopReason string `json:"last_stop_reason,omitempty"`
+	Errors      int     `json:"errors"`
+}
+
 func HandleSessions(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]any{
-		"hermes": readHermesSessions(),
-		"omp":    readOMPSessions(),
+		"hermes":   readHermesSessions(),
+		"omp":      readOMPSessions(),
+		"pi_costs": readPiCosts(),
 	})
 }
 
@@ -98,4 +118,23 @@ func extractModel(path string) string {
 		}
 	}
 	return ""
+}
+
+func readPiCosts() []PiCostSession {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return nil
+	}
+	path := filepath.Join(home, "Github", "nightforge", "data", "cost", "pi-costs.json")
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil
+	}
+	var wrapper struct {
+		Sessions []PiCostSession `json:"sessions"`
+	}
+	if err := json.Unmarshal(data, &wrapper); err != nil {
+		return nil
+	}
+	return wrapper.Sessions
 }
