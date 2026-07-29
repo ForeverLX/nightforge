@@ -73,3 +73,6 @@ This project is indexed by GitNexus as **nightforge** (799 symbols, 802 relation
 | Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
 
 <!-- gitnexus:end -->
+
+## Documentation
+- `docs/solutions/` — problem resolutions and execution records
