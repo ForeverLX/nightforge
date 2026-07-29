@@ -190,6 +190,7 @@
   </div>
   <div class="tab-panel" id="panel-proposals"><div id="proposalsContent"></div></div>
   <div class="tab-panel" id="panel-gates"><div id="gatesContent"></div></div>
+  <div class="tab-panel" id="panel-snapshots"><div id="snapshotsContent"></div></div>
   <div class="tab-panel" id="panel-routes"><div id="routesContent"></div></div>
   <div class="tab-panel" id="panel-cost"><div id="costContent"></div></div>
   <div class="timestamp" id="lastUpdate"></div>
@@ -374,12 +375,28 @@ async function loadSnapshots() {
   try {
     const res = await fetch(API + '/snapshots');
     const data = await res.json();
-    document.getElementById('snapshotsContent').innerHTML = `
-      <div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">
-        <div class="card"><h3>Latest Snapshot</h3><div class="value" style="font-size:16px">${data.latest_snapshot || 'None'}</div></div>
-        <div class="card"><h3>Total Snapshots</h3><div class="value">${data.total_snapshots}</div></div>
-        <div class="card"><h3>Rollbacks</h3><div class="value" style="color:${data.rollbacks > 0 ? 'var(--warn)' : 'var(--success)'}">${data.rollbacks}</div></div>
-      </div>`;
+    const hist = data.history || [];
+    const latestLabel = hist.length > 0 ? hist[hist.length-1].label || hist[hist.length-1].timestamp.slice(0, 16).replace('T', ' ') : 'None';
+
+    let html = '<div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">';
+    html += '<div class="card"><h3>Latest Snapshot</h3><div class="value" style="font-size:16px">' + (data.latest_snapshot ? data.latest_snapshot.slice(0, 16).replace('T', ' ') : 'None') + '</div><div class="sub">' + latestLabel + '</div></div>';
+    html += '<div class="card"><h3>Total Snapshots</h3><div class="value">' + data.total_snapshots + '</div><div class="sub">captured</div></div>';
+    html += '<div class="card"><h3>Rollbacks</h3><div class="value" style="color:' + (data.rollbacks > 0 ? 'var(--warn)' : 'var(--success)') + '">' + data.rollbacks + '</div><div class="sub">' + (data.rollbacks > 0 ? 'restore events' : 'no rollbacks') + '</div></div>';
+    html += '</div>';
+
+    // Snapshot timeline
+    if (hist.length > 0) {
+      html += '<div class="card"><h3>Snapshot Timeline</h3><table><thead><tr><th>#</th><th>Timestamp</th><th>Label</th><th>Name</th></tr></thead><tbody>';
+      hist.slice().reverse().forEach((s, i) => {
+        const ts = s.timestamp ? s.timestamp.slice(0, 16).replace('T', ' ') : '?';
+        html += '<tr><td>' + (hist.length - i) + '</td><td>' + ts + '</td><td>' + (s.label || '') + '</td><td class="model-cell">' + (s.name || '') + '</td></tr>';
+      });
+      html += '</tbody></table></div>';
+    } else {
+      html += '<div class="card"><div class="sub">No snapshots yet — run scripts/harness/snapshot-config.sh</div></div>';
+    }
+
+    document.getElementById('snapshotsContent').innerHTML = html;
   } catch (e) {
     document.getElementById('snapshotsContent').innerHTML = '<div class="error">Failed to load snapshots</div>';
   }
