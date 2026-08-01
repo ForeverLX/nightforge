@@ -1,7 +1,7 @@
 # nightforge — Agent Rules
 
 ## Purpose
-Operator workstation for CR1MS0N-Operator operations. Hosts T5 code tooling (OpenCode) and local development environment.
+Full environment for CR1MS0N-Operator operations: red team work, security research, and agentic AI. Hosts OMP (executor), Hermes (research), local LLM serving, and the offsec toolchain (offsec-ops container on CERBERUS). Conventions in README.md; stale CLAUDE.md removed — this file is the agent rules source.
 
 ## Session Strategy
 - `--fork` — branch session for exploratory work
@@ -14,31 +14,30 @@ Operator workstation for CR1MS0N-Operator operations. Hosts T5 code tooling (Ope
 - STATE.md tracks progress
 - Execute in order: lint -> typecheck -> test -> build
 
-## Model & Provider Stack (S168 — v5 Routing)
+## Model & Provider Stack (2026-08-01)
 
 | Role | Primary Model | Provider | Cost | Notes |
 |------|--------------|----------|------|-------|
-| **Hermes BRAIN** | deepseek-v4-flash | OpenCode Go ($10/mo) | ~$0.14/mo used | Planning, routing, research synthesis |
-| **OMP EXECUTOR** | deepseek-v4-flash | OpenCode Go ($10/mo) | bundled | Coding, debugging, testing, CI/CD |
-| **Subagents** | deepseek-v4-flash-free | OpenCode Zen Free | $0 | Free tier when Zen resets |
-| **Pi/gnhf** | ornith-1.0-9b-Q4_K_M | Local llama.cpp | $0 | Offsec, local-only tasks |
-| **Local Fallback** | ornith-1.0-9b-Q4_K_M | local-llama (:18234) | $0 | Fallback when cloud unavailable |
+| **OMP EXECUTOR** | deepseek-v4-flash | opencode-go | $0/mo | Coding, debugging, testing, CI/CD |
+| **Hermes BRAIN** | deepseek-v4-flash | opencode-go | $0/mo | Planning, routing, research synthesis |
+| **Local Offsec** | CyberStrike-OffSec-35B Q3_K_M | local llama-server (:18235) | $0 | Resident, interactive offsec + fallback, 15-18 tok/s |
+| **Local Deep-Think** | Bonsai-27B Q1_0 | local llama-server (:18234) | $0 | On-demand, 28K-context deep-think only, Conflicts= swap |
 
 ### Subagent Routing
 | Subagent | Model | Provider | Notes |
 |----------|-------|----------|-------|
-| Coding | deepseek-v4-flash | OpenCode Go | OMP default |
-| Research | deepseek-v4-flash | OpenCode Go | Fast + cheap |
-| Review | deepseek-v4-flash | OpenCode Go | Quality gate |
-| Offsec | ornith-1.0-9b | local-llama | Air-gapped |
+| Coding | deepseek-v4-flash | opencode-go | OMP default |
+| Research | deepseek-v4-flash | opencode-go | Fast + cheap |
+| Review | deepseek-v4-flash | opencode-go | Quality gate |
+| Offsec | CyberStrike-OffSec-35B | local llama-server (:18235) | Interactive offsec work |
 
-### Provider Priority Chain (S168)
-1. **OpenCode Go** ($10/mo flat) → deepseek-v4-flash for Hermes + OMP
-2. **local-llama** → ornith-1.0-9b on :18234 (fallback, private, offline)
-3. **OpenCode Zen Free** → DeepSeek V4 Flash Free, (subagents, daily cap)
+### Provider Priority Chain
+1. **opencode-go** → deepseek-v4-flash for OMP + Hermes ($0/mo)
+2. **local llama-server** → CyberStrike-OffSec-35B on :18235 (fallback, private, offline)
+3. **Bonsai-27B** on :18234 — deep-think only, on-demand (VRAM swap with OffSec)
 
-**Budget:** $10/mo (Go) + $0 (Zen free) + $0 (local) = $10/mo
-**Routing:** Go primary → local fallback → Zen subagents
+**Budget:** $0/mo (opencode-go) + $0 (local) = $0/mo
+**Routing:** opencode-go primary → local OffSec-35B fallback → Bonsai deep-think
 
 ## 10-Layer Self-Improving Harness (Backend Architecture)
 ```
@@ -58,14 +57,14 @@ Full doc: `10-Stack/10-layer-harness-build.md`
 ## Key Ports
 | Port | Service | Purpose |
 |------|---------|---------|
-| 18234 | llama-server | Local LLM (Ornith-1.0-9B) |
-| 3000 | Forgejo | Git service |
-| 7545 | gitlawb | Git lawb peer |
-| 8585 | memlawb | E2E encrypted agent memory |
-| 4747 | context-mode | Insight dashboard |
-| 9191 | nightforged | Operator dashboard |
+| 18234 | llama-server (Bonsai-27B) | On-demand deep-think, 28K ctx |
+| 18235 | llama-server (CyberStrike-OffSec-35B) | Resident offsec model + fallback |
+| 3000 | Gitea (CERBERUS) | Repo hub + vault backup |
+| 3002 | cyberstrike (offsec-ops, loopback) | Agentic offsec assistant |
+| 3333 | t3mp3st (offsec-ops, loopback) | Network/tempest tooling |
+| 2222 | Gitea SSH (CERBERUS) | git over SSH |
 
-Full registry: `80-Operations/port-registry.md`
+Full registry: README.md §Port Registry
 
 ## Hacker Overlays (Permanent Identity)
 
