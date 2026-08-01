@@ -77,3 +77,8 @@ end
 function fish_greeting
     echo "NightForge operator shell ready."
 end
+
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH /home/ForeverLX/.lmstudio/bin
+# End of LM Studio CLI section
+
