@@ -3,7 +3,7 @@
 # Font: JetBrainsMono Nerd Font Mono
 
 # === Font ===
-font-size = 12
+font-size = 16
 font-family = "JetBrainsMono Nerd Font Mono"
 
 # === Window ===
@@ -47,6 +47,9 @@ unfocused-split-fill = #0D0F1A
 
 # === Tab bar ===
 gtk-titlebar = false
+
+# === Fragment Shader ===
+fragment-shader = "/home/ForeverLX/.config/ghostty/shaders/space.glsl"
 
 # === Theme (Matugen auto-generated) ===
 # Colors are synced by ~/.local/bin/matugen-sync.sh

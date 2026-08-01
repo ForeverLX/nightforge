@@ -57,7 +57,11 @@ dotfiles/nvim/.config/nvim/lua/plugins/dankcolors.lua
 /.config/
 dotfiles/zsh/.zshrc
 
-# Rust builds
+# Tracked compiled binaries (remove from git tracking)
+scripts/qs-watcher/qs-watcher
+scripts/niri-outputs/niri-outputs
+niri-modifications/outputs/niri-outputs
+harness/target/
 session-tracker/target/
 
 # Go binaries
@@ -72,6 +76,7 @@ niri-modifications/scripts/dashboard-ctl
 # Build artifacts
 dashboard-ctl/dashboard-ctl
 
+nightforged
 # Generated/planning artifacts
 .codegraph/
 .planning/

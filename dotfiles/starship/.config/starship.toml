@@ -10,9 +10,9 @@ symbol = ' '
 
 [character]
 format = "$symbol "
-success_symbol = "[◎](bold italic bright-yellow)"
-error_symbol = "[○](italic purple)"
-vimcmd_symbol = "[■](italic dimmed green)"
+success_symbol = '[➜](bold green)'
+error_symbol = '[✗](bold red)'
+vicmd_symbol = "[N] >>>"
 # not supported in zsh
 vimcmd_replace_one_symbol = "◌"
 vimcmd_replace_symbol = "□"
@@ -57,6 +57,7 @@ renamed = "[◎◦](italic bright-blue)"
 deleted = "[✕](italic red)"
 
 [docker_context]
+disabled = true
 symbol = "◧ "
 format = " docker [$symbol$context]($style)"
 
@@ -79,6 +80,11 @@ style = "bold bright-yellow"
 [c]
 symbol = "ℂ "
 format = " [$symbol($version(-$name))]($style)"
+
+[kubernetes]
+disabled = true
+symbol = "☸ "
+format = '[$symbol$context( \($namespace\))]($style) '
 
 # === Commented out modules — uncomment as needed ===
 # [env_var.VIMSHELL]
