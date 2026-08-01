@@ -1,3 +1,4 @@
+# shellcheck disable=SC2148
 # === MODERN COMMAND REPLACEMENTS ===
 alias ls='eza --icons --group-directories-first'
 alias ll='eza -l --icons --group-directories-first'
