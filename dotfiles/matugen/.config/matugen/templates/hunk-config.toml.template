@@ -1,0 +1,15 @@
+# Hunk matugen template — only colors section gets injected into ~/.config/hunk/config.toml
+[custom_theme]
+base = "catppuccin-mocha"
+label = "Matugen"
+accent = "{{colors.primary.default.hex}}"
+panel = "{{colors.surface.default.hex}}"
+noteBorder = "{{colors.tertiary.default.hex}}"
+
+[custom_theme.syntax_scopes]
+"comment" = "{{colors.on_surface_variant.default.hex}}"
+"punctuation.definition.comment" = "{{colors.on_surface_variant.default.hex}}"
+"keyword.operator" = "{{colors.primary.default.hex}}"
+"entity.name.function" = "{{colors.secondary.default.hex}}"
+"string.quoted" = "{{colors.tertiary.default.hex}}"
+"constant.numeric" = "{{colors.primary.default.hex}}"
