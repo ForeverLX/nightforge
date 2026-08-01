@@ -5,12 +5,12 @@ anchor=top-right
 margin=10,10
 
 # Styling
-background-color=##131318DD
-text-color=##e4e1e9
+background-color=#1a1111DD
+text-color=#f0dede
 border-size=2
 border-radius=8
-border-color=##bcc2ff
-progress-color=##bcc2ff
+border-color=#ffb3b3
+progress-color=#ffb3b3
 
 # Font
 font=MesloLGS NF 12
