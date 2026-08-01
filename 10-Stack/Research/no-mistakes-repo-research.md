@@ -24,12 +24,12 @@
 | Dir Hash | Remote URL | Repo |
 |----------|-----------|------|
 | `ff6dd5de6292` | `git@github.com:CR1MS0N-Operator/ai-lab-vault.git` | ai-lab-vault |
-| `f56459fbf053` | `ssh://git@10.0.0.1:2222/foreverlx/veil.git` | veil |
-| `ee55a8df2469` | `ssh://git@git.lan:2222/foreverlx/euphrates.git` | euphrates |
+| `f56459fbf053` | `<internal-gitea>/foreverlx/veil.git` | veil |
+| `ee55a8df2469` | `<internal-gitea>/foreverlx/euphrates.git` | euphrates |
 | `de26ea35d9e1` | `git@github.com:ForeverLX/azrael-security.git` | azrael-security |
 | `9edab0b7273b` | `git@github.com:ForeverLX/security-research.git` | security-research |
 | `5a6aaf5fd7cf` | `git@github.com:CR1MS0N-Operator/ACLGuard-Active-Directory-Permission-Auditor.git` | ACLGuard |
-| `2d0cb17c1721` | `ssh://git@git.lan:2222/foreverlx/azrael-ops-dashboard.git` | azrael-ops-dashboard |
+| `2d0cb17c1721` | `<internal-gitea>/foreverlx/azrael-ops-dashboard.git` | azrael-ops-dashboard |
 | `6ec5f2f9d76e` | `git@github.com:CR1MS0N-Operator/c4.git` | c4 (has actual branches pushed) |
 | `1615b9d23356` | `git@github.com:CR1MS0N-Operator/nightforge.git` | nightforge |
 
