@@ -1,0 +1,29 @@
+[package]
+name = "gn"
+version = "0.1.0"
+edition = "2024"
+description = "libghostty-based terminal emulator with agent-mode panes"
+authors = ["CR1MS0N <cr1ms0n@azrael-security.dev>"]
+license = "MIT"
+
+[dependencies]
+# Terminal rendering
+crossterm = "0.28"
+ratatui = "0.29"
+
+# Config
+toml = "0.8"
+serde = { version = "1.0", features = ["derive"] }
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# IPC
+tokio = { version = "1.0", features = ["full"] }
+serde_json = "1.0"
+
+# Error handling
+anyhow = "1.0"
+thiserror = "2.0"
+dirs = "6.0.0"
