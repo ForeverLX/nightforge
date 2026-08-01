@@ -8,6 +8,10 @@ Part of the [Veil](https://github.com/CR1MS0N-Operator/veil) infrastructure proj
 
 > NightForge is not a dotfile dump — it is a reproducible, production-grade environment that unifies three workloads on one Arch Linux machine: offensive security operations, security research, and agentic AI. The emphasis is on reproducibility, operational awareness, OPSEC-safe workflows, and long-term maintainability.
 
+![NightForge environment architecture](assets/nightforge-architecture.svg)
+
+*Environment topology — node roles, model stack, and the isolated offsec toolchain. Internal addressing is deliberately omitted (see [SECURITY.md](SECURITY.md)).*
+
 ---
 
 ## 1. What NightForge Is
