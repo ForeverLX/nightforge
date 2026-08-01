@@ -15,4 +15,4 @@
 - Generate code operator should write themselves (write-first rule).
 
 ## OPSEC
-- Confirm before destructive bash. Redact 10.0.0.0/24 and 192.168.1.0/24 from external output.
+- Confirm before destructive bash. Redact internal IP ranges (RFC1918 + WG mesh) from external output.
