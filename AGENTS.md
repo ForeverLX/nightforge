@@ -1,7 +1,7 @@
 # nightforge — Agent Rules
 
 ## Purpose
-Full environment for CR1MS0N-Operator operations: red team work, security research, and agentic AI. Hosts OMP (executor), Hermes (research), local LLM serving, and the offsec toolchain (offsec-ops container on CERBERUS). Conventions in README.md; stale CLAUDE.md removed — this file is the agent rules source.
+Full environment for CR1MS0N-Operator operations: red team work, security research, and agentic AI. Hosts OMP (executor), Hermes (fallback), pi (planned brain), local LLM serving, and the offsec toolchain (offsec-ops container on CERBERUS). Conventions in README.md; this file is the agent rules source.
 
 ## Session Strategy
 - `--fork` — branch session for exploratory work
@@ -18,8 +18,9 @@ Full environment for CR1MS0N-Operator operations: red team work, security resear
 
 | Role | Primary Model | Provider | Cost | Notes |
 |------|--------------|----------|------|-------|
+| **pi BRAIN** | mimo-v2.5 | opencode-go | $10/mo | Orchestrator + Buzz bridge; planned replacement for Hermes as primary brain |
 | **OMP EXECUTOR** | deepseek-v4-flash | opencode-go | $10/mo | Coding, debugging, testing, CI/CD |
-| **Hermes BRAIN** | deepseek-v4-flash | opencode-go | $10/mo | Planning, routing, research synthesis |
+| **Hermes FALLBACK** | deepseek-v4-flash | opencode-go | $10/mo | Kanban, web research, light tasks (brain until pi lands) |
 | **Local Offsec** | CyberStrike-OffSec-35B Q3_K_M | local llama-server | $0 | Resident, interactive offsec + fallback, 15-18 tok/s |
 | **Local Deep-Think** | Bonsai-27B Q1_0 | local llama-server | $0 | On-demand, 28K-context deep-think only, Conflicts= swap |
 
@@ -32,12 +33,12 @@ Full environment for CR1MS0N-Operator operations: red team work, security resear
 | Offsec | CyberStrike-OffSec-35B | local llama-server | Interactive offsec work |
 
 ### Provider Priority Chain
-1. **opencode-go** → deepseek-v4-flash for OMP + Hermes ($10/mo)
+1. **opencode-go** → deepseek-v4-flash for OMP + Hermes, mimo-v2.5 for pi ($10/mo)
 2. **local llama-server** → CyberStrike-OffSec-35B (fallback, private, offline)
 3. **Bonsai-27B** — deep-think only, on-demand (VRAM swap with OffSec)
 
 **Budget:** $10/mo (opencode-go) + $0 (local) = $10/mo
-**Routing:** opencode-go primary → local OffSec-35B fallback → Bonsai deep-think
+**Routing:** opencode-go primary → local OffSec-35B fallback → Bonsai deep-think; pi replaces Hermes as brain on transition
 
 ## 10-Layer Self-Improving Harness (Backend Architecture)
 ```
@@ -119,7 +120,7 @@ Before starting substantive work:
 
 ## Reference
 - Global rules: ~/.config/opencode/AGENTS.md
-- CR1MS0N context: ~/Documents/cr1ms0n-ops/CLAUDE.md
+- CR1MS0N context: ~/Documents/cr1ms0n-ops/AGENTS.md
 - Vault context: ~/Documents/ai-lab-vault/AGENTS.md
 
 <!-- gitnexus:start -->
@@ -155,13 +156,12 @@ This project is indexed by GitNexus as **nightforge** (799 symbols, 802 relation
 
 ## CLI
 
-| Task | Read this skill file |
-|------|---------------------|
-| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
-| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
-| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
-| Rename / extract / split / refactor | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md` |
-| Tools, resources, schema reference | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md` |
-| Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
+| Task | Tool |
+|------|------|
+| Understand architecture / "How does X work?" | GitNexus MCP tools (index: **nightforge**) |
+| Blast radius / "What breaks if I change X?" | `gitnexus_impact` — run before editing any symbol |
+| Trace bugs / "Why is X failing?" | GitNexus MCP + `git log -S` |
+| Rename / extract / split / refactor | `gitnexus_refactor` (MCP) |
+| Index, status, clean, wiki CLI commands | `npx gitnexus` CLI |
 
 <!-- gitnexus:end -->
