@@ -60,9 +60,9 @@ The offensive toolchain runs in a Podman container on the edge node (**CERBERUS*
 
 ### Agentic AI Stack
 
-- **OMP (lead/executor):** deepseek-v4-flash via opencode-go — **$10/mo flat**
-- **Fallback chain:** opencode-go → local-llama (OffSec-35B)
-- **Hermes:** long research, planning, kanban — deepseek-v4-flash
+- **pi (brain, planned):** orchestrator + Buzz bridge — mimo-v2.5 via opencode-go; scheduled to replace Hermes as the primary brain
+- **OMP (executor):** deepseek-v4-flash via opencode-go — **$10/mo flat**
+- **Hermes (fallback):** kanban, web research, light tasks — deepseek-v4-flash
 - **memlawb:** E2E-encrypted agent memory
 - **Agent harness:** `harness/` (Rust TUI, ACP panes for omp/hermes/zero/pi/c4), 10-layer self-improving harness design in `harness/docs/10-layer-architecture.md`
 
@@ -122,9 +122,9 @@ new-engagement my-client 10.10.10.0/24
 | `dotfiles/` | 27 stow packages: niri, quickshell, ghostty, matugen (17 color templates), zsh, tmux, nvim, operator-terminal, starship, mako, rofi, etc. |
 | `internal/` + `dashboard-ctl/` + `web/` | Go dashboard: collector → API (`/api/v1` + SSE) → embedded web SPA; CLI for VMs/containers/services/C2/network |
 | `services/` | Quickshell QML singletons: MatugenColors, MpdClient, VpnStatus, PodmanStatus |
-| `session-tracker/` | Rust: OpenCode + Hermes session stats → quickshell agent-sessions widget |
-| `harness/` | Rust TUI (`gn`): libghostty terminal with ACP agent panes (omp/hermes/zero/pi/c4) |
-| `.claude/` | Claude Code project config: safety hooks (6 block scripts), deny-list, 13 commands. Legacy — see AGENTS.md |
+| `session-tracker/` | Rust: OpenCode + agent session stats → quickshell agent-sessions widget |
+| `harness/` | Rust TUI (`gn`): ACP agent panes (omp/hermes/zero/pi/c4) |
+| `scripts/security/` | Tool-agnostic safety hooks: block destructive git/network/credential-access operations |
 | `docs/` | Design docs, audits, migration notes, snapshots |
 | `10-Stack/` | 10-layer self-improving harness design + research |
 | `install.sh` | Profile-driven installer (pacman manifests + directory contract) |
