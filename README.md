@@ -36,52 +36,42 @@ Everything is version-controlled: host packages, container images, dotfiles, scr
 
 Two llama.cpp servers on loopback; systemd `Conflicts=` ensures only one occupies VRAM at a time:
 
-| Model | Quant | Port | Service | Role | Throughput |
-|-------|-------|------|---------|------|-----------|
-| **CyberStrike-OffSec-35B** | Q3_K_M | 18235 | `llama-server-offsec.service` | **Resident** — interactive offsec work + OMP fallback | 15–18 tok/s |
-| **Bonsai-27B** | Q1_0 | 18234 | `llama-server-bonsai.service` | **On-demand** — 28K-context deep-think only | — |
+| Model | Quant | Service | Role | Throughput |
+|-------|-------|---------|------|-----------|
+| **CyberStrike-OffSec-35B** | Q3_K_M | `llama-server-offsec.service` | **Resident** — interactive offsec work + OMP fallback | 15–18 tok/s |
+| **Bonsai-27B** | Q1_0 | `llama-server-bonsai.service` | **On-demand** — 28K-context deep-think only | — |
 
 One model in VRAM at a time (swap via `Conflicts=`). Both expose the OpenAI-compatible API on `127.0.0.1`.
 
 ### Offsec Toolchain — `offsec-ops` Container (CERBERUS)
 
-The offensive toolchain runs in a Podman container on **CERBERUS (10.0.0.1)**, not on the host:
+The offensive toolchain runs in a Podman container on the edge node (**CERBERUS**), not on the host:
 
 - **cyberstrike v1.1.15** — interactive agentic offsec assistant
 - **t3mp3st v1.0.0** — network/tempest tooling
 - **impacket, netexec, certipy, bloodhound, responder, mitmproxy, pypykatz**
 - **Suites:** Rubeus, SharpUp
 - **sliver-client** (C2), **EyeWitness** (screenshot/reporting)
-- Exposed **loopback-only** on ports **3002** (cyberstrike) and **3333** (t3mp3st)
+- Exposed **loopback-only** (no network exposure)
 
 ### Agentic AI Stack
 
-- **OMP (lead/executor):** deepseek-v4-flash via opencode-go — **$0/mo**
-- **Fallback chain:** opencode-go → local-llama (OffSec-35B, `:18235`)
+- **OMP (lead/executor):** deepseek-v4-flash via opencode-go — **$10/mo flat**
+- **Fallback chain:** opencode-go → local-llama (OffSec-35B)
 - **Hermes:** long research, planning, kanban — deepseek-v4-flash
 - **memlawb:** E2E-encrypted agent memory
-- **Agent harness:** `harness/` (Rust TUI, ACP panes for omp/hermes/zero/pi/c4), 10-layer self-improving harness design in `10-Stack/`
+- **Agent harness:** `harness/` (Rust TUI, ACP panes for omp/hermes/zero/pi/c4), 10-layer self-improving harness design in `harness/docs/10-layer-architecture.md`
 
 ### Infrastructure Roles
 
-| Node | Role | Address |
-|------|------|---------|
-| **CERBERUS** | Edge + services: Gitea (repo hub + vault backup `foreverlx/ai-lab-vault`), Mythic C2 stack, offsec-ops container | 10.0.0.1 |
-| **NIGHTFORGE** | Operator workstation (this repo) | 10.0.0.3 |
-| **HERMES** | Research/analysis node | 10.0.0.5 |
+| Node | Role |
+|------|------|
+| **CERBERUS** | Edge node: Gitea (repo hub + vault backup), Mythic C2 stack, offsec-ops container |
+| **NIGHTFORGE** | Operator workstation (this repo) |
+| **HERMES** | Research/analysis node |
 
-WireGuard mesh `10.0.0.0/24` connects all nodes.
-
-### Port Registry
-
-| Port | Service |
-|------|---------|
-| 18234 | Bonsai-27B (llama-server) |
-| 18235 | CyberStrike-OffSec-35B (llama-server) |
-| 3000 | Gitea (web) |
-| 3002 | cyberstrike (offsec-ops, loopback) |
-| 3333 | t3mp3st (offsec-ops, loopback) |
-| 2222 | Gitea SSH |
+Nodes connect over a private WireGuard mesh. Internal addressing and the full
+port registry are documented in the private ops vault, not this public README.
 
 ---
 
@@ -174,7 +164,7 @@ See [CHANGELOG.md](CHANGELOG.md) for full history.
 
 ### 2026-08-01 — Full-Environment Refresh
 - README rewritten to full-environment framing (Red Team Operators / Security Researchers / Agentic AI)
-- Documented current stack: RTX 3070 8GB, CyberStrike-OffSec-35B (:18235) + Bonsai-27B (:18234), offsec-ops container on CERBERUS, agentic stack (OMP/Hermes/memlawb), port registry
+- Documented current stack: RTX 3070 8GB, CyberStrike-OffSec-35B + Bonsai-27B (dual llama-server, `Conflicts=` swap), offsec-ops container on CERBERUS, agentic stack (OMP/Hermes/memlawb)
 - AGENTS.md model/provider/port sections updated to current reality
 
 ### v0.5.0 — Operator Terminal Framework + Niri Migration
