@@ -17,7 +17,7 @@ Instead, contact the maintainer directly:
 - No hardcoded credentials, API keys, or tokens in this repository
 - All secrets use environment variable references (`{env:VAR_NAME}`) or placeholder values (`your_key_here`)
 - Telemetry and error reporting are explicitly disabled in all tooling configurations
-- Internal IP ranges (10.0.0.0/8, 192.168.0.0/16, 172.16.0.0/12) appear only in documentation examples
+- Internal IP ranges are not published in this repository
 
 ## Container Security
 
