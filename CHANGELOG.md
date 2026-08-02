@@ -3,6 +3,32 @@
 All notable changes are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); newest first.
 
+## 2026-08-01 — Security Remediation & Stale-Directory Audit
+
+### Security
+- **Sanitized session handoffs**: `docs/archive/SESSION_HANDOFF.md` and
+  `docs/archive/NEXT_SESSION.md` converted to redacted templates — no
+  operational data (processes, keybinds, paths); handoff policy documented
+- **Removed embedded forgejo token** from the local git remote URL
+  (`.git/config`); rotation required — see `SECURITY.md` → Known Token Exposure
+- **SECURITY.md**: documented PUBLIC repo status, handoff policy, token
+  exposure, and OPSEC documentation guidelines
+- **.gitignore**: added credential-in-remote policy note
+
+### Docs
+- **`docs/CLEANUP-CANDIDATES.md`** (new): consolidated P1 stale-dir audit and
+  P2 remaining candidates with evidence and recommended actions
+
+### Audit (no deletions performed)
+- **Empty/abandoned** (untracked): `10-Stack/architecture/`,
+  `internal/cache/`, `data/stream_store/`, `80-Operations/infra/langfuse/`,
+  `80-Operations/scripts/memory/`
+- **Legacy**: `data/state_store.db/` (nightforged-era tracked binary),
+  `modules/nightowl/` (optional integration, engagement dir already removed)
+- **Documented**: routes.go Hermes BRAIN entry vs deprecated Hermes; go.mod
+  module path mismatch; QML source drift; missing LICENSE; GitNexus index
+
+
 ## 2026-07-28 — Harness Dashboard Migration (10-Layer)
 
 ### Added
