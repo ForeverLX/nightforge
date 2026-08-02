@@ -100,3 +100,6 @@ package-lock.json
 /.dmux/
 /.codegraph/
 /.gitnexus/
+
+# CUE migration generated artifacts
+/build/
