@@ -1,40 +1,14 @@
 #!/usr/bin/env bash
-# cue-validate.sh — validate the NightForge CUE config against the schema.
-#
-# Usage:
-#   scripts/cue-validate.sh
-#
-# Checks:
-#   1. cue fmt — formatting is canonical
-#   2. cue vet — data satisfies schema constraints
-#   3. structural sanity via cue export (counts printed for the record)
-#
-# Exit 0 on success, non-zero on any failure.
-
+# Thin launcher for cmd/cue-validate (Go) — S187 ported scripts/cue-validate.sh.
+# Builds the binary on demand into build/bin/ (gitignored) and execs it.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CUE_DIR="$REPO_ROOT/cue"
+BIN="$REPO_ROOT/build/bin/cue-validate"
 
-cd "$CUE_DIR"
-
-echo "==> cue fmt --check"
-if ! out=$(cue fmt --check . 2>&1); then
-    echo "ERROR: CUE formatting drift:" >&2
-    echo "$out" >&2
-    echo "Run: (cd cue && cue fmt .)" >&2
-    exit 1
+if [[ ! -x "$BIN" ]]; then
+    mkdir -p "$REPO_ROOT/build/bin"
+    (cd "$REPO_ROOT" && go build -o "$BIN" ./cmd/cue-validate)
 fi
 
-echo "==> cue vet"
-cue vet .
-
-echo "==> cue export (counts)"
-cue export . --out json | jq -r '
-  .config |
-  "spawn-at-startup: \(.spawnAtStartup | length)" ,
-  "binds:            \(.binds | length)" ,
-  "window-rules:     \(.windowRules | length)"
-'
-
-echo "OK: CUE schemas validate (nightforge.niri)."
+exec "$BIN" "$@"
