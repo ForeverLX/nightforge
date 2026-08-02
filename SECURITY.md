@@ -2,33 +2,52 @@
 
 ## Supported Versions
 
-This project is a rolling-release operator workstation configuration. There are no versioned releases — security fixes are applied to the `main` branch.
+Rolling-release operator workstation configuration. No versioned releases —
+security fixes are applied to the `main` branch.
 
 ## Reporting a Vulnerability
 
-For operational security reasons, please **do not file public issues** for security vulnerabilities.
+For operational security reasons, **do not file public issues** for security
+vulnerabilities.
 
-Instead, contact the maintainer directly:
-- **GitHub Issues**: Tag with `security` label for low-sensitivity items
-- **Direct message**: For sensitive disclosures, reach out via GitHub to CR1MS0N-Operator
+- **GitHub Issues**: tag with the `security` label for low-sensitivity items
+- **Direct message**: for sensitive disclosures, reach out via GitHub to
+  CR1MS0N-Operator
 
 ## OPSEC Commitments
 
 - No hardcoded credentials, API keys, or tokens in this repository
-- All secrets use environment variable references (`{env:VAR_NAME}`) or placeholder values (`your_key_here`)
-- Telemetry and error reporting are explicitly disabled in all tooling configurations
-- Internal IP ranges (10.0.0.0/8, 192.168.0.0/16, 172.16.0.0/12) appear only in documentation examples
+- Secrets use environment-variable references or placeholder values
+- `.gitignore` blocks secret-bearing files (`*.env`, `.env.*`) and build
+  artifacts (`harnessd`, `nightforged`, `*.tar`, `target/`)
+- Internal IP ranges (10.0.0.0/8, 192.168.0.0/16, 172.16.0.0/12) appear only
+  in documentation examples
+
+## Network Posture
+
+- `harnessd` binds **127.0.0.1:9191** only — no remote access
+- Go daemon is stdlib-only with zero external network calls
+- CORS middleware allows local development origins only (`GET`, `OPTIONS`)
 
 ## Container Security
 
 - All container profiles run rootless via Podman (`--userns=keep-id`)
-- Container builds use host networking; runtime uses bridge networking with minimal capabilities
-- Engagement directories are mounted read-write but application-level isolation is the operator's responsibility
+- Builds use host networking for package downloads; runtime uses bridge
+  networking with minimal capabilities (`NET_RAW`, `NET_ADMIN`)
+- Engagement directories are mounted read-write; application-level isolation
+  is the operator's responsibility
 
 ## Secure Development
 
-This project uses:
-- Pre-commit hooks that block credential access, destructive commands, and path boundary violations
-- `shellcheck`-compatible patterns in shell scripts
-- Rust with `#![forbid(unsafe_code)]` patterns (no unsafe blocks)
-- Go with no external network calls in operational binaries
+- CI enforces `go build` + `go vet`, shellcheck, and `bash -n` syntax checks
+- Removed components (`session-tracker`, `dashboard-ctl`, `.claude/`, …) are
+  gitignored to prevent accidental reintroduction
+- Scripts avoid `eval`/command injection patterns; secrets stay out of
+  command lines
+
+## Known Security Considerations
+
+- `dotfiles/` contains personal workstation configuration — review before
+  sharing externally
+- Deployed dotfiles (`dotfiles/matugen/`) reflect live desktop state and are
+  operator-owned
