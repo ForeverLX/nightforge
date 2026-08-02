@@ -6,39 +6,17 @@ on:
   pull_request:
     branches: [main]
 
-env:
-  CARGO_TERM_COLOR: always
-
 jobs:
   go-build:
-    name: Go build (dashboard-ctl)
+    name: Go build + vet (harnessd)
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: dashboard-ctl
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
-          cache-dependency-path: dashboard-ctl/go.mod
-      - run: go build -o /dev/null .
-      - run: go vet .
-
-  cargo-build:
-    name: Cargo build + clippy (session-tracker)
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: session-tracker
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          toolchain: stable
-          components: clippy
-      - run: cargo build
-      - run: cargo clippy -- -D warnings
+          go-version: '1.26'
+      - run: go build ./cmd/harnessd/
+      - run: go vet ./...
 
   shellcheck:
     name: Shellcheck
@@ -50,12 +28,9 @@ jobs:
           severity: style
           ignore_paths: >
             .git
-            target
-            node_modules
-            .claude
-            .opencode
-            .dmux
-            .codegraph
+            .planning
+            data
+            dotfiles
             modules/nightowl
             niri-modifications
 
@@ -66,10 +41,10 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           find . -name '*.sh' \
-            -not -path '*/target/*' \
-            -not -path '*/.git/*' \
-            -not -path '*/node_modules/*' \
-            -not -path '*/.claude/*' \
-            -not -path '*/.opencode/*' \
-            -not -path '*/niri-modifications/*' \
+            -not -path './.git/*' \
+            -not -path './.planning/*' \
+            -not -path './data/*' \
+            -not -path './dotfiles/*' \
+            -not -path './modules/nightowl/*' \
+            -not -path './niri-modifications/*' \
             -print0 | xargs -0 -n1 bash -n
