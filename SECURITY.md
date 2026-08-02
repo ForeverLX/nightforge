@@ -1,5 +1,15 @@
 # Security Policy
 
+## Repository Visibility
+
+**This repository is PUBLIC.** Everything committed to `main` is visible to
+anyone with access to the remote. Treat committed content as public:
+
+- No credentials, API keys, tokens, or secrets — ever
+- No operational data: running process names, keybinds, file paths,
+  hostnames, internal IPs, or engagement details
+- Redact anything operator-specific with `[REDACTED - operator-specific]`
+
 ## Supported Versions
 
 Rolling-release operator workstation configuration. No versioned releases —
@@ -22,6 +32,18 @@ vulnerabilities.
   artifacts (`harnessd`, `nightforged`, `*.tar`, `target/`)
 - Internal IP ranges (10.0.0.0/8, 192.168.0.0/16, 172.16.0.0/12) appear only
   in documentation examples
+- Session handoffs (`docs/archive/`) are sanitized templates only — never
+  commit operational data in handoff notes
+
+## Known Token Exposure (2026-08-01)
+
+The local `forgejo` remote URL in `.git/config` previously contained an
+embedded credential token. Remediation completed:
+
+- Token removed from the remote URL (now `http://localhost:3000/...`)
+- No occurrence of the token remains in `.git/config`
+- **Action required by operator:** rotate the token at the forgejo instance —
+  it was exposed in local config and may exist in shell history/backups
 
 ## Network Posture
 
@@ -45,9 +67,18 @@ vulnerabilities.
 - Scripts avoid `eval`/command injection patterns; secrets stay out of
   command lines
 
+## OPSEC Guidelines for Documentation
+
+- Docs must describe the environment generically; never name real running
+  processes, bind keybinds, or quote live config paths
+- Use the sanitized templates in `docs/archive/` for any handoff content
+- If a doc needs to reference something sensitive, write
+  `[REDACTED - operator-specific]` and keep the detail out of the repo
+
 ## Known Security Considerations
 
 - `dotfiles/` contains personal workstation configuration — review before
   sharing externally
 - Deployed dotfiles (`dotfiles/matugen/`) reflect live desktop state and are
   operator-owned
+- `data/` contains operator telemetry — never commit new entries
