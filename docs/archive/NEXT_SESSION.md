@@ -1,103 +1,54 @@
-# NightForge Session Handoff — Agent Sessions Dashboard v1
+# NightForge Next-Session Prompt — TEMPLATE (SANITIZED)
+
+> **Handoff policy:** Use this template for next-session handoffs. This
+> repository is **PUBLIC** — never include operational details (process
+> names, keybinds, file paths, hostnames, IPs, credentials). Redact with
+> `[REDACTED - operator-specific]`.
 
 ## Decisions Made
 
 | Decision | Rationale |
-|----------|----------|
-| File-based IPC for session-tracker | Consistent with ops-data.sh pattern — no HTTP server |
-| DashboardWidget.qml tracked in dotfiles/ | Reproducible deploys, symlink to ~/.config/quickshell |
-| QML tabs for Mermaid graphs | Separate views: Timeline, Tool Usage, Model Routing |
-| mermaid-rs-renderer v0.2.2 | Pure Rust, 100-1400x faster than mermaid-cli |
+|----------|-----------|
+| [Decision] | [Rationale] |
 
 ## Completed
 
-- **DashboardWidget.qml** — tracked in dotfiles, 6 `font.size`→`font.pixelSize` bugs fixed, `Layout.preferredHeight` binding loop resolved, 146-line Agent Sessions section added (SVG tabs + session list)
-- **Rust session-tracker** — reads OpenCode `stats-pid-*.json` + Hermes `session_*.json`, generates 3 Mermaid SVGs, writes `/tmp/session-tracker.*` atomically
-- **niri-modifications/README.md** — reproducible setup docs
-- **opencode upgraded** — 1.14.46 → 1.14.48 via AUR
+- [What was finished — no operational specifics]
 
 ## Open Issues
 
-### Priority 1: Dashboard Widget Text Overlapping
+### Priority 1: [Area]
 
-**Root cause:** Operations sub-rectangles have zero implicitHeight. Inner ColumnLayout uses `anchors.fill: parent` on a 0-height parent, so text overflows into the next section.
+[Generic issue description — no file paths or line numbers.]
 
-**Fix needed in `dotfiles/quickshell/.config/quickshell/modules/widgets/DashboardWidget.qml`:**
+[If a code-level fix pattern is worth preserving, describe the PATTERN, not
+the target file:]
 
-Apply this pattern to 3 sub-rectangles:
-
-1. **Network & Environment** (line ~410):
-```qml
-// BEFORE:
-Rectangle {
-    Layout.fillWidth: true; radius: 10
-    color: mocha.surface1
-    ColumnLayout {
-        anchors.fill: parent; anchors.margins: 12; spacing: 8
-        // ...
-    }
-}
-// AFTER:
-Rectangle {
-    Layout.fillWidth: true; radius: 10
-    implicitHeight: networkCol.implicitHeight + 24
-    color: mocha.surface1
-    ColumnLayout {
-        id: networkCol
-        anchors.left: parent.left; anchors.right: parent.right
-        anchors.top: parent.top; anchors.margins: 12
-        spacing: 8
-        // ...
-    }
-}
+```text
+[Generic before/after pattern, e.g. "set implicitHeight on a container
+whose child uses anchors.fill — otherwise text overflows"]
 ```
 
-2. **Service Status** (line ~439) — same pattern, `id: svcCol`
+### Priority N: [Area]
 
-3. **C2 Frameworks** (line ~466) — same pattern, `id: c2Col`
-
-Also fix the Containers+VMs layout (line ~238):
-```qml
-// BEFORE: Layout.fillHeight: true (steals all space from Operations)
-// AFTER:
-Layout.fillHeight: false
-Layout.preferredHeight: 250
-```
-
-This ensures Operations section gets consistent space. ListViews already scroll internally.
-
-### Priority 2: Settings Keybinds Text Overlapping
-
-File: `~/.config/quickshell/settings/SettingsPopup.qml` (3273 lines)
-Likely same `anchors.fill: parent` pattern on zero-height containers in the `kbListView` delegate or keybinds tab layout. Needs investigation.
-
-### Priority 3: Waterfox Video/LinkedIn Issues
-
-- Video loading fails on cyberwarfare.live / labs.cyberwarfare.live (but YouTube works)
-- LinkedIn textboxes broken
-- Waterfox Phase 3-6 (hardening, codecs, userChrome) planned but not executed
-- Likely cause: Enhanced Tracking Protection blocking cross-origin media or Widevine DRM not set up
+[Generic issue description.]
 
 ## Git Commits
 
-```
-b933ad0 feat(qml): add agent sessions section with Mermaid SVG tabs to dashboard
-50bd571 feat(rust): add session-tracker backend for agent session data
-5dd8859 fix(qml): copy DashboardWidget.qml to repo, fix font bindings and layout loop
-9d6762d docs(niri): add niri-modifications README for reproducible setup
-```
-
-Pushed to origin/main.
+[Commit hashes + subjects only. Do not include file paths that reveal
+operator layout.]
 
 ## Next Session Prompt
 
 ```
-Continue from session handoff at docs/NEXT_SESSION.md.
-Fix the Operations section text overlapping in DashboardWidget.qml.
-
-Root cause: sub-rectangles have zero implicitHeight because inner ColumnLayout
-uses anchors.fill:parent. Fix pattern: add implicitHeight: <colId>.implicitHeight + 24
-to each Rectangle, change anchors.fill:parent → anchors.left/right/top:parent.
-
-Also investigate SettingsPopup.qml keybinds overlapping (same pattern likely).
+Continue from the sanitized handoff template in docs/archive/.
+[Generic next step — no operational specifics.]
 ```
+
+## Template Rules
+
+- Copy this file for a new handoff; fill placeholders with GENERIC descriptions.
+- Never paste real paths, process names, keybinds, or credentials.
+- If a detail would help a future operator but is sensitive, write
+  `[REDACTED - operator-specific]` instead.
+- Delete or rotate handoffs once superseded.
