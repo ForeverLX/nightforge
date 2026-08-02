@@ -209,7 +209,7 @@ nightforge/
 ├── services/                # Quickshell QML services (MatugenColors, MpdClient, VpnStatus, PodmanStatus)
 ├── manifests/               # Package lists (host, aur, container, ad/re/web tooling)
 ├── profiles/                # install.sh profiles (local-only, solo-operator, team-operator)
-├── 10-Stack/ 80-Operations/ # Planning scaffolding (mostly empty — see report)
+├── 10-Stack/ 80-Operations/ # Planning scaffolding (mostly empty — see docs/CLEANUP-CANDIDATES.md)
 ├── niri-modifications/      # Niri experiment scripts + README
 ├── system/optimizations/    # Sysctl/kernel tuning
 ├── docs/                    # INSTALL, ARCHITECTURE-referenced guides, plans/, solutions/, security/
