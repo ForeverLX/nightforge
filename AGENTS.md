@@ -1,78 +1,80 @@
 # nightforge — Agent Rules
 
 ## Purpose
-Operator workstation for CR1MS0N-Operator operations. Hosts T5 code tooling (OpenCode) and local development environment.
+
+Operator workstation repository for CR1MS0N-Operator. Contains the desktop
+environment (Niri/Quickshell/Matugen dotfiles), rootless Podman container
+profiles, and the `harnessd` monitoring dashboard (Go, `127.0.0.1:9191`).
+
+## Agent Architecture (current)
+
+| Role | Scope |
+|------|-------|
+| **pi** | Brain — planning, proposals, decisions, roadmap |
+| **OMP** | Executor — implements approved plans, code, docs, verification |
+| **zero** | Offsec / cron — quick fixes, scheduled maintenance tasks |
+| **Hermes** | **Deprecated** — do not route new work to Hermes |
+
+Model/provider truth is the **live routing table** served by the harness at
+`GET http://127.0.0.1:9191/api/v1/routes` (source:
+`internal/handler/routes.go`). Do not hardcode model claims in docs; the
+served table is authoritative. Note: that table still contains a legacy
+"Hermes BRAIN" entry — reconciliation is a candidate, not a doc change.
 
 ## Session Strategy
+
 - `--fork` — branch session for exploratory work
 - `--continue` — resume prior session
-- Use handoff docs between sessions for context transfer
+- Use `docs/solutions/` and `docs/plans/` for cross-session context transfer
 
 ## GSD Workflow
-- `.planning/` directory for task breakdowns
-- STATE.md tracks progress
-- Execute in order: lint -> typecheck -> test -> build
 
-## Model Routing ($20/mo)
-| Task / Agent | Model | Provider | Cost |
-|---|---|---|---|
-| Quick tasks | Big Pickle (GLM-4.6) | OpenCode Go FREE | $0 |
-| Council/Oracle/Designer | kimi-k2.6 | OpenCode Go | $0 (sub) |
-| Councillor/Fixer | deepseek-v4-flash | OpenRouter | ~$0.28/M out |
-| General | glm-5.1 | OpenCode Go | $0 (sub) |
-| Explore | mistral-nemo | OpenRouter | ~$0.03/M out |
-| Explorer/Librarian | nemotron-3-nano | NVIDIA NIM (free) | $0 |
-| Architecture | kimi-k2.6 | OpenCode Go | $0 (sub) |
+Execute in order, adapted to this repo:
 
-**Pattern:** Free tier first → OpenCode Go sub → OpenRouter fallback → NVIDIA NIM (free)
+1. `go vet ./...`
+2. `go build ./cmd/harnessd/`
+3. `shellcheck` + `bash -n` on any changed `.sh`
 
-## Reference
-- Global rules: ~/.config/opencode/AGENTS.md
-- CR1MS0N context: ~/Documents/cr1ms0n-ops/CLAUDE.md
+## Harness Operations
+
+```bash
+go build ./cmd/harnessd/
+./harnessd                       # 127.0.0.1:9191
+curl -s http://127.0.0.1:9191/api/v1/health
+systemctl --user status harnessd # deployed service
+```
+
+Pipelines live in `scripts/harness/`; telemetry in `data/`; plans/solutions
+in `docs/plans/` and `docs/solutions/`.
+
+## Constraints
+
+- **Never** modify or stage: `data/` (telemetry), `dotfiles/matugen/`
+  (deploy state), `docs/plans/`, `harnessd.bak`
+- **Never** push without explicit approval
+- Stage only files you personally changed; prefer micro-commits with
+  meaningful messages
+- Do not modify application behavior or source logic in docs-only passes
+- If a cleanup would risk deleting user work, stop and report it
+
+## Documentation
+
+- `README.md` — overview, quick start, harness API
+- `ARCHITECTURE.md` — harness + desktop shell design
+- `CONTRIBUTING.md` — contribution workflow
+- `docs/INSTALL.md`, `docs/TROUBLESHOOTING.md` (top level), `docs/DECISIONS.md`
 
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **nightforge** (799 symbols, 802 relationships, 0 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is **not currently indexed** by GitNexus: `gitnexus list_repos`
+shows only the `euphrates` repo in the registry. To re-enable code
+intelligence here, run `npx gitnexus analyze` in this repo and register it.
+Until then, prefer plain `grep`/`read` navigation.
 
-> If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
-
-## Always Do
-
-- **MUST run impact analysis before editing any symbol.** Before modifying a function, class, or method, run `gitnexus_impact({target: "symbolName", direction: "upstream"})` and report the blast radius (direct callers, affected processes, risk level) to the user.
-- **MUST run `gitnexus_detect_changes()` before committing** to verify your changes only affect expected symbols and execution flows.
-- **MUST warn the user** if impact analysis returns HIGH or CRITICAL risk before proceeding with edits.
-- When exploring unfamiliar code, use `gitnexus_query({query: "concept"})` to find execution flows instead of grepping. It returns process-grouped results ranked by relevance.
-- When you need full context on a specific symbol — callers, callees, which execution flows it participates in — use `gitnexus_context({name: "symbolName"})`.
-
-## Never Do
-
-- NEVER edit a function, class, or method without first running `gitnexus_impact` on it.
-- NEVER ignore HIGH or CRITICAL risk warnings from impact analysis.
-- NEVER rename symbols with find-and-replace — use `gitnexus_rename` which understands the call graph.
-- NEVER commit changes without running `gitnexus_detect_changes()` to check affected scope.
-
-## Resources
-
-| Resource | Use for |
-|----------|---------|
-| `gitnexus://repo/nightforge/context` | Codebase overview, check index freshness |
-| `gitnexus://repo/nightforge/clusters` | All functional areas |
-| `gitnexus://repo/nightforge/processes` | All execution flows |
-| `gitnexus://repo/nightforge/process/{name}` | Step-by-step execution trace |
-
-## CLI
-
-| Task | Read this skill file |
-|------|---------------------|
-| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
-| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
-| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
-| Rename / extract / split / refactor | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md` |
-| Tools, resources, schema reference | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md` |
-| Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
-
+If a GitNexus tool warns the index is stale, run `npx gitnexus analyze` first.
 <!-- gitnexus:end -->
 
-## Documentation
-- `docs/solutions/` — problem resolutions and execution records
+## Reference
+
+- CR1MS0N context: `~/Documents/cr1ms0n-ops/CLAUDE.md`
