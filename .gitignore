@@ -67,6 +67,7 @@ session-tracker/target/
 # Go binaries
 niri-modifications/scripts/dashboard-ctl
 harnessd
+harnessd.bak
 nightforged
 
 # Generated files
