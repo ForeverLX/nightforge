@@ -34,14 +34,43 @@ cue/
   cue.mod/module.cue   module nightforge.niri (language v0.17.1)
   schema.cue           #Config/#Spawn/#Bind/#WindowRule definitions
   nightforge.cue       the data (spawns, binds, window rules)
+cmd/
+  cue-to-kdl/          Phase 3: CUE data -> staging KDL tree (Go)
+  fidelity-check/      Phase 3: generated vs source semantics diff (Go)
+  cue-validate/        Phase 2: fmt + vet + export counts (Go)
+  niri-backup/         Phase 1: sha256 checksummed backup + --verify (Go)
+  niri-staging-validate/  Phase 4: full pipeline incl. `niri validate` (Go)
+internal/nfutil/       shared repo-root + cue-export helpers
 scripts/
-  cue-validate.sh          Phase 2: fmt + vet + export counts
-  backup-niri-config.sh    Phase 1: sha256 checksummed backup + --verify
-  cue-to-kdl.py            Phase 3: CUE data -> staging KDL tree
-  fidelity-check.py        Phase 3: generated vs source semantics diff
-  niri-staging-validate.sh Phase 4: full pipeline incl. `niri validate`
+  cue-validate.sh          thin launcher -> cmd/cue-validate
+  backup-niri-config.sh    thin launcher -> cmd/niri-backup
+  cue-to-kdl.sh            thin launcher -> cmd/cue-to-kdl
+  fidelity-check.sh        thin launcher -> cmd/fidelity-check
+  niri-staging-validate.sh thin launcher -> cmd/niri-staging-validate
 docs/CUE-MIGRATION.md      this file
 ```
+
+## Toolchain
+
+All migration tools are Go (repo convention: Rust/Go/C only; the original
+Python scripts from the gnhf overnight run were rewritten in S187). The
+`.sh` files in `scripts/` are thin launchers that build the Go binary on
+demand into `build/bin/` (gitignored) and exec it — no Python, no jq.
+Build everything at once with `go build ./cmd/...`.
+
+```bash
+# optional: prebuild all tools
+mkdir -p build/bin && go build -o build/bin/cue-to-kdl ./cmd/cue-to-kdl && \
+  go build -o build/bin/fidelity-check ./cmd/fidelity-check && \
+  go build -o build/bin/cue-validate ./cmd/cue-validate && \
+  go build -o build/bin/niri-backup ./cmd/niri-backup && \
+  go build -o build/bin/niri-staging-validate ./cmd/niri-staging-validate
+```
+
+Generated KDL comments name the tool as `cue-to-kdl` (the Go binary); the
+original `cue-to-kdl.py` string was dropped — that is the only byte-level
+difference from the Python generator output. Semantics are unchanged and
+verified by fidelity-check.
 
 ## Verification Evidence (reproduce)
 
@@ -55,8 +84,8 @@ scripts/cue-validate.sh    # cue fmt --check + cue vet + export counts
 
 # Phases 3–4 — dry-run generation, fidelity, staging validation
 scripts/niri-staging-validate.sh
-#   1. cue-to-kdl.py generates build/niri-staging/
-#   2. fidelity-check.py: 133 canonical entries (8 spawns + 90 binds + 35
+#   1. cue-to-kdl generates build/niri-staging/
+#   2. fidelity-check: 133 canonical entries (8 spawns + 90 binds + 35
 #      rules) match the source KDL semantics exactly
 #   3. niri validate -c build/niri-staging/config.kdl  -> "config is valid"
 ```
@@ -74,7 +103,9 @@ INFO niri: config is valid
 ## Fidelity Methodology
 
 Both the source KDL and the generated KDL are parsed into the same canonical
-structures and diffed as sets (order-independent):
+structures and diffed as sets (order-independent). The canonical forms use
+Python-style repr encodings (`('spawn', ('ghostty',))`), so the Go
+fidelity-check output is byte-identical to the original Python script.
 
 - **spawn-at-startup**: argv token tuples
 - **keybinds**: `(combo, flags, action)` with flags normalized to
