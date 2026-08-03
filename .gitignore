@@ -8,6 +8,7 @@ git_env/
 # Secrets / env files
 *.env
 .env.*
+!.env.example
 
 # OS/editor noise
 *.swp
