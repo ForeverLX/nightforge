@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/ForeverLX/nightforge-dashboard/internal/collector"
-	"github.com/ForeverLX/nightforge-dashboard/internal/collector/model"
+	"github.com/ForeverLX/nightforge/internal/collector"
+	"github.com/ForeverLX/nightforge/internal/collector/model"
 )
 
 // ---- health ----

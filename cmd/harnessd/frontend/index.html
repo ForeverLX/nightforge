@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harness Dashboard</title>
+<style>
+  :root {
+    --bg: #0D0F1A;
+    --primary: #8B6FEF;
+    --text: #E6EAF0;
+    --accent: #C8D0DC;
+    --card-bg: #1A1D2E;
+    --border: #2A2D3E;
+    --success: #4ADE80;
+    --warn: #FBBF24;
+    --danger: #F87171;
+    --muted: #6B7280;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+  }
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+  }
+  .header h1 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .header .badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--primary);
+    color: #fff;
+  }
+  .header .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+    margin-left: auto;
+  }
+  .tab-bar {
+    display: flex;
+    gap: 0;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .tab-btn {
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+  .tab-btn:hover { color: var(--accent); }
+  .tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+  }
+  .content {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .card h3 {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .card .value {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .card .sub {
+    font-size: 13px;
+    color: var(--accent);
+  }
+  .card .bar {
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .card .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s;
+  }
+  .bar-fill.green { background: var(--success); }
+  .bar-fill.yellow { background: var(--warn); }
+  .bar-fill.red { background: var(--danger); }
+  .bar-fill.purple { background: var(--primary); }
+  table { width: 100%; border-collapse: collapse; }
+  th, td {
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+  th { color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
+  td { color: var(--accent); }
+  .status-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .status-tag.complete { background: rgba(74,222,128,0.15); color: var(--success); }
+  .status-tag.not-designed { background: rgba(251,191,36,0.15); color: var(--warn); }
+  .status-tag.not-applicable { background: rgba(107,114,128,0.15); color: var(--muted); }
+  .model-cell { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; }
+  .trend-bar {
+    display: flex;
+    align-items: end;
+    gap: 2px;
+    height: 40px;
+    margin-top: 8px;
+  }
+  .trend-bar .col {
+    flex: 1;
+    background: var(--primary);
+    border-radius: 2px 2px 0 0;
+    min-height: 2px;
+    transition: height 0.3s;
+    opacity: 0.7;
+  }
+  .timestamp { font-size: 11px; color: var(--muted); margin-top: 12px; }
+  .loading { color: var(--muted); font-style: italic; padding: 24px; text-align: center; }
+  .error { color: var(--danger); padding: 24px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>HARNESS DASHBOARD</h1>
+  <span class="badge">v1</span>
+  <div class="status-dot" id="healthDot" title="System health"></div>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" data-tab="health">L4 Health</button>
+  <button class="tab-btn" data-tab="proposals">L5 Proposals</button>
+  <button class="tab-btn" data-tab="gates">L6 Gates</button>
+  <button class="tab-btn" data-tab="snapshots">L7 Snapshots</button>
+  <button class="tab-btn" data-tab="routes">L8 Routes</button>
+  <button class="tab-btn" data-tab="cost">Cost/Tokens</button>
+</div>
+
+<div class="content">
+  <div class="tab-panel active" id="panel-health">
+    <div class="card-grid" id="healthCards"></div>
+    <div class="card" id="loadCard"><h3>Load Average</h3><div class="trend-bar" id="trendBar"></div></div>
+    <div class="card" id="historyCard"><h3>24h Health History</h3><div id="historyContent"></div></div>
+  </div>
+  <div class="tab-panel" id="panel-proposals"><div id="proposalsContent"></div></div>
+  <div class="tab-panel" id="panel-gates"><div id="gatesContent"></div></div>
+  <div class="tab-panel" id="panel-snapshots"><div id="snapshotsContent"></div></div>
+  <div class="tab-panel" id="panel-routes"><div id="routesContent"></div></div>
+  <div class="tab-panel" id="panel-cost"><div id="costContent"></div></div>
+  <div class="timestamp" id="lastUpdate"></div>
+</div>
+
+<script>
+const API = '/api/v1';
+
+// Tab switching
+document.getElementById('tabBar').addEventListener('click', e => {
+  const btn = e.target.closest('.tab-btn');
+  if (!btn) return;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+  loadTab(btn.dataset.tab);
+});
+
+function loadTab(name) {
+  switch (name) {
+    case 'health': loadHealth(); break;
+    case 'proposals': loadProposals(); break;
+    case 'gates': loadGates(); break;
+    case 'snapshots': loadSnapshots(); break;
+    case 'routes': loadRoutes(); break;
+    case 'cost': loadCost(); break;
+  }
+}
+
+// --- Health ---
+async function loadHealth() {
+  try {
+    const res = await fetch(API + '/health');
+    const data = await res.json();
+    renderHealth(data);
+  } catch (e) {
+    document.getElementById('healthCards').innerHTML = '<div class="error">Failed to load health data</div>';
+  }
+}
+
+function renderHealth(data) {
+  const h = data.current?.health;
+  const s = data.daily_summary || {};
+  const history = data.history || [];
+  if (!h) return;
+
+  document.getElementById('healthDot').style.background = h.disk_root_pct > 95 || h.mem_pct > 90 ? 'var(--danger)' : 'var(--success)';
+
+  // KPI summary row with 24h delta
+  const kpi = (label, value, delta, unit) => {
+    const d = delta > 0 ? '+' + delta : delta;
+    const dColor = delta > 5 ? 'var(--danger)' : delta < -5 ? 'var(--success)' : 'var(--muted)';
+    return '<div class="card"><h3>' + label + '</h3><div class="value" style="font-size:24px">' + value + '</div><div class="sub" style="color:' + dColor + '">24h Δ ' + d + ' ' + unit + '</div></div>';
+  };
+  const drAvg = s.disk_root ? Math.round(s.disk_root.avg) : '?';
+  const dhAvg = s.disk_home ? Math.round(s.disk_home.avg) : '?';
+  const memAvg = s.mem_pct ? Math.round(s.mem_pct.avg) : '?';
+  const gpuAvg = s.gpu_mem_mb ? Math.round(s.gpu_mem_mb.avg) : '?';
+  document.getElementById('healthCards').innerHTML =
+    kpi('Disk (/)', h.disk_root_pct + '%', h.disk_root_pct - drAvg, 'pp') +
+    kpi('Disk (/home)', h.disk_home_pct + '%', h.disk_home_pct - dhAvg, 'pp') +
+    kpi('Memory', h.mem_pct + '%', h.mem_pct - memAvg, 'pp') +
+    kpi('GPU', (h.gpu_mem / 1024).toFixed(1) + 'G', Math.round((h.gpu_mem - gpuAvg) / 102.4) / 10 + 'G', '');
+
+  // Load card
+  document.getElementById('loadCard').querySelector('h3').textContent = 'Load: ' + h.load.join('  ');
+
+  if (history.length > 1) {
+    // Helper: build sparkline bars for a metric
+    const sparkline = (values, maxVal, color) => {
+      const mx = maxVal || Math.max(...values, 1);
+      return '<div class="trend-bar">' + values.map(v => '<div class="col" style="height:' + Math.round(v/mx*36) + 'px;background:' + color + '"></div>').join('') + '</div>';
+    };
+
+    const diskPcts = history.map(s => s.health.disk_root_pct);
+    const memPcts = history.map(s => s.health.mem_pct);
+    const gpuMBs = history.map(s => s.health.gpu_mem);
+    const loads = history.map(s => Math.max(...s.health.load));
+
+    // Sparkline row
+    document.getElementById('trendBar').innerHTML =
+      '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px">' +
+      '<div class="card"><h3>Disk / 24h</h3>' + sparkline(diskPcts, 100, 'var(--warn)') + '<div class="sub" style="margin-top:4px">' + Math.min(...diskPcts) + '% – ' + Math.max(...diskPcts) + '%</div></div>' +
+      '<div class="card"><h3>Memory / 24h</h3>' + sparkline(memPcts, 100, 'var(--primary)') + '<div class="sub" style="margin-top:4px">' + Math.min(...memPcts) + '% – ' + Math.max(...memPcts) + '%</div></div>' +
+      '<div class="card"><h3>GPU / 24h</h3>' + sparkline(gpuMBs, Math.max(...gpuMBs, 1), 'var(--success)') + '<div class="sub" style="margin-top:4px">' + Math.min(...gpuMBs) + 'MB – ' + Math.max(...gpuMBs) + 'MB</div></div>' +
+      '<div class="card"><h3>Load / 24h</h3>' + sparkline(loads, Math.max(...loads, 1), 'var(--danger)') + '<div class="sub" style="margin-top:4px">' + Math.min(...loads).toFixed(1) + ' – ' + Math.max(...loads).toFixed(1) + '</div></div>' +
+      '</div>';
+  }
+
+  // History count
+  document.getElementById('historyContent').innerHTML = '<span style="color:var(--muted)">' + history.length + ' data points · ' + (s.samples || '?') + ' samples in 24h rolling window</span>';
+  document.getElementById('lastUpdate').textContent = 'Last updated: ' + new Date().toLocaleTimeString();
+}
+
+// --- Proposals (from layers data) ---
+async function loadProposals() {
+  try {
+    const res = await fetch(API + '/layers');
+    const data = await res.json();
+    const props = data.proposals?.proposals || [];
+    const failures = data.failures || {};
+    const cats = failures.categories || [];
+
+    let html = '<div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">';
+    html += '<div class="card"><h3>Active Proposals</h3><div class="value">' + props.length + '</div><div class="sub">from failure mining</div></div>';
+    html += '<div class="card"><h3>Total Failures</h3><div class="value">' + (failures.total_failures || 0) + '</div><div class="sub">mined from sessions</div></div>';
+    html += '<div class="card"><h3>Failure Categories</h3><div class="value">' + cats.length + '</div><div class="sub">classified</div></div>';
+    html += '</div>';
+
+    // Failure categories
+    if (cats.length > 0) {
+      html += '<div class="card"><h3>Failure Categories</h3><table><thead><tr><th>Category</th><th>Count</th><th>Severity</th></tr></thead><tbody>';
+      cats.forEach(c => {
+        const sevColor = c.severity === 'high' ? 'var(--danger)' : c.severity === 'medium' ? 'var(--warn)' : 'var(--success)';
+        html += '<tr><td>' + c.label + '</td><td>' + c.count + '</td><td style="color:' + sevColor + '">' + c.severity + '</td></tr>';
+      });
+      html += '</tbody></table></div>';
+    }
+
+    // Proposals
+    if (props.length > 0) {
+      html += '<div class="card"><h3>Generated Proposals</h3><table><thead><tr><th>ID</th><th>Title</th><th>Impact</th><th>Effort</th><th>Status</th></tr></thead><tbody>';
+      props.forEach(p => {
+        const impColor = p.impact === 'high' ? 'var(--danger)' : p.impact === 'medium' ? 'var(--warn)' : 'var(--success)';
+        html += '<tr><td>' + p.id + '</td><td>' + p.title + '</td><td style="color:' + impColor + '">' + p.impact + '</td><td>' + p.effort + '</td><td><span class="status-tag ' + p.status + '">' + p.status + '</span></td></tr>';
+      });
+      html += '</tbody></table></div>';
+    } else {
+      html += '<div class="card"><div class="sub">No proposals generated yet — run scripts/harness/proposal-engine.sh</div></div>';
+    }
+
+    document.getElementById('proposalsContent').innerHTML = html;
+  } catch (e) {
+    document.getElementById('proposalsContent').innerHTML = '<div class="error">Failed to load proposals</div>';
+  }
+}
+
+async function loadGates() {
+  try {
+    const res = await fetch(API + '/layers');
+    const data = await res.json();
+    const gates = data.gates?.gates || [];
+    const propResults = data.gates?.proposal_results || [];
+
+    if (!gates.length && !propResults.length) {
+      document.getElementById('gatesContent').innerHTML = '<div class="card"><div class="sub">No gate data yet — run scripts/harness/gate-check.sh</div></div>';
+      return;
+    }
+
+    // Gate rules status
+    let html = '<div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">';
+    gates.forEach(g => {
+      const color = g.status === 'pass' ? 'var(--success)' : g.status === 'fail' ? 'var(--danger)' : 'var(--warn)';
+      html += '<div class="card"><h3>' + g.name + '</h3><div class="value" style="font-size:18px;color:' + color + '">' + g.status.toUpperCase() + '</div><div class="sub" style="font-size:11px">' + (g.pass_count || 0) + ' pass / ' + (g.fail_count || 0) + ' fail</div><div class="sub">' + g.description + '</div></div>';
+    });
+    html += '</div>';
+
+    // Proposal evaluation results
+    if (propResults.length > 0) {
+      html += '<div class="card"><h3>Proposal Evaluations</h3><table><thead><tr><th>Proposal</th><th>Title</th><th>Overall</th><th>G1</th><th>G2</th><th>G3</th><th>G4</th><th>G5</th></tr></thead><tbody>';
+      propResults.forEach(pr => {
+        const ovColor = pr.overall === 'pass' ? 'var(--success)' : 'var(--danger)';
+        html += '<tr><td>' + pr.proposal_id + '</td><td style="max-width:300px;overflow:hidden;text-overflow:ellipsis">' + pr.title + '</td><td style="color:' + ovColor + ';font-weight:600">' + pr.overall + '</td>';
+        ['G1','G2','G3','G4','G5'].forEach(g => {
+          const gColor = (pr.gates || {})[g] === 'pass' ? 'var(--success)' : 'var(--danger)';
+          html += '<td style="color:' + gColor + '">' + ((pr.gates || {})[g] || '?') + '</td>';
+        });
+        html += '</tr>';
+      });
+      html += '</tbody></table></div>';
+    }
+
+    document.getElementById('gatesContent').innerHTML = html;
+  } catch (e) {
+    document.getElementById('gatesContent').innerHTML = '<div class="error">Failed to load gates</div>';
+  }
+}
+
+// --- Snapshots ---
+async function loadSnapshots() {
+  try {
+    const res = await fetch(API + '/snapshots');
+    const data = await res.json();
+    const hist = data.history || [];
+    const latestLabel = hist.length > 0 ? hist[hist.length-1].label || hist[hist.length-1].timestamp.slice(0, 16).replace('T', ' ') : 'None';
+
+    let html = '<div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">';
+    html += '<div class="card"><h3>Latest Snapshot</h3><div class="value" style="font-size:16px">' + (data.latest_snapshot ? data.latest_snapshot.slice(0, 16).replace('T', ' ') : 'None') + '</div><div class="sub">' + latestLabel + '</div></div>';
+    html += '<div class="card"><h3>Total Snapshots</h3><div class="value">' + data.total_snapshots + '</div><div class="sub">captured</div></div>';
+    html += '<div class="card"><h3>Rollbacks</h3><div class="value" style="color:' + (data.rollbacks > 0 ? 'var(--warn)' : 'var(--success)') + '">' + data.rollbacks + '</div><div class="sub">' + (data.rollbacks > 0 ? 'restore events' : 'no rollbacks') + '</div></div>';
+    html += '</div>';
+
+    // Snapshot timeline
+    if (hist.length > 0) {
+      html += '<div class="card"><h3>Snapshot Timeline</h3><table><thead><tr><th>#</th><th>Timestamp</th><th>Label</th><th>Name</th></tr></thead><tbody>';
+      hist.slice().reverse().forEach((s, i) => {
+        const ts = s.timestamp ? s.timestamp.slice(0, 16).replace('T', ' ') : '?';
+        html += '<tr><td>' + (hist.length - i) + '</td><td>' + ts + '</td><td>' + (s.label || '') + '</td><td class="model-cell">' + (s.name || '') + '</td></tr>';
+      });
+      html += '</tbody></table></div>';
+    } else {
+      html += '<div class="card"><div class="sub">No snapshots yet — run scripts/harness/snapshot-config.sh</div></div>';
+    }
+
+    document.getElementById('snapshotsContent').innerHTML = html;
+  } catch (e) {
+    document.getElementById('snapshotsContent').innerHTML = '<div class="error">Failed to load snapshots</div>';
+  }
+}
+
+// --- Routes ---
+async function loadRoutes() {
+  try {
+    const res = await fetch(API + '/routes');
+    const data = await res.json();
+    document.getElementById('routesContent').innerHTML = `
+      <div class="card">
+        <h3>Active Model Routes</h3>
+        <table><thead><tr><th>Role</th><th>Model</th><th>Provider</th></tr></thead>
+        <tbody>${data.routes.map(r => `<tr><td>${r.role}</td><td class="model-cell">${r.model}</td><td>${r.provider}</td></tr>`).join('')}</tbody></table>
+      </div>`;
+  } catch (e) {
+    document.getElementById('routesContent').innerHTML = '<div class="error">Failed to load routes</div>';
+  }
+}
+
+// --- Cost/Tokens ---
+async function loadCost() {
+  try {
+    const res = await fetch(API + '/cost');
+    if (!res.ok) {
+      document.getElementById('costContent').innerHTML = '<div class="card"><div class="error">No token data yet — run scripts/harness/token-tracker.sh</div></div>';
+      return;
+    }
+    const data = await res.json();
+    const pm = data.per_model || [];
+    const tot = data.totals || {};
+    const daily = data.daily || [];
+
+    let html = '<div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">';
+    html += '<div class="card"><h3>Total Tokens (30d)</h3><div class="value" style="font-size:22px">' + (tot.total_tokens_in || 0).toLocaleString() + '</div><div class="sub">input</div></div>';
+    html += '<div class="card"><h3>Output Tokens</h3><div class="value" style="font-size:22px">' + (tot.total_tokens_out || 0).toLocaleString() + '</div><div class="sub">' + pm.length + ' models</div></div>';
+    html += '<div class="card"><h3>Estimated Cost</h3><div class="value" style="font-size:22px">$' + (tot.total_cost_usd || 0).toFixed(4) + '</div><div class="sub">' + (tot.total_sessions || 0) + ' sessions</div></div>';
+    html += '<div class="card"><h3>Last Updated</h3><div class="value" style="font-size:16px">' + (data.last_updated ? data.last_updated.slice(0, 16).replace('T', ' ') : '?') + '</div><div class="sub">UTC</div></div>';
+    html += '</div>';
+
+    // Per-model table
+    html += '<div class="card"><h3>Per-Model Usage (last 30d)</h3><table><thead><tr><th>Model</th><th>Tokens In</th><th>Tokens Out</th><th>Cost</th><th>Sessions</th><th>Provider</th></tr></thead><tbody>';
+    pm.forEach(m => {
+      const cost = m.cost_usd > 0 ? '$' + m.cost_usd.toFixed(6) : 'free';
+      html += '<tr><td class="model-cell">' + m.model + '</td><td>' + (m.tokens_in || 0).toLocaleString() + '</td><td>' + (m.tokens_out || 0).toLocaleString() + '</td><td>' + cost + '</td><td>' + (m.sessions || 0) + '</td><td>' + (m.provider || '') + '</td></tr>';
+    });
+    html += '</tbody></table></div>';
+
+    // Daily table
+    if (daily.length > 0) {
+      html += '<div class="card"><h3>Daily Usage</h3><table><thead><tr><th>Date</th><th>Tokens In</th><th>Tokens Out</th><th>Cost</th><th>Sessions</th></tr></thead><tbody>';
+      daily.forEach(d => {
+        html += '<tr><td>' + d.date + '</td><td>' + (d.tokens_in || 0).toLocaleString() + '</td><td>' + (d.tokens_out || 0).toLocaleString() + '</td><td>' + (d.cost_usd > 0 ? '$' + d.cost_usd.toFixed(6) : 'free') + '</td><td>' + (d.sessions || 0) + '</td></tr>';
+      });
+      html += '</tbody></table></div>';
+    }
+
+
+    // Pi session costs (from /api/v1/sessions)
+    try {
+      const sessRes = await fetch(API + '/sessions');
+      if (sessRes.ok) {
+        const sessData = await sessRes.json();
+        const pi = sessData.pi_costs || [];
+        if (pi.length > 0) {
+          const totalPiCost = pi.reduce((s, p) => s + p.cost, 0);
+          const totalPiTokens = pi.reduce((s, p) => s + p.tokens_in, 0);
+          html += '<div class="card"><h3>Pi Session Costs (' + pi.length + ' sessions, $' + totalPiCost.toFixed(4) + ')</h3><div style="max-height:300px;overflow-y:auto"><table><thead><tr><th>Session</th><th>Model</th><th>Tokens In</th><th>Cost</th><th>Messages</th></tr></thead><tbody>';
+          // Last 20 sessions
+          pi.slice(-20).reverse().forEach(s => {
+            const label = s.session_id ? s.session_id.slice(-8) : s.session_file.slice(0, 16);
+            html += '<tr><td class="model-cell">' + label + '</td><td>' + (s.model || '?') + '</td><td>' + (s.tokens_in || 0).toLocaleString() + '</td><td>' + (s.cost > 0 ? '$' + s.cost.toFixed(6) : 'free') + '</td><td>' + (s.message_count || 0) + '</td></tr>';
+          });
+          html += '</tbody></table></div></div>';
+        }
+      }
+    } catch (e) {}
+
+    document.getElementById('costContent').innerHTML = html;
+  } catch (e) {
+    document.getElementById('costContent').innerHTML = '<div class="error">Failed to load cost data</div>';
+  }
+}
+
+// Auto-refresh health every 30s
+setInterval(() => {
+  const active = document.querySelector('.tab-btn.active');
+  if (active && active.dataset.tab === 'health') loadHealth();
+}, 30000);
+
+// Initial load
+loadHealth();
+</script>
+</body>
+</html>
