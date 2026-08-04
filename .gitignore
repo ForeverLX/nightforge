@@ -63,6 +63,7 @@ dotfiles/zsh/.zshrc
 
 # Rust builds
 session-tracker/target/
+shell/target/
 
 # Go binaries
 niri-modifications/scripts/dashboard-ctl
