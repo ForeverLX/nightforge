@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ForeverLX/nightforge-dashboard/internal/collector/model"
+	"github.com/ForeverLX/nightforge/internal/collector/model"
 )
 
 // historyDir stores time-series health snapshots.

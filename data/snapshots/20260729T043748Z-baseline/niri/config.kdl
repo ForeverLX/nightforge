@@ -1,0 +1,52 @@
+// Niri Configuration - NightForge Operator Workstation
+// Migrated from DMS to Quickshell + Matugen stack
+// GPU: Nvidia RTX 3070 (nvidia-open-dkms) — VRR on DP-1
+
+// === MATUGEN ENVIRONMENT ===
+// Colors injected via /tmp/matugen/colors.json
+// Sync: ~/.local/bin/matugen-sync.sh [wallpaper]
+
+// === AUTOSTART (replace DMS) ===
+// Wallpaper daemon (awww) — no namespace needed (single-user)
+spawn-at-startup "awww-daemon"
+
+// Wayland native bar (matugen-themed)
+spawn-at-startup "waybar"
+
+// Quickshell overlay (widgets, StackView) — bar disabled, waybar handles it
+spawn-at-startup "bash" "-c" "quickshell &"
+
+// Set wallpaper + matugen sync on startup
+spawn-at-startup "bash" "-c" "$HOME/.local/bin/niri-startup-wallpaper.sh"
+
+// Podman services (NightForge operator stack)
+spawn-at-startup "systemctl" "--user" "start" "podman-restart.service"
+
+// Wallpaper rotation (15 min)
+spawn-at-startup "systemctl" "--user" "enable" "--now" "wallpaper-rotate.timer"
+
+// Screensharing env (dbus activation)
+spawn-at-startup "bash" "-c" "sleep 2 && dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri"
+
+// MPD user service
+spawn-at-startup "systemctl" "--user" "start" "mpd.service"
+
+// LLM server — Bonsai-27B (local tool-calling model)
+spawn-at-startup "systemctl" "--user" "start" "llama-server-bonsai.service"
+
+// Notification daemon (swaync)
+spawn-at-startup "swaync"
+
+// Clipboard history (WarpStash)
+spawn-at-startup "warpstashd"
+
+// === MODULAR INCLUDES ===
+include "includes/input.kdl"
+include "includes/keybinds.kdl"
+include "includes/window-rules.kdl"
+include "includes/compositor.kdl"
+
+// Auto-generated border colors (from matugen)
+include "includes/colors.kdl"
+
+include "includes/local.kdl"

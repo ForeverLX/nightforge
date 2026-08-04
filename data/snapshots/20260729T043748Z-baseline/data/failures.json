@@ -1,0 +1,1862 @@
+{
+  "failures": [
+    {
+      "session_id": "019efdb9-00bc-7000-8b3a-07d70b1a34de",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 2,
+      "stop_reason": "error",
+      "message_count": 9,
+      "category": "stop_reason_error"
+    },
+    {
+      "session_id": "019f0758-687f-7000-87f4-81b8ee68a3c5",
+      "model": "qwen2.5-coder:3b",
+      "provider": "ollama",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 4,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019ef26d-cd6c-7000-95cd-034ed583ae78",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 2,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019ef25c-09d5-7000-8be3-0fe1870ba61e",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 4,
+      "stop_reason": "stop",
+      "message_count": 15,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ef257-5ec6-7000-8b33-054081aa456b",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 7,
+      "stop_reason": "toolUse",
+      "message_count": 40,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019efdb4-20fd-7000-977a-eba53fd144a1",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 7,
+      "stop_reason": "error",
+      "message_count": 72,
+      "category": "stop_reason_error"
+    },
+    {
+      "session_id": "019f2361-ff15-7000-afa7-1e22ef8fe7b5",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 10,
+      "stop_reason": "dispose",
+      "message_count": 154,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ef231-a8d4-7000-a85d-9f80f685f4aa",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 1,
+      "stop_reason": "toolUse",
+      "message_count": 3,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa245-61e2-7000-9c59-bc8697eb924c",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 3,
+      "stop_reason": "uncaught_exception",
+      "message_count": 27,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ef234-a6d7-7000-829f-3e68828f36e4",
+      "model": "gpt-4o-mini",
+      "provider": "openai",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 2,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019ef0d8-5aa3-7000-a959-7845e206384a",
+      "model": "deepseek/deepseek-v4-flash:free",
+      "provider": "openrouter",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 2,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019ef22a-9245-7000-a04e-58578bb5dd3f",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 2,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019ef22a-3fac-7000-aa82-77ae7f198006",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 1,
+      "stop_reason": "stop",
+      "message_count": 4,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ef164-ccad-7000-8078-13008c93b29e",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 6,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019ef234-d427-7000-9060-efdd78bc06d0",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 2,
+      "stop_reason": "toolUse",
+      "message_count": 5,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ef24a-c857-7000-8fa5-2dd13ee97cbc",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 2,
+      "stop_reason": "toolUse",
+      "message_count": 18,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fabb7-f426-7000-b7f3-4299f2b6aafa",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 4,
+      "stop_reason": "dispose",
+      "message_count": 60,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ef061-c0cd-7000-b089-84642a57c653",
+      "model": "glm-5.2",
+      "provider": "opencode-go",
+      "error_count": 8,
+      "stop_reason": "stop",
+      "message_count": 79,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ef230-4145-7000-928a-987c68804d0b",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 2,
+      "stop_reason": "toolUse",
+      "message_count": 5,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f074c-a18c-7000-b66a-d8f935abf390",
+      "model": "qwen2.5-coder:3b",
+      "provider": "ollama",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 2,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f123b-4081-7000-b6fe-e59180a1f313",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 4,
+      "stop_reason": "stop",
+      "message_count": 140,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ef24c-9d89-7000-917d-16c1e3cf2bab",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 1,
+      "stop_reason": "toolUse",
+      "message_count": 19,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019efdb6-1914-7000-8581-9082c268114c",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 2,
+      "stop_reason": "error",
+      "message_count": 11,
+      "category": "stop_reason_error"
+    },
+    {
+      "session_id": "019ef22c-b94c-7000-a6fb-e243366edd7f",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 3,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019ef221-15a2-7000-af36-74290f0fc22a",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 3,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f3ecf-7322-7000-ac2e-ce7f4296ef56",
+      "model": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "error_count": 10,
+      "stop_reason": "dispose",
+      "message_count": 504,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ef185-e51a-7000-b54f-ac27b46b947e",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 3,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f1e40-98da-7000-ba25-4713288ed2f8",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 10,
+      "stop_reason": "stop",
+      "message_count": 218,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ef254-524d-7000-b258-3a757c3927c2",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 6,
+      "stop_reason": "toolUse",
+      "message_count": 27,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ef228-ec55-7000-ac18-a530f76ebe49",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 2,
+      "stop_reason": "stop",
+      "message_count": 8,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ef236-4763-7000-b221-72abdeb27d99",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 2,
+      "stop_reason": "stop",
+      "message_count": 6,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ef0d8-624e-7000-9fb9-a6c0312ece47",
+      "model": "deepseek/deepseek-v4-flash:free",
+      "provider": "openrouter",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 2,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f323f-1f0a-7000-b662-4de8348373f7",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 84,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f30d1-6b76-7000-aadc-25874833e191",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 3,
+      "stop_reason": "dispose",
+      "message_count": 10,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f3245-a5b8-7000-9da9-a1377cea410f",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 54,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f75bd-ec98-7000-9672-e069add7188f",
+      "model": "kimi-k3",
+      "provider": "opencode-go",
+      "error_count": 8,
+      "stop_reason": "uncaught_exception",
+      "message_count": 115,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f75be-4a22-7000-9fe8-930ff7ec3827",
+      "model": "x-ai/grok-4.5",
+      "provider": "openrouter",
+      "error_count": 1,
+      "stop_reason": "stop",
+      "message_count": 132,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f2788-fba8-7000-8ffe-088babef8926",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 33,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f324c-b5c5-7000-8ae3-4b4fbcaa9d3e",
+      "model": "minimax-m3",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "toolUse",
+      "message_count": 3,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f324c-eb5a-7000-a4ca-b720788a1a13",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 6,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f3002-3f90-7000-961a-278b2cb15a4e",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 6,
+      "stop_reason": "dispose",
+      "message_count": 82,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f3249-b56d-7000-8082-1e0ab1071c8d",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 5,
+      "stop_reason": "dispose",
+      "message_count": 121,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f3244-ed1f-7000-ab16-1f6b5cfee264",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 4,
+      "stop_reason": "sighup",
+      "message_count": 36,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f323e-7366-7000-a029-1574019896d9",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 4,
+      "stop_reason": "sighup",
+      "message_count": 43,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa23b-bfbe-7000-a4b7-d63a32c6ee8f",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 4,
+      "stop_reason": "dispose",
+      "message_count": 109,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa251-7ce1-7000-8f09-beff57aa51ac",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "uncaught_exception",
+      "message_count": 81,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f05a3-e7b5-7000-bb30-90e3c1d64c42",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 22,
+      "stop_reason": "error",
+      "message_count": 331,
+      "category": "stop_reason_error"
+    },
+    {
+      "session_id": "019efd8e-1772-7000-b265-2b0df8c74c56",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 3,
+      "stop_reason": "aborted",
+      "message_count": 71,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f1bc2-49de-7000-8eea-ac70d815be04",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 9,
+      "stop_reason": "stop",
+      "message_count": 187,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f1266-2d92-7000-a3f2-f5fa64970ecc",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 22,
+      "stop_reason": "stop",
+      "message_count": 322,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa1d3-b44a-7000-8463-5baa75e174b4",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 15,
+      "stop_reason": "dispose",
+      "message_count": 462,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fabf3-63d8-7000-9e96-a668c9cd49cd",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 11,
+      "stop_reason": "toolUse",
+      "message_count": 360,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019eed6f-65d1-7000-a56d-7ad00f5d7601",
+      "model": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "stop",
+      "message_count": 49,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019eed6f-1aa5-7000-b644-fbdbc506f3da",
+      "model": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "error_count": 4,
+      "stop_reason": "stop",
+      "message_count": 94,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f0777-7cc4-7000-b470-ed23022dda35",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 2,
+      "stop_reason": "stop",
+      "message_count": 76,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019eed48-c4b6-7000-b34f-82e44d1b8544",
+      "model": "glm-5.2",
+      "provider": "opencode-go",
+      "error_count": 21,
+      "stop_reason": "stop",
+      "message_count": 496,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f07dd-5f45-7000-a25f-55c7ef1382f6",
+      "model": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "error_count": 1,
+      "stop_reason": "error",
+      "message_count": 28,
+      "category": "stop_reason_error"
+    },
+    {
+      "session_id": "019f39fc-0331-7000-a867-79bfae0e5bee",
+      "model": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 13,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f39fc-2fc7-7000-860d-f52ee2f6d52e",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 31,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019ee6d9-eb9a-7000-8121-0f9787e99ace",
+      "model": "glm-5.2",
+      "provider": "opencode-go",
+      "error_count": 11,
+      "stop_reason": "stop",
+      "message_count": 189,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019eed48-f320-7000-b17c-392b1734a588",
+      "model": "glm-5.2",
+      "provider": "opencode-go",
+      "error_count": 12,
+      "stop_reason": "stop",
+      "message_count": 351,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa23b-d638-7000-ab7d-488086eac4da",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 8,
+      "stop_reason": "dispose",
+      "message_count": 85,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa255-d672-7000-bf46-aa8b2bf813e3",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "uncaught_exception",
+      "message_count": 74,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa23b-eca9-7000-93a5-a329f4ec8634",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 38,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f77fa-8aa4-7000-a549-e47844f6cc94",
+      "model": "kimi-k3",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "sighup",
+      "message_count": 11,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f77f3-0bbf-7000-917b-cd9db72adcac",
+      "model": "kimi-k3",
+      "provider": "opencode-go",
+      "error_count": 3,
+      "stop_reason": "sighup",
+      "message_count": 64,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa1e4-7340-7000-893b-a6818c25069a",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 4,
+      "stop_reason": "dispose",
+      "message_count": 52,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ee4fd-c5bb-7000-9814-12927f1a61d7",
+      "model": "glm-5.2",
+      "provider": "opencode-go",
+      "error_count": 2,
+      "stop_reason": "stop",
+      "message_count": 22,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa264-9f0e-7000-b00f-09717a1f82c7",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 3,
+      "stop_reason": "dispose",
+      "message_count": 56,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa1f1-32e1-7000-abba-1fffbdbf67d1",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 2,
+      "stop_reason": "dispose",
+      "message_count": 47,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ee4d9-411e-7000-8cb7-44685e2590c9",
+      "model": "deepseek-v4-pro",
+      "provider": "deepseek",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 2,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019ee5cf-1bd4-7000-9c84-55b4610f46f0",
+      "model": "glm-5.2",
+      "provider": "opencode-go",
+      "error_count": 9,
+      "stop_reason": "stop",
+      "message_count": 73,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ee3a7-6095-7000-8fa1-fe77cf41c59c",
+      "model": "deepseek-v4-pro",
+      "provider": "deepseek",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 9,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019fa24b-505b-7000-9213-de0180c3758d",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 8,
+      "stop_reason": "uncaught_exception",
+      "message_count": 126,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ee525-7430-7000-a504-b45123481a1e",
+      "model": "glm-5.2",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "stop",
+      "message_count": 26,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019eed49-0327-7000-876c-9d06828ca97b",
+      "model": "glm-5.2",
+      "provider": "opencode-go",
+      "error_count": 22,
+      "stop_reason": "stop",
+      "message_count": 264,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f5990-5f6c-7000-b08e-2d3bc8cbbdd6",
+      "model": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "error_count": 18,
+      "stop_reason": "dispose",
+      "message_count": 106,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f5990-b085-7000-be48-52df0532adb4",
+      "model": "ring-2.6-1t-free",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 313,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f31ed-dbb5-7000-9441-8307a69abf9d",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 16,
+      "stop_reason": "dispose",
+      "message_count": 208,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f354c-eae4-7000-8a54-ac68cabea8cf",
+      "model": "minimax-m3",
+      "provider": "opencode-go",
+      "error_count": 5,
+      "stop_reason": "dispose",
+      "message_count": 170,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f35c8-cb5d-7000-a906-ca6328505452",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 654,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f33ec-e182-7000-8b98-e43a5225566f",
+      "model": "minimax-m3",
+      "provider": "opencode-go",
+      "error_count": 3,
+      "stop_reason": "dispose",
+      "message_count": 259,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f354d-c936-7000-8a54-f9d849f70e10",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 402,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019fa1bf-0793-7000-9d4d-073b1dda8382",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 78,
+      "stop_reason": "stop",
+      "message_count": 1120,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa6fb-6ccb-7000-82d6-b362aeffecf6",
+      "model": "deepseek-v4-pro",
+      "provider": "deepseek",
+      "error_count": 26,
+      "stop_reason": "dispose",
+      "message_count": 228,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f929b-860c-7000-9706-5540415cb27c",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "provider": "openrouter",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 76,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f772c-2d67-7000-aa9f-9317a0a70082",
+      "model": "kimi-k3",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 8,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019eeaa1-578c-7000-9c99-9bbae98ab392",
+      "model": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "error_count": 3,
+      "stop_reason": "stop",
+      "message_count": 55,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f9fe2-07e2-7000-aa89-067597ce85ba",
+      "model": "deepseek-v4-pro",
+      "provider": "deepseek",
+      "error_count": 8,
+      "stop_reason": "dispose",
+      "message_count": 46,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7db0-5faf-7000-935c-c8d0e55a3144",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 46,
+      "stop_reason": "dispose",
+      "message_count": 1126,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f772c-391f-7000-978f-9e9073fb3679",
+      "model": "kimi-k3",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 12,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f81a9-6dae-7000-864f-1d9067243d19",
+      "model": "nemotron-3-ultra-free",
+      "provider": "opencode-zen",
+      "error_count": 26,
+      "stop_reason": "dispose",
+      "message_count": 357,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ee81d-8212-7000-8a41-b1deddb5930b",
+      "model": "glm-5.2",
+      "provider": "opencode-go",
+      "error_count": 10,
+      "stop_reason": "stop",
+      "message_count": 175,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f3a4b-2478-7000-b622-9ed1842dbf72",
+      "model": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "error_count": 3,
+      "stop_reason": "aborted",
+      "message_count": 6,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7b79-e123-7000-94cf-a652ffc5e1ac",
+      "model": "deepseek-ai/DeepSeek-V3.2",
+      "provider": "huggingface",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 780,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f7b6f-8b06-7000-83ab-738f66912429",
+      "model": "kimi-k3",
+      "provider": "opencode-go",
+      "error_count": 19,
+      "stop_reason": "dispose",
+      "message_count": 163,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f35c7-3671-7000-8695-eeff09e0f7aa",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 49,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa744-7c3d-7000-82dd-94fd586634b7",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 31,
+      "stop_reason": "stop",
+      "message_count": 687,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f3435-478e-7000-bd34-88ebc4b4f326",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 252,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f38b3-19b8-7000-90d8-e2b6a30dd32f",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 22,
+      "stop_reason": "dispose",
+      "message_count": 734,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f3ded-8ce2-7000-b16f-d3e479589a9f",
+      "model": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "error_count": 13,
+      "stop_reason": "dispose",
+      "message_count": 273,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f35c6-d15a-7000-ae5a-f3023fafef49",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 11,
+      "stop_reason": "dispose",
+      "message_count": 226,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f35c7-bfdb-7000-9b3e-4237ee0bcab8",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 618,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f38b4-07b7-7000-aee2-f44b362f0f7b",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 2022,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f76aa-acc9-7000-8c2a-d8436d16f65c",
+      "model": "kimi-k3",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "sigterm",
+      "message_count": 24,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f39c1-2093-7000-83aa-c448f045fa8d",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 426,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f92a8-3ba1-7000-89aa-ec777d96b399",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 64,
+      "stop_reason": "dispose",
+      "message_count": 639,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa16c-aa37-7000-95a2-95271fbb2f68",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 2,
+      "stop_reason": "dispose",
+      "message_count": 148,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f8d64-b85f-7000-ae87-7353857d2b96",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 14,
+      "stop_reason": "dispose",
+      "message_count": 230,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f2fa3-8d6b-7000-b88d-ce7527f0ed6e",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 4,
+      "stop_reason": "dispose",
+      "message_count": 135,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f355a-9463-7000-ba2d-8abd4df88116",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 18,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019ee63d-adbd-7000-b36a-abb6e07075c3",
+      "model": "glm-5.2",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "stop",
+      "message_count": 77,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f2add-5a23-7000-ae39-bc49fb74b362",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 16,
+      "stop_reason": "dispose",
+      "message_count": 194,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa07f-56ee-7000-b9ee-bb69f69e1b78",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 2,
+      "stop_reason": "dispose",
+      "message_count": 91,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f9f5b-a62e-7000-b71e-781adf807c83",
+      "model": "mimo-v2.5",
+      "provider": "opencode-go",
+      "error_count": 31,
+      "stop_reason": "dispose",
+      "message_count": 1057,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa767-aee8-7000-8225-4139113112bc",
+      "model": "gemini-3.1-flash-lite",
+      "provider": "google",
+      "error_count": 2,
+      "stop_reason": "dispose",
+      "message_count": 80,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa77a-ec2f-7000-99ed-9118a3225117",
+      "model": "gemini-3.1-flash-lite",
+      "provider": "google",
+      "error_count": 6,
+      "stop_reason": "sighup",
+      "message_count": 36,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fabe0-b99c-7000-8b39-5177ed7740da",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 8,
+      "stop_reason": "dispose",
+      "message_count": 221,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa747-9344-7000-8531-1ae273e21a8f",
+      "model": "gemini-3.1-flash-lite",
+      "provider": "google",
+      "error_count": 2,
+      "stop_reason": "dispose",
+      "message_count": 201,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa77a-9b1f-7000-a049-848193432b5b",
+      "model": "gemini-3.1-flash-lite",
+      "provider": "google",
+      "error_count": 1,
+      "stop_reason": "aborted",
+      "message_count": 50,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fabe0-b99d-7001-b477-f546f1a818fb",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 23,
+      "stop_reason": "dispose",
+      "message_count": 250,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa791-4379-7000-bcd0-635179bf0881",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 27,
+      "stop_reason": "dispose",
+      "message_count": 321,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fabe1-5848-7000-b404-fcff3dcf5ed3",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 7,
+      "stop_reason": "dispose",
+      "message_count": 71,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fabe1-5849-7001-a7ad-99ab26c991ab",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 34,
+      "stop_reason": "dispose",
+      "message_count": 245,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fabe1-5848-7002-ae53-9da28000c560",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 19,
+      "stop_reason": "dispose",
+      "message_count": 371,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fabe1-5849-7000-9c2e-a5133993dafb",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 2,
+      "stop_reason": "dispose",
+      "message_count": 18,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fabe1-5848-7003-a6fb-f9f9a8659524",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 21,
+      "stop_reason": "dispose",
+      "message_count": 148,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fabe1-5848-7001-8747-c5c652982516",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 8,
+      "stop_reason": "dispose",
+      "message_count": 85,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fabe1-5847-7000-beeb-7ab01f3a71b2",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 5,
+      "stop_reason": "dispose",
+      "message_count": 55,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa791-4378-7000-889f-1bb29a6af668",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 7,
+      "stop_reason": "dispose",
+      "message_count": 49,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fabe0-b99d-7000-9cfe-55d84661fd49",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 13,
+      "stop_reason": "dispose",
+      "message_count": 261,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa747-9343-7000-8d1c-9998de419cb1",
+      "model": "gemini-3.1-flash-lite",
+      "provider": "google",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 60,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f31ee-4ec4-7000-91ee-1ff334fceaf4",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 426,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f39c0-511a-7000-9187-d92a54903ca6",
+      "model": "kimi-k2.7-code",
+      "provider": "opencode-go",
+      "error_count": 11,
+      "stop_reason": "dispose",
+      "message_count": 171,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f3435-059f-7000-994e-c884f05bf8a9",
+      "model": "minimax-m3",
+      "provider": "opencode-go",
+      "error_count": 3,
+      "stop_reason": "dispose",
+      "message_count": 90,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa145-1478-7000-a20e-110a5b369166",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 4,
+      "stop_reason": "dispose",
+      "message_count": 74,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa1e7-c42b-7000-a880-d7deba13f1fb",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 2,
+      "stop_reason": "dispose",
+      "message_count": 53,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f31be-0f46-7000-9b4c-441bce395bd2",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 32,
+      "stop_reason": "dispose",
+      "message_count": 398,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f8d94-a9f5-7000-8ad6-69ff4567e18b",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 40,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f8db4-2480-7000-9cc0-c5eef1a6d24c",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 30,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f8d99-763a-7000-be4e-8f895ec3b647",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 49,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f8db4-6a18-7000-9e6b-3b901ce1bdde",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "provider": "openrouter",
+      "error_count": 4,
+      "stop_reason": "dispose",
+      "message_count": 24,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f8db4-6a18-7002-9ee3-a2430ef47f48",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "provider": "openrouter",
+      "error_count": 2,
+      "stop_reason": "dispose",
+      "message_count": 25,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f8db4-6a17-7001-a3d7-3a37765fb50b",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "provider": "openrouter",
+      "error_count": 5,
+      "stop_reason": "dispose",
+      "message_count": 39,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f8db4-6a17-7000-a761-5fe90c2a1361",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "provider": "openrouter",
+      "error_count": 4,
+      "stop_reason": "dispose",
+      "message_count": 33,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f8db4-6a18-7001-b003-ed555a1ee1dd",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "provider": "openrouter",
+      "error_count": 2,
+      "stop_reason": "dispose",
+      "message_count": 20,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f8db4-6a18-7003-becb-ea60a6345523",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "provider": "openrouter",
+      "error_count": 2,
+      "stop_reason": "dispose",
+      "message_count": 25,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f8d94-d46b-7001-9b30-1ee657a400ab",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "provider": "openrouter",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 42,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f8d94-d46a-7000-bedf-05d120195bd3",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "provider": "openrouter",
+      "error_count": 2,
+      "stop_reason": "dispose",
+      "message_count": 44,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019eea97-4c00-7000-914f-b7e9fa992f4e",
+      "model": "glm-5.2",
+      "provider": "opencode-go",
+      "error_count": 26,
+      "stop_reason": "stop",
+      "message_count": 592,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f3a4b-a626-7000-839a-0cf52d3d3ac0",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 2,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f33ee-f585-7000-a9d0-80b0c10f497b",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 484,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019fa6e2-e094-7000-b90a-e6c1fb21457f",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 13,
+      "stop_reason": "dispose",
+      "message_count": 127,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa1ec-d0ec-7001-a125-dd8435d906b0",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 29,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa1ec-d0eb-7000-aedc-ded1b45dacfc",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 4,
+      "stop_reason": "dispose",
+      "message_count": 92,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa1f1-b45d-7000-b7b6-0d693437bdb4",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 4,
+      "stop_reason": "dispose",
+      "message_count": 47,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa1ec-d0ec-7000-8cb4-3c598c457726",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 6,
+      "stop_reason": "dispose",
+      "message_count": 61,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa6e2-e094-7002-8379-9198e98c8366",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 11,
+      "stop_reason": "dispose",
+      "message_count": 56,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa6e2-e093-7000-82a8-eda2c561ac10",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 5,
+      "stop_reason": "dispose",
+      "message_count": 52,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa1ec-d0ec-7002-8e40-fcc2d64fa545",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 10,
+      "stop_reason": "dispose",
+      "message_count": 48,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa246-a58c-7000-8c78-92f58142d555",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 3,
+      "stop_reason": "dispose",
+      "message_count": 65,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa246-a570-7000-91f9-dcaab11d849b",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 9,
+      "stop_reason": "dispose",
+      "message_count": 145,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa246-a58d-7000-b12d-a1b2bd484505",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 12,
+      "stop_reason": "dispose",
+      "message_count": 192,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7bfe-5002-7000-915f-0e00e40b7408",
+      "model": "kimi-k3",
+      "provider": "opencode-go",
+      "error_count": 2,
+      "stop_reason": "dispose",
+      "message_count": 111,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ef0b0-332e-7000-a2cb-76ae3b280f54",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 6,
+      "stop_reason": "stop",
+      "message_count": 21,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7c41-d560-7000-a90e-7c0426f26d02",
+      "model": "kimi-k3",
+      "provider": "opencode-go",
+      "error_count": 62,
+      "stop_reason": "dispose",
+      "message_count": 1000,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7731-87e3-7000-aeb9-945ca8b37d2c",
+      "model": "kimi-k3",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 104,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7d2e-6d46-7000-a6e8-05ae60c0e735",
+      "model": "Ornith-1.0-35B",
+      "provider": "local-llama",
+      "error_count": 19,
+      "stop_reason": "toolUse",
+      "message_count": 333,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f35c8-09bb-7000-8eb9-f5d03ca5efdc",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 120,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f924f-6e34-7000-a684-182aff5b6ce8",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 23,
+      "stop_reason": "dispose",
+      "message_count": 685,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f35c8-6d49-7000-98a1-fdc5605454d9",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 16,
+      "stop_reason": "dispose",
+      "message_count": 267,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa061-aa5b-7000-8706-2c4e155ce8d0",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 11,
+      "stop_reason": "dispose",
+      "message_count": 140,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f35c8-f65e-7000-9e0e-b164de9fde07",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 366,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019fa12b-8b65-7000-abe1-1707e20f45d5",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 13,
+      "stop_reason": "dispose",
+      "message_count": 180,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019ef0b2-c773-7000-a1d0-8d26c681e1a1",
+      "model": "openrouter/auto",
+      "provider": "openrouter",
+      "error_count": 1,
+      "stop_reason": "stop",
+      "message_count": 5,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa0ad-a2f2-7000-9d17-7eeb6b06a613",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "uncaught_exception",
+      "message_count": 68,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f921b-af54-7000-8665-b13e0ccbf85a",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 10,
+      "stop_reason": "dispose",
+      "message_count": 244,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7df6-4be2-7001-a4a3-8db6133e7f1a",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 18,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7dc0-f53a-7002-b939-37c3f5a74995",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 52,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f80dc-e506-7000-b44c-b96479294fd3",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 6,
+      "stop_reason": "dispose",
+      "message_count": 29,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7de3-d999-7000-bf94-e11ab34d783f",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 3,
+      "stop_reason": "dispose",
+      "message_count": 115,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7df3-876f-7001-89de-9174177c45bb",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "provider": "openrouter",
+      "error_count": 7,
+      "stop_reason": "dispose",
+      "message_count": 27,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7e01-8a8e-7000-a71c-040df78fd295",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "provider": "openrouter",
+      "error_count": 6,
+      "stop_reason": "dispose",
+      "message_count": 59,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7dc0-f53a-7001-b706-bfb6ecf1d702",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 2,
+      "stop_reason": "dispose",
+      "message_count": 28,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7df6-4be2-7002-8d2d-4c3c17ab584a",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 5,
+      "stop_reason": "dispose",
+      "message_count": 33,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7e01-8a8f-7000-8697-3ce826dbf5c2",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "provider": "openrouter",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 48,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7df3-876f-7000-9a87-d12c3543665a",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "provider": "openrouter",
+      "error_count": 6,
+      "stop_reason": "dispose",
+      "message_count": 53,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f80dc-e502-7000-96a8-04cfedf9b567",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 13,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7de3-d99a-7002-a49e-25f78d26c751",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 4,
+      "stop_reason": "dispose",
+      "message_count": 81,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7de3-d99a-7001-8cd2-06402d1289a9",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 8,
+      "stop_reason": "dispose",
+      "message_count": 101,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7de3-d99a-7000-b9e7-7add09bafa7b",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 7,
+      "stop_reason": "dispose",
+      "message_count": 112,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7de3-3f75-7000-9c27-9a1e8465f561",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 2,
+      "stop_reason": "dispose",
+      "message_count": 128,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f87ef-9489-7000-823c-ddfa9a1ba381",
+      "model": "big-pickle",
+      "provider": "opencode-zen",
+      "error_count": 7,
+      "stop_reason": "dispose",
+      "message_count": 199,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa134-0dde-7000-b653-0688dd0e0c28",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 4,
+      "stop_reason": "dispose",
+      "message_count": 72,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa113-0e47-7001-85eb-a9bb57d380cc",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 6,
+      "stop_reason": "dispose",
+      "message_count": 104,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa10f-516e-7000-b26b-5cd5fece2249",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 4,
+      "stop_reason": "dispose",
+      "message_count": 81,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa134-0ddd-7000-93bc-1b1ca9b461cc",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 5,
+      "stop_reason": "dispose",
+      "message_count": 96,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa113-0e47-7000-8940-cc2d5d1c09be",
+      "model": "deepseek-v4-pro",
+      "provider": "opencode-go",
+      "error_count": 6,
+      "stop_reason": "dispose",
+      "message_count": 126,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019fa019-08a6-7000-bdb6-b0f610e3510c",
+      "model": "deepseek-v4-pro",
+      "provider": "deepseek",
+      "error_count": 2,
+      "stop_reason": "dispose",
+      "message_count": 182,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f31be-7f35-7000-b324-f4aadd1c8a76",
+      "model": "gpt-5.5",
+      "provider": "opencode-zen",
+      "error_count": 0,
+      "stop_reason": "error",
+      "message_count": 865,
+      "category": "unknown"
+    },
+    {
+      "session_id": "019f772c-5091-7000-b4a2-195b36cc278e",
+      "model": "kimi-k3",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 24,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f35c7-234d-7000-9596-7c6faf358b4f",
+      "model": "deepseek-v4-flash",
+      "provider": "opencode-go",
+      "error_count": 3,
+      "stop_reason": "dispose",
+      "message_count": 153,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7bfc-3926-7000-942b-9c36af48d081",
+      "model": "kimi-k3",
+      "provider": "opencode-go",
+      "error_count": 17,
+      "stop_reason": "dispose",
+      "message_count": 454,
+      "category": "tool_error"
+    },
+    {
+      "session_id": "019f7731-9177-7000-a5d3-4f5759f3b7d2",
+      "model": "kimi-k3",
+      "provider": "opencode-go",
+      "error_count": 1,
+      "stop_reason": "dispose",
+      "message_count": 68,
+      "category": "tool_error"
+    }
+  ],
+  "categories": [
+    {
+      "id": "tool_error",
+      "label": "Tool Execution Error",
+      "severity": "medium",
+      "count": 167
+    },
+    {
+      "id": "stop_reason_error",
+      "label": "Session Terminated by Error",
+      "severity": "high",
+      "count": 5
+    },
+    {
+      "id": "unknown",
+      "label": "Unknown Failure",
+      "severity": "low",
+      "count": 32
+    }
+  ],
+  "total_failures": 204,
+  "last_updated": "2026-07-29T04:34:46Z"
+}
