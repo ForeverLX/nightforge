@@ -48,8 +48,11 @@ embedded credential token. Remediation completed:
 ## Network Posture
 
 - `harnessd` binds **127.0.0.1:9191** only — no remote access
-- Go daemon is stdlib-only with zero external network calls
+- Go daemon makes zero external network calls (only `go-chi/chi/v5` + stdlib)
 - CORS middleware allows local development origins only (`GET`, `OPTIONS`)
+- Observability stack services bind loopback only (31744–31750, see
+  `10-layer-stack/README.md`) — **not started automatically**; operator
+  populates `.env` secrets before first run
 
 ## Container Security
 
