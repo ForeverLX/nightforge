@@ -56,7 +56,7 @@ func tick() {
 }
 
 // GetHealth returns the latest snapshot and recent history.
-func GetHealth() (HealthSnapshot, []HealthSnapshot) {
+func GetHealthHistory() (HealthSnapshot, []HealthSnapshot) {
 	mu.RLock()
 	defer mu.RUnlock()
 	if len(history) == 0 {

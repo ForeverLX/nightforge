@@ -68,3 +68,7 @@ output_path = "/tmp/matugen/hyprlock.conf"
 [templates.fastfetch]
 input_path = "~/.config/matugen/templates/fastfetch-config.jsonc.template"
 output_path = "/tmp/matugen/fastfetch-config.jsonc"
+
+[templates.hunk]
+input_path = "~/.config/matugen/templates/hunk-config.toml.template"
+output_path = "/tmp/matugen/hunk-config.toml"
