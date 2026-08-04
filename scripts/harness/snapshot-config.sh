@@ -7,7 +7,6 @@ NOW=$(date -u +%Y%m%dT%H%M%SZ)
 TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 SNAPSHOT_NAME="${NOW}-${LABEL}"
 SNAPSHOT_PATH="${SNAPSHOT_DIR}/${SNAPSHOT_NAME}"
-LOG_FILE="${SNAPSHOT_DIR}/snapshot-log.json"
 
 mkdir -p "${SNAPSHOT_PATH}"
 
