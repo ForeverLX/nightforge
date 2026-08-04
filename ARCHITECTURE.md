@@ -1,11 +1,14 @@
 # NightForge Architecture
 
-Two active subsystems:
+Active subsystems:
 
 1. **Harness Dashboard** (`harnessd`) — Go monitoring daemon on `127.0.0.1:9191`
-2. **Desktop Shell** — Niri compositor + Quickshell UI + Matugen theming
+2. **Observability Stack** — Docker Compose (OTel/Prometheus/Grafana/Langfuse)
+3. **CUE Config Migration** — CUE schemas + Go toolchain for Niri config
+4. **Desktop Shell** — Niri compositor + Quickshell UI + Matugen theming
 
-The Go module is `github.com/ForeverLX/nightforge` (stdlib-only, `go 1.26.5`).
+The Go module is `github.com/ForeverLX/nightforge` (`go 1.26.5`), with
+`go-chi/chi/v5` as the only external dependency (dashboard API router).
 
 ---
 
@@ -58,6 +61,37 @@ scripts/harness/*.sh  (failure-miner, proposal-engine, gate-check,
     ▼
 data/{failures,gates,proposals,snapshots,tokens,cost}/
 ```
+
+### Observability Stack
+
+`10-layer-stack/observability-stack/` (Docker Compose, operator-started)
+collects AgentGateway traces and host/agent metrics for L2 (trace log) and
+future L9 (benefit measurement):
+
+| Service | Port (loopback) | Role |
+|---------|-----------------|------|
+| OTel Collector | 31744 (OTLP gRPC) | Receives traces → Prometheus + Langfuse |
+| Prometheus | 31745 (`127.0.0.2`) | Scrapes AgentGateway `/metrics` + node-exporter |
+| Grafana | 31746 | Dashboards (four-agent architecture) |
+| Langfuse | 31747 | Trace/LLM observability |
+| node-exporter | 31750 | Host metrics |
+
+Ports and startup procedure: `10-layer-stack/README.md` and
+`10-layer-stack/observability-stack/TROUBLESHOOTING.md`.
+
+### CUE Config Migration
+
+Niri config is migrating from hand-maintained KDL to CUE schemas
+(`cue/nightforge.cue`, `cue/schema.cue`) with a Go toolchain:
+
+```
+cue/nightforge.cue ──▶ cmd/cue-to-kdl ──▶ dotfiles/niri/.config/niri/config.kdl
+       ▲
+cmd/cue-validate / cmd/fidelity-check / cmd/niri-staging-validate
+```
+
+`scripts/*.sh` launchers build the tools into `build/bin/` on demand. See
+[docs/CUE-MIGRATION.md](docs/CUE-MIGRATION.md).
 
 ### Model Routing
 
@@ -244,7 +278,9 @@ GTK/Qt, Neovim, btop, Mako, Rofi, Starship, Quickshell, Waybar).
 | Audio | `pipewire`, `wireplumber`, `pamixer` |
 | Containers | `podman` |
 | Utils | `jq`, `inotify-tools`, `socat` |
-| Dashboard | Go 1.26+ (stdlib only) |
+| Dashboard | Go 1.26+ (`go-chi/chi/v5` + stdlib) |
+| Observability | Docker + Docker Compose (`10-layer-stack/observability-stack/`) |
+| Config migration | CUE (`cue` CLI), Go toolchain under `cmd/` |
 
 ---
 

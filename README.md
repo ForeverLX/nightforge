@@ -15,7 +15,7 @@ Built and operated by [CR1MS0N-Operator](https://github.com/CR1MS0N-Operator).
 | Active | Yes |
 | CI | GitHub Actions (`.github/workflows/ci.yml`) |
 | Tests | Go build + `go vet`, shellcheck, `bash -n` (CI) |
-| Last Updated | 2026-08-01 |
+| Last Updated | 2026-08-04 |
 
 ---
 
@@ -56,8 +56,8 @@ See [docs/INSTALL.md](docs/INSTALL.md) for the full procedure and
 ## Harness Dashboard (`harnessd`)
 
 The active monitoring system: a Go backend on `127.0.0.1:9191` serving a
-single-file HTML frontend. No database, no build step, no external
-dependencies — stdlib only (`go.mod` has zero requires). Replaces the former
+single-file HTML frontend. No database, no build step. Depends only on
+`go-chi/chi/v5` (router) plus the standard library. Replaces the former
 `nightforged` daemon.
 
 - **Daemon:** `cmd/harnessd/main.go` — embeds the frontend, starts the health
@@ -123,6 +123,37 @@ dependencies — stdlib only (`go.mod` has zero requires). Replaces the former
 Run with `systemctl --user status harnessd` on the workstation. See
 [ARCHITECTURE.md](ARCHITECTURE.md) for the full design and
 [scripts/harness/](scripts/harness/) for the pipeline implementation.
+
+---
+
+## Observability Stack
+
+Docker Compose stack in [`10-layer-stack/observability-stack/`](10-layer-stack/observability-stack/)
+serving L2 (trace log) and the future L9 (benefit measurement): OTel
+Collector, Prometheus, Grafana, node-exporter, and Langfuse. It collects
+AgentGateway traces and host/agent metrics. **Not started automatically** —
+operator starts it after populating `.env` (see the
+[stack README](10-layer-stack/README.md) for ports and the startup
+procedure).
+
+---
+
+## CUE Config Migration
+
+NightForge configs are being migrated to [CUE](https://cuelang.org/) schemas
+(`cue/nightforge.cue`, `cue/schema.cue`) with a Go toolchain under `cmd/`:
+
+| Tool | Purpose |
+|------|---------|
+| `cmd/cue-to-kdl` | Export validated CUE config → Niri `config.kdl` |
+| `cmd/cue-validate` | Validate CUE schemas + config |
+| `cmd/fidelity-check` | Compare exported config against live state |
+| `cmd/niri-backup` | Snapshot current Niri config before changes |
+| `cmd/niri-staging-validate` | Validate staged config against CUE before apply |
+
+Scripts in `scripts/` (`cue-to-kdl.sh`, `cue-validate.sh`, `fidelity-check.sh`,
+`niri-staging-validate.sh`, `backup-niri-config.sh`) are thin launchers that
+build into `build/bin/` on demand. See [docs/CUE-MIGRATION.md](docs/CUE-MIGRATION.md).
 
 ---
 
@@ -192,23 +223,31 @@ health, MITRE ATT&CK technique logging (`mitre log T1059.004 "…"`).
 ```
 nightforge/
 ├── cmd/harnessd/            # Go daemon entry point (+ embedded frontend/)
+├── cmd/cue-to-kdl/          # CUE → KDL export (config migration)
+├── cmd/cue-validate/        # CUE schema/config validation
+├── cmd/fidelity-check/      # exported-config vs live-state comparison
+├── cmd/niri-backup/         # Niri config snapshot before changes
+├── cmd/niri-staging-validate/ # staged-config CUE validation
+├── cue/                     # CUE schemas (nightforge.cue, schema.cue)
 ├── internal/
 │   ├── server/              # Router, middleware
 │   ├── handler/             # API handlers (health, layers, sessions, snapshots, routes, cost)
 │   ├── collector/           # 5-min health collector, JSONL persistence
-│   └── cache/               # (empty — reserved)
+│   └── nfutil/              # Shared repo-root + cue-export helpers
 ├── data/                    # Harness telemetry (proposals, gates, failures, snapshots, tokens, cost, history)
 ├── scripts/
 │   ├── harness/             # Pipeline scripts (failure-miner, proposal-engine, gate-check, …)
 │   ├── maintenance/         # Weekly/monthly/quarterly upkeep
 │   ├── audit/ benchmark/ engagement/ helpers/ recon/ security/ setup/
-│   ├── qs-watcher/ niri-outputs/   # Small Go helpers
+│   ├── security/            # Tool-agnostic safety hooks (block destructive/credential ops)
+│   ├── cue-to-kdl.sh, cue-validate.sh, fidelity-check.sh, …
 │   └── apply-dotfiles.sh, deploy.sh, matugen-sync.sh, …
 ├── dotfiles/                # Stow-style per-app configs (niri, quickshell, ghostty, matugen, …)
 ├── modules/                 # Quickshell QML sources (Bar.qml, widgets) + niri/ shell/ container/ nightowl/
 ├── services/                # Quickshell QML services (MatugenColors, MpdClient, VpnStatus, PodmanStatus)
 ├── manifests/               # Package lists (host, aur, container, ad/re/web tooling)
 ├── profiles/                # install.sh profiles (local-only, solo-operator, team-operator)
+├── 10-layer-stack/          # L2/L9 substrate: observability-stack (OTel/Prometheus/Grafana/Langfuse)
 ├── 10-Stack/ 80-Operations/ # Planning scaffolding (mostly empty — see docs/CLEANUP-CANDIDATES.md)
 ├── niri-modifications/      # Niri experiment scripts + README
 ├── system/optimizations/    # Sysctl/kernel tuning
