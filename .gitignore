@@ -10,6 +10,10 @@ git_env/
 .env.*
 !.env.example
 
+# Never commit credentials embedded in git remote URLs (e.g. http://user:TOKEN@host/...)
+# Remote URLs live in .git/config (never committed), but if one was exposed, rotate the token.
+# See SECURITY.md -> Known Token Exposure.
+
 # OS/editor noise
 *.swp
 *~
@@ -67,6 +71,9 @@ session-tracker/target/
 
 # Go binaries
 niri-modifications/scripts/dashboard-ctl
+harnessd
+harnessd.bak
+nightforged
 
 # Generated files
 *.qslog
@@ -91,3 +98,15 @@ package.json
 package-lock.json
 # Aider (removed)
 .aider*
+
+# Deleted/removed components (prevent accidental reintroduction)
+/harness/
+/session-tracker/
+/dashboard-ctl/
+/.claude/
+/.dmux/
+/.codegraph/
+/.gitnexus/
+
+# CUE migration generated artifacts
+/build/

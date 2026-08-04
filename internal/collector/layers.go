@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ForeverLX/nightforge-dashboard/internal/collector/model"
+	"github.com/ForeverLX/nightforge/internal/collector/model"
 )
 
 // vaultScriptsDir is the root of the AI Lab Vault scripts directory.

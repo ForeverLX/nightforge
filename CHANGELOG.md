@@ -1,7 +1,68 @@
-# NightForge v2 — Changelog
+# NightForge — Changelog
+
+All notable changes are documented here. Format loosely follows
+[Keep a Changelog](https://keepachangelog.com/en/1.0.0/); newest first.
+
+## 2026-08-01 — Security Remediation & Stale-Directory Audit
+
+### Security
+- **Sanitized session handoffs**: `docs/archive/SESSION_HANDOFF.md` and
+  `docs/archive/NEXT_SESSION.md` converted to redacted templates — no
+  operational data (processes, keybinds, paths); handoff policy documented
+- **Removed embedded forgejo token** from the local git remote URL
+  (`.git/config`); rotation required — see `SECURITY.md` → Known Token Exposure
+- **SECURITY.md**: documented PUBLIC repo status, handoff policy, token
+  exposure, and OPSEC documentation guidelines
+- **.gitignore**: added credential-in-remote policy note
+
+### Docs
+- **`docs/CLEANUP-CANDIDATES.md`** (new): consolidated P1 stale-dir audit and
+  P2 remaining candidates with evidence and recommended actions
+
+### Audit (no deletions performed)
+- **Empty/abandoned** (untracked): `10-Stack/architecture/`,
+  `internal/cache/`, `data/stream_store/`, `80-Operations/infra/langfuse/`,
+  `80-Operations/scripts/memory/`
+- **Legacy**: `data/state_store.db/` (nightforged-era tracked binary),
+  `modules/nightowl/` (optional integration, engagement dir already removed)
+- **Documented**: routes.go Hermes BRAIN entry vs deprecated Hermes; go.mod
+  module path mismatch; QML source drift; missing LICENSE; GitNexus index
 
 
-## 2026-06-21 — Deep Audit & P0 Fixes (S{next})
+## 2026-07-28 — Harness Dashboard Migration (10-Layer)
+
+### Added
+- **harnessd Go backend** on `127.0.0.1:9191` — stdlib-only module
+  (`cmd/harnessd/` + `internal/{server,handler,collector}`), frontend embedded
+  via `//go:embed`
+- **6 API endpoints**: `/api/v1/{health,layers,sessions,snapshots,routes,cost}`
+- **Single-file frontend** (`cmd/harnessd/frontend/index.html`) — Matugen dark
+  theme, 6 tabs (L4 Health, L5 Proposals, L6 Gates, L7 Snapshots, L8 Routes,
+  Cost/Tokens), 30s auto-refresh
+- **Health collector**: 5-minute ticker, JSONL history in `data/history/`,
+  daily min/max/avg summary
+- **Token tracking**: `data/tokens/current.json`, Cost/Tokens tab, 30-minute
+  cron (`scripts/harness/token-tracker.sh`)
+- **Pi session parser**: cost data from OMP/Pi session JSONL
+  (`scripts/harness/pi-session-parser.sh`)
+- **L4/L5/L6 data pipelines** with detail views (failure-miner,
+  proposal-engine, gate-check)
+- **L7 snapshot pipeline** with history views (snapshot-config, rollback)
+- `~/.config/systemd/user/harnessd.service` (systemd user) replaces `nightforged.service`
+
+### Removed
+- Dead dashboard components: `nightforged`, `session-tracker`, `harness`,
+  `dashboard-ctl` (commit `21358e9`)
+- Stale agent dirs `.claude/`, `.aider*`, `.dmux/`, `.codegraph/`,
+  `.gitnexus/`; `.gitignore` updated to prevent reintroduction
+
+## 2026-06-28 — Shell Bar Cleanup
+
+- Purged old quickshell `Bar.qml`; archived `TopBar-legacy.qml`; live bar
+  symlinked to dotfiles; `compositor.kdl` changes committed (quickshell
+  overlay fixes)
+
+## 2026-06-21 — Deep Audit & P0 Fixes
 
 ### Code Quality
 - **Rebrand**: Replaced all "Azrael Security" → "CR1MS0N-Operator" and "ForeverLX" URLs → "CR1MS0N-Operator" across README, AGENTS.md, AGENTS.pi.md, go.mod, dotfiles, .claude hooks
@@ -15,7 +76,6 @@
 - Added `--json` flag for machine-readable output
 - Improved error handling: list functions return errors instead of empty slices
 - Made TLS InsecureSkipVerify conditional (enabled for localhost only)
-- Removed dead `init()` in tmux.go
 - Added HTTP timeout safety in c2.go
 - Container/service error propagation on command failure
 
@@ -26,6 +86,7 @@
 
 ### Repository
 - Set GitHub topics (arch-linux, niri, red-team, offensive-security, etc.)
+
 ## 2026-05-04 — Full Stack Rebuild
 
 ### Architecture Change

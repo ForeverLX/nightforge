@@ -7,7 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
-	nightforge "github.com/ForeverLX/nightforge-dashboard"
+	nightforge "github.com/ForeverLX/nightforge"
 )
 
 // NewRouter creates the chi router with all API routes, SSE, and static files.
