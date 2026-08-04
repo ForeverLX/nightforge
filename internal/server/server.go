@@ -21,6 +21,7 @@ func New(frontend embed.FS) http.Handler {
 	mux.HandleFunc("GET /api/v1/snapshots", handler.HandleSnapshots)
 	mux.HandleFunc("GET /api/v1/routes", handler.HandleRoutes)
 	mux.HandleFunc("GET /api/v1/cost", handler.HandleCost)
+	mux.HandleFunc("GET /metrics", handler.HandleMetrics)
 
 	// Static frontend
 	frontendFS, err := fs.Sub(frontend, "frontend")
@@ -35,6 +36,7 @@ func New(frontend embed.FS) http.Handler {
 func withMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
+		handler.IncRequests()
 
 		// CORS for local dev
 		w.Header().Set("Access-Control-Allow-Origin", "*")

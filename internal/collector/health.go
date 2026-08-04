@@ -198,8 +198,23 @@ func collectHealthData() HealthData {
 
 // --- disk ---
 
+// execLookPath resolves a binary, preferring absolute paths when PATH is
+// unreliable. The harnessd systemd user service runs with a broken PATH
+// (literal %E{PATH} in Environment=), so exec.LookPath alone is not enough.
+func execLookPath(bin string) string {
+	if p, err := exec.LookPath(bin); err == nil {
+		return p
+	}
+	for _, p := range []string{"/usr/bin/" + bin, "/bin/" + bin, "/usr/local/bin/" + bin} {
+		if _, err := os.Stat(p); err == nil {
+			return p
+		}
+	}
+	return bin // surface the original exec error downstream
+}
+
 func getDiskUsage(path string) int {
-	out, err := exec.Command("df", "--output=pcent", path).Output()
+	out, err := exec.Command(execLookPath("df"), "--output=pcent", path).Output()
 	if err != nil {
 		return 0
 	}
@@ -207,13 +222,17 @@ func getDiskUsage(path string) int {
 	if len(lines) < 2 {
 		return 0
 	}
+	// df pads the value; TrimSpace before stripping % and parsing.
 	v := strings.TrimSpace(strings.TrimSuffix(lines[1], "%"))
-	pct, _ := strconv.Atoi(v)
+	pct, err := strconv.Atoi(v)
+	if err != nil {
+		return 0
+	}
 	return pct
 }
 
 func getDiskUsed(path string) string {
-	out, err := exec.Command("df", "-h", "--output=used", path).Output()
+	out, err := exec.Command(execLookPath("df"), "-h", "--output=used", path).Output()
 	if err != nil {
 		return "?"
 	}
@@ -225,7 +244,7 @@ func getDiskUsed(path string) string {
 }
 
 func getDiskFree(path string) string {
-	out, err := exec.Command("df", "-h", "--output=avail", path).Output()
+	out, err := exec.Command(execLookPath("df"), "-h", "--output=avail", path).Output()
 	if err != nil {
 		return "?"
 	}
@@ -301,7 +320,7 @@ func getLoad() [3]float64 {
 // --- GPU ---
 
 func nvidiaSMI(query string) string {
-	out, err := exec.Command("nvidia-smi", "--query-gpu="+query, "--format=csv,noheader,nounits").Output()
+	out, err := exec.Command(execLookPath("nvidia-smi"), "--query-gpu="+query, "--format=csv,noheader,nounits").Output()
 	if err != nil {
 		return "0"
 	}
