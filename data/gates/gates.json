@@ -1,0 +1,89 @@
+{
+  "gates": [
+    {
+      "id": "G1",
+      "name": "Impact Threshold",
+      "description": "Proposal must address at least 5 failures to qualify",
+      "status": "pass",
+      "pass_count": 3,
+      "fail_count": 0,
+      "total_evaluated": 3
+    },
+    {
+      "id": "G2",
+      "name": "Effort Ceiling",
+      "description": "Proposals with high effort must have high or critical impact",
+      "status": "pass",
+      "pass_count": 3,
+      "fail_count": 0,
+      "total_evaluated": 3
+    },
+    {
+      "id": "G3",
+      "name": "Non-Duplicate",
+      "description": "Proposal must not duplicate existing active proposals",
+      "status": "pass",
+      "pass_count": 3,
+      "fail_count": 0,
+      "total_evaluated": 3
+    },
+    {
+      "id": "G4",
+      "name": "Failure Correlation",
+      "description": "Proposal must reference at least one failure category",
+      "status": "pass",
+      "pass_count": 3,
+      "fail_count": 0,
+      "total_evaluated": 3
+    },
+    {
+      "id": "G5",
+      "name": "Actionable",
+      "description": "Proposal must include concrete implementation steps",
+      "status": "pass",
+      "pass_count": 3,
+      "fail_count": 0,
+      "total_evaluated": 3
+    }
+  ],
+  "proposal_results": [
+    {
+      "proposal_id": "P1",
+      "title": "Reduce Tool Execution Errors",
+      "gates": {
+        "G1": "pass",
+        "G2": "pass",
+        "G3": "pass",
+        "G4": "pass",
+        "G5": "pass"
+      },
+      "overall": "pass"
+    },
+    {
+      "proposal_id": "P4",
+      "title": "Session Recovery on Error",
+      "gates": {
+        "G1": "pass",
+        "G2": "pass",
+        "G3": "pass",
+        "G4": "pass",
+        "G5": "pass"
+      },
+      "overall": "pass"
+    },
+    {
+      "proposal_id": "P5",
+      "title": "Proactive Failure Monitoring",
+      "gates": {
+        "G1": "pass",
+        "G2": "pass",
+        "G3": "pass",
+        "G4": "pass",
+        "G5": "pass"
+      },
+      "overall": "pass"
+    }
+  ],
+  "total_proposals_evaluated": 3,
+  "last_updated": "2026-07-29T04:34:46Z"
+}

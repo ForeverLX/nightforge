@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ForeverLX/nightforge-dashboard/internal/collector/model"
+	"github.com/ForeverLX/nightforge/internal/collector/model"
 )
 
 // PortServices maps known TCP ports to human-readable service names.
