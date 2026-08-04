@@ -3,17 +3,20 @@
 ## Scope
 
 NightForge is a single-operator workstation repository: desktop environment
-(Niri / Quickshell / Matugen dotfiles), Podman container profiles, and the
-`harnessd` monitoring dashboard. Keep changes conservative, evidence-based,
+(Niri / Quickshell / Matugen dotfiles), Podman container profiles, the
+`harnessd` monitoring dashboard, the observability stack
+(`10-layer-stack/observability-stack/`), and the CUE config migration
+toolchain (`cue/` + `cmd/cue-*`). Keep changes conservative, evidence-based,
 and scoped to what the task asks for.
 
 ## Prerequisites
 
-- Go 1.26+ (`go.mod` declares `go 1.26.5`; the harness is stdlib-only, so no
-  `go.sum` is needed)
+- Go 1.26+ (`go.mod` declares `go 1.26.5`; the harness depends only on
+  `go-chi/chi/v5` + stdlib)
 - `bash`, `git`
 - Optional: `podman` (container profiles), `quickshell`/`matugen`/`niri`
-  (desktop shell work)
+  (desktop shell work), `docker` + `docker compose` (observability stack),
+  `cue` (config migration)
 
 ## Build & Run (harnessd)
 
