@@ -37,7 +37,7 @@ The daemon runs as a systemd user service on the workstation
 
 ## Shell / Script Work
 
-- Run `shellcheck` on any changed `.sh` (CI enforces it)
+- Run `shellcheck` on any changed `.sh` (optional local check; CI runs `bash -n`)
 - Run `bash -n` for syntax verification
 - Keep scripts self-contained; prefer stdlib tooling over new dependencies
 
