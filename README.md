@@ -14,7 +14,7 @@ Built and operated by [CR1MS0N-Operator](https://github.com/CR1MS0N-Operator).
 | Version | Rolling (no versioned releases) |
 | Active | Yes |
 | CI | GitHub Actions (`.github/workflows/ci.yml`) |
-| Tests | Go build + `go vet`, shellcheck, `bash -n` (CI) |
+| Tests | Go build + `go vet`, `bash -n` (CI) |
 | Last Updated | 2026-08-04 |
 
 ---
@@ -80,6 +80,7 @@ single-file HTML frontend. No database, no build step. Depends only on
 | `GET /api/v1/snapshots` | Snapshot inventory + rollback history |
 | `GET /api/v1/routes` | Active model-routing table (from `internal/handler/routes.go`) |
 | `GET /api/v1/cost` | Token usage + cost (`data/tokens/current.json`) |
+| `GET /metrics` | Prometheus exposition (`harness_*`, `agentgateway_requests_total`) |
 
 ### Data Store (`data/`)
 
@@ -239,6 +240,7 @@ nightforge/
 │   ├── harness/             # Pipeline scripts (failure-miner, proposal-engine, gate-check, …)
 │   ├── maintenance/         # Weekly/monthly/quarterly upkeep
 │   ├── audit/ benchmark/ engagement/ helpers/ recon/ security/ setup/
+│   ├── qs-watcher/ niri-outputs/   # Small Go helpers
 │   ├── security/            # Tool-agnostic safety hooks (block destructive/credential ops)
 │   ├── cue-to-kdl.sh, cue-validate.sh, fidelity-check.sh, …
 │   └── apply-dotfiles.sh, deploy.sh, matugen-sync.sh, …
@@ -252,7 +254,7 @@ nightforge/
 ├── niri-modifications/      # Niri experiment scripts + README
 ├── system/optimizations/    # Sysctl/kernel tuning
 ├── docs/                    # INSTALL, ARCHITECTURE-referenced guides, plans/, solutions/, security/
-├── .github/workflows/ci.yml # Go build/vet + shellcheck + bash syntax
+├── .github/workflows/ci.yml # Go build/vet + bash syntax
 ├── AGENTS.md                # Agent guidance (pi/OMP/zero, harness ops)
 ├── CONTRIBUTING.md          # Contribution guide
 └── TROUBLESHOOTING.md
