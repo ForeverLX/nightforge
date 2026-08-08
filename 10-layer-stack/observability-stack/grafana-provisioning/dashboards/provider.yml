@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: CR1MS0N S189
+    orgId: 1
+    folder: Four-Agent Architecture
+    type: file
+    disableDeletion: true
+    editable: false
+    options:
+      path: /var/lib/grafana/dashboards
