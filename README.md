@@ -80,6 +80,7 @@ single-file HTML frontend. No database, no build step. Depends only on
 | `GET /api/v1/snapshots` | Snapshot inventory + rollback history |
 | `GET /api/v1/routes` | Active model-routing table (from `internal/handler/routes.go`) |
 | `GET /api/v1/cost` | Token usage + cost (`data/tokens/current.json`) |
+| `GET /metrics` | Prometheus exposition (`harness_*`, `agentgateway_requests_total`) |
 
 ### Data Store (`data/`)
 
