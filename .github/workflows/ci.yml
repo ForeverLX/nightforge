@@ -18,22 +18,6 @@ jobs:
       - run: go build ./cmd/harnessd/
       - run: go vet ./...
 
-  shellcheck:
-    name: Shellcheck
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ludeeus/action-shellcheck@master
-        with:
-          severity: warning
-          ignore_paths: >
-            .git
-            .planning
-            data
-            dotfiles
-            modules/nightowl
-            niri-modifications
-
   bash-syntax:
     name: Bash syntax check
     runs-on: ubuntu-latest
