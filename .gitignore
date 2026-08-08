@@ -14,6 +14,10 @@ git_env/
 # Remote URLs live in .git/config (never committed), but if one was exposed, rotate the token.
 # See SECURITY.md -> Known Token Exposure.
 
+# Never commit credentials embedded in git remote URLs (e.g. http://user:TOKEN@host/...)
+# Remote URLs live in .git/config (never committed), but if one was exposed, rotate the token.
+# See SECURITY.md -> Known Token Exposure.
+
 # OS/editor noise
 *.swp
 *~
