@@ -64,7 +64,7 @@ embedded credential token. Remediation completed:
 
 ## Secure Development
 
-- CI enforces `go build` + `go vet`, shellcheck, and `bash -n` syntax checks
+- CI enforces `go build` + `go vet` and `bash -n` syntax checks
 - Removed components (`session-tracker`, `dashboard-ctl`, `.claude/`, …) are
   gitignored to prevent accidental reintroduction
 - Scripts avoid `eval`/command injection patterns; secrets stay out of
