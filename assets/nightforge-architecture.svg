@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" font-family="JetBrains Mono, monospace">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+    </pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="760" fill="#020617"/>
+  <rect width="1200" height="760" fill="url(#grid)"/>
+
+  <!-- mesh boundary -->
+  <rect x="40" y="40" width="1120" height="680" rx="12" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="8,4"/>
+  <text x="60" y="65" fill="#fbbf24" font-size="12" font-weight="bold">PRIVATE MESH</text>
+
+  <!-- NightForge -->
+  <g>
+    <rect x="80" y="110" width="380" height="300" rx="8" fill="none" stroke="#22d3ee" stroke-width="1.5"/>
+    <text x="95" y="135" fill="#22d3ee" font-size="12" font-weight="bold">NIGHTFORGE</text>
+    <text x="95" y="150" fill="#64748b" font-size="9">Operator workstation — Arch / Niri / RTX 3070 8GB</text>
+
+    <rect x="100" y="170" width="160" height="52" rx="6" fill="#0f172a"/><rect x="100" y="170" width="160" height="52" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+    <text x="112" y="193" fill="#e2e8f0" font-size="12">OffSec-35B (resident)</text>
+    <text x="112" y="208" fill="#64748b" font-size="9">interactive offsec + fallback</text>
+
+    <rect x="280" y="170" width="160" height="52" rx="6" fill="#0f172a"/><rect x="280" y="170" width="160" height="52" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="292" y="193" fill="#e2e8f0" font-size="12">Bonsai-27B (on-demand)</text>
+    <text x="292" y="208" fill="#64748b" font-size="9">28K deep-think, Conflicts= swap</text>
+
+    <rect x="100" y="240" width="160" height="52" rx="6" fill="#0f172a"/><rect x="100" y="240" width="160" height="52" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+    <text x="112" y="263" fill="#e2e8f0" font-size="12">GN Harness</text>
+    <text x="112" y="278" fill="#64748b" font-size="9">Rust TUI · agent panes · libghostty</text>
+
+    <rect x="280" y="240" width="160" height="52" rx="6" fill="#0f172a"/><rect x="280" y="240" width="160" height="52" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+    <text x="292" y="263" fill="#e2e8f0" font-size="12">Dashboard</text>
+    <text x="292" y="278" fill="#64748b" font-size="9">Go collector → API → SPA</text>
+
+    <rect x="100" y="310" width="340" height="72" rx="6" fill="#0f172a"/><rect x="100" y="310" width="340" height="72" rx="6" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+    <text x="112" y="333" fill="#e2e8f0" font-size="12">Agent stack</text>
+    <text x="112" y="350" fill="#94a3b8" font-size="9">Hermes (brain) · OMP (executor) · memlawb (E2E memory)</text>
+    <text x="112" y="365" fill="#94a3b8" font-size="9">opencode-go → deepseek-v4-flash · local-llama fallback</text>
+  </g>
+
+  <!-- Cerberus -->
+  <g>
+    <rect x="540" y="110" width="380" height="440" rx="8" fill="none" stroke="#34d399" stroke-width="1.5"/>
+    <text x="555" y="135" fill="#34d399" font-size="12" font-weight="bold">CERBERUS</text>
+    <text x="555" y="150" fill="#64748b" font-size="9">Edge node — podman services</text>
+
+    <rect x="560" y="170" width="160" height="52" rx="6" fill="#0f172a"/><rect x="560" y="170" width="160" height="52" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="572" y="193" fill="#e2e8f0" font-size="12">Gitea</text>
+    <text x="572" y="208" fill="#64748b" font-size="9">repo hub · off-machine backup</text>
+
+    <rect x="740" y="170" width="160" height="52" rx="6" fill="#0f172a"/><rect x="740" y="170" width="160" height="52" rx="6" fill="rgba(136,19,55,0.4)" stroke="#fb7185" stroke-width="1.5"/>
+    <text x="752" y="193" fill="#e2e8f0" font-size="12">Mythic C2</text>
+    <text x="752" y="208" fill="#64748b" font-size="9">agent management</text>
+
+    <rect x="560" y="240" width="340" height="280" rx="6" fill="none" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="4,4"/>
+    <text x="575" y="260" fill="#fb7185" font-size="10" font-weight="bold">OFFSEC-OPS CONTAINER</text>
+    <text x="575" y="273" fill="#64748b" font-size="9">isolated · loopback-only · disposable</text>
+
+    <rect x="580" y="290" width="140" height="52" rx="6" fill="#0f172a"/><rect x="580" y="290" width="140" height="52" rx="6" fill="rgba(136,19,55,0.4)" stroke="#fb7185" stroke-width="1.5"/>
+    <text x="592" y="313" fill="#e2e8f0" font-size="12">CyberStrike</text>
+    <text x="592" y="328" fill="#64748b" font-size="9">agentic offsec assistant</text>
+
+    <rect x="740" y="290" width="140" height="52" rx="6" fill="#0f172a"/><rect x="740" y="290" width="140" height="52" rx="6" fill="rgba(136,19,55,0.4)" stroke="#fb7185" stroke-width="1.5"/>
+    <text x="752" y="313" fill="#e2e8f0" font-size="12">T3MP3ST</text>
+    <text x="752" y="328" fill="#64748b" font-size="9">LLM red-teaming</text>
+
+    <rect x="580" y="360" width="300" height="60" rx="6" fill="#0f172a"/><rect x="580" y="360" width="300" height="60" rx="6" fill="rgba(136,19,55,0.4)" stroke="#fb7185" stroke-width="1.5"/>
+    <text x="592" y="383" fill="#e2e8f0" font-size="12">Offsec toolchain</text>
+    <text x="592" y="398" fill="#64748b" font-size="9">impacket · netexec · certipy · bloodhound · responder · sliver-client</text>
+
+    <rect x="580" y="435" width="300" height="60" rx="6" fill="#0f172a"/><rect x="580" y="435" width="300" height="60" rx="6" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+    <text x="592" y="458" fill="#e2e8f0" font-size="12">Other services</text>
+    <text x="592" y="473" fill="#64748b" font-size="9">caddy · buzz infra (redis + minio)</text>
+  </g>
+
+  <!-- Hermes -->
+  <g>
+    <rect x="1000" y="110" width="160" height="130" rx="8" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
+    <text x="1015" y="135" fill="#94a3b8" font-size="12" font-weight="bold">HERMES</text>
+    <text x="1015" y="150" fill="#64748b" font-size="9">research / redirector</text>
+    <rect x="1020" y="165" width="120" height="52" rx="6" fill="#0f172a"/><rect x="1020" y="165" width="120" height="52" rx="6" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+    <text x="1032" y="188" fill="#e2e8f0" font-size="11">Analysis node</text>
+    <text x="1032" y="203" fill="#64748b" font-size="9">Alpine minimal</text>
+  </g>
+
+  <!-- connections -->
+  <line x1="460" y1="260" x2="540" y2="260" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="540" y1="180" x2="1000" y2="160" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,4" marker-end="url(#arrow)"/>
+  <line x1="460" y1="400" x2="540" y2="400" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrow)"/>
+  <text x="470" y="250" fill="#64748b" font-size="9">wireguard mesh</text>
+
+  <!-- legend -->
+  <g>
+    <rect x="60" y="640" width="180" height="18" rx="3" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1"/><text x="250" y="654" fill="#94a3b8" font-size="10">Frontend / workstation</text>
+    <rect x="420" y="640" width="180" height="18" rx="3" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1"/><text x="610" y="654" fill="#94a3b8" font-size="10">Backend / edge</text>
+    <rect x="780" y="640" width="180" height="18" rx="3" fill="rgba(136,19,55,0.4)" stroke="#fb7185" stroke-width="1"/><text x="970" y="654" fill="#94a3b8" font-size="10">Security / offsec</text>
+    <rect x="60" y="668" width="180" height="18" rx="3" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1"/><text x="250" y="682" fill="#94a3b8" font-size="10">Model / data</text>
+    <rect x="420" y="668" width="180" height="18" rx="3" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1"/><text x="610" y="682" fill="#94a3b8" font-size="10">External / infra</text>
+  </g>
+  <text x="60" y="720" fill="#475569" font-size="9">Azrael Security — NightForge environment · internal topology (addresses omitted)</text>
+</svg>

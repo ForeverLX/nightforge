@@ -137,7 +137,7 @@ func HandleMetrics(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// --- system health snapshot (single current value; node-exporter owns the time series) ---
-	if cur, _ := collector.GetHealth(); cur.Timestamp != "" {
+	if cur, _ := collector.GetHealthHistory(); cur.Timestamp != "" {
 		fmt.Fprintf(&b, "# HELP harness_health System health gauges from the latest harnessd snapshot.\n# TYPE harness_health gauge\n")
 		fmt.Fprintf(&b, "harness_health{metric=\"mem_pct\"} %d\n", cur.Health.MemPct)
 		fmt.Fprintf(&b, "harness_health{metric=\"load_1m\"} %g\n", cur.Health.Load[0])

@@ -9,7 +9,7 @@ import (
 
 // HandleHealth returns the latest health snapshot, 24h history, and daily summary.
 func HandleHealth(w http.ResponseWriter, r *http.Request) {
-	current, history := collector.GetHealth()
+	current, history := collector.GetHealthHistory()
 	if current.Timestamp == "" {
 		writeJSON(w, http.StatusOK, map[string]any{
 			"current":        nil,

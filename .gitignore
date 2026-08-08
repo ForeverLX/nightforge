@@ -8,6 +8,11 @@ git_env/
 # Secrets / env files
 *.env
 .env.*
+!.env.example
+
+# Never commit credentials embedded in git remote URLs (e.g. http://user:TOKEN@host/...)
+# Remote URLs live in .git/config (never committed), but if one was exposed, rotate the token.
+# See SECURITY.md -> Known Token Exposure.
 
 # Never commit credentials embedded in git remote URLs (e.g. http://user:TOKEN@host/...)
 # Remote URLs live in .git/config (never committed), but if one was exposed, rotate the token.
@@ -61,7 +66,11 @@ dotfiles/nvim/.config/nvim/lua/plugins/dankcolors.lua
 /.config/
 dotfiles/zsh/.zshrc
 
-# Rust builds
+# Tracked compiled binaries (remove from git tracking)
+scripts/qs-watcher/qs-watcher
+scripts/niri-outputs/niri-outputs
+niri-modifications/outputs/niri-outputs
+harness/target/
 session-tracker/target/
 
 # Go binaries
@@ -79,6 +88,7 @@ nightforged
 # Build artifacts
 dashboard-ctl/dashboard-ctl
 
+nightforged
 # Generated/planning artifacts
 .codegraph/
 .planning/
