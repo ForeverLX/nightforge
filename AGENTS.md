@@ -33,7 +33,7 @@ Execute in order, adapted to this repo:
 
 1. `go vet ./...`
 2. `go build ./cmd/harnessd/`
-3. `shellcheck` + `bash -n` on any changed `.sh`
+3. `bash -n` on any changed `.sh` (CI-enforced; `shellcheck` optional locally)
 4. CUE migration work: `go build ./cmd/cue-validate/` + validate against
    `cue/` schemas (see `docs/CUE-MIGRATION.md`)
 
