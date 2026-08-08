@@ -10,6 +10,6 @@ STATE_FILE="/tmp/qs_bt_state"
 "$FETCH" > "$STATE_FILE"
 
 # Listen for BlueZ property changes via D-Bus
-dbus-monitor --system "type='signal',sender='org.bluez',interface='org.freedesktop.DBus.Properties'" 2>/dev/null | while read -r line; do
+dbus-monitor --system "type='signal',sender='org.bluez',interface='org.freedesktop.DBus.Properties'" 2>/dev/null | while read -r _; do
     "$FETCH"
 done
