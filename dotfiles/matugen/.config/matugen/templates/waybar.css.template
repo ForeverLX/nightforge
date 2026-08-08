@@ -1,0 +1,131 @@
+/* NightForge Waybar — matugen template */
+* {
+    border: none;
+    border-radius: 14px;
+    font-family: "JetBrains Mono", "Iosevka Nerd Font", sans-serif;
+    font-size: 13px;
+    min-height: 0;
+}
+
+window#waybar { background: transparent; }
+window#waybar.hidden { opacity: 0; }
+
+#waybar {
+    background: {{colors.surface_container_lowest.default.hex}};
+    border: 1px solid {{colors.outline.default.hex}};
+    opacity: 0.96;
+    border-radius: 18px;
+    margin: 4px 8px;
+    padding: 0 8px;
+}
+
+#workspaces button {
+    padding: 0 4px;
+    margin: 0 1px;
+    background: transparent;
+    color: {{colors.on_surface_variant.default.hex}};
+    border-radius: 10px;
+    font-size: 14px;
+    min-width: 20px;
+}
+#workspaces button.active {
+    color: {{colors.primary.default.hex}};
+    background: {{colors.primary_container.default.hex}};
+}
+#workspaces button.urgent {
+    color: {{colors.error.default.hex}};
+    background: {{colors.error_container.default.hex}};
+}
+#workspaces button:hover {
+    background: {{colors.surface_variant.default.hex}};
+    color: {{colors.on_surface.default.hex}};
+}
+
+#custom-time {
+    color: {{colors.on_surface.default.hex}};
+    font-weight: bold;
+    font-size: 15px;
+    margin: 0 4px;
+    padding: 0 8px;
+    letter-spacing: 0.5px;
+}
+
+#custom-media {
+    color: {{colors.tertiary.default.hex}};
+    margin: 0 4px;
+    padding: 0 8px;
+    background: {{colors.tertiary_container.default.hex}};
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+#network {
+    color: {{colors.secondary.default.hex}};
+    margin: 0 4px;
+    font-size: 13px;
+}
+
+#bluetooth {
+    color: {{colors.secondary.default.hex}};
+    margin: 0 4px;
+    font-size: 13px;
+}
+
+#pulseaudio {
+    color: {{colors.on_surface.default.hex}};
+    margin: 0 4px;
+    font-size: 13px;
+}
+
+#pulseaudio.muted {
+    color: {{colors.error.default.hex}};
+}
+
+#custom-btop {
+    color: {{colors.tertiary.default.hex}};
+    margin: 0 2px;
+    padding: 0 4px;
+    font-size: 13px;
+    background: {{colors.tertiary_container.default.hex}};
+    border-radius: 8px;
+}
+
+#custom-agent {
+    margin: 0 2px;
+    font-size: 16px;
+    min-width: 16px;
+}
+#custom-agent.active { color: #a6e3a1; }
+#custom-agent.idle { color: #f9e2af; }
+#custom-agent.inactive { color: {{colors.outline.default.hex}}; }
+
+#battery {
+    color: {{colors.on_surface.default.hex}};
+    margin: 0 4px;
+    font-size: 13px;
+}
+#battery.warning { color: {{colors.error.default.hex}}; }
+#battery.critical {
+    color: {{colors.error.default.hex}};
+    animation: blink 1s infinite;
+}
+
+#cpu, #memory {
+    color: {{colors.on_surface_variant.default.hex}};
+    margin: 0 3px;
+    font-size: 12px;
+}
+
+#tray { margin: 0 4px; }
+#tray > .passive { -gtk-icon-effect: dim; }
+#tray > .needs-attention { -gtk-icon-effect: highlight; }
+
+tooltip {
+    background: {{colors.surface_container_lowest.default.hex}};
+    border: 1px solid {{colors.outline.default.hex}};
+    border-radius: 10px;
+}
+tooltip label {
+    color: {{colors.on_surface.default.hex}};
+    font-size: 13px;
+}
