@@ -14,7 +14,7 @@ Built and operated by [CR1MS0N-Operator](https://github.com/CR1MS0N-Operator).
 | Version | Rolling (no versioned releases) |
 | Active | Yes |
 | CI | GitHub Actions (`.github/workflows/ci.yml`) |
-| Tests | Go build + `go vet`, shellcheck, `bash -n` (CI) |
+| Tests | Go build + `go vet`, `bash -n` (CI) |
 | Last Updated | 2026-08-04 |
 
 ---
@@ -253,7 +253,7 @@ nightforge/
 ├── niri-modifications/      # Niri experiment scripts + README
 ├── system/optimizations/    # Sysctl/kernel tuning
 ├── docs/                    # INSTALL, ARCHITECTURE-referenced guides, plans/, solutions/, security/
-├── .github/workflows/ci.yml # Go build/vet + shellcheck + bash syntax
+├── .github/workflows/ci.yml # Go build/vet + bash syntax
 ├── AGENTS.md                # Agent guidance (pi/OMP/zero, harness ops)
 ├── CONTRIBUTING.md          # Contribution guide
 └── TROUBLESHOOTING.md
