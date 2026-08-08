@@ -45,6 +45,18 @@ output_path = "/tmp/matugen/cava-colors.ini"
 input_path = "~/.config/matugen/templates/swayosd.css.template"
 output_path = "/tmp/matugen/swayosd-style.css"
 
+[templates.swaync]
+input_path = "~/.config/matugen/templates/swaync.css.template"
+output_path = "/tmp/matugen/swaync-style.css"
+
+[templates.waybar]
+input_path = "~/.config/matugen/templates/waybar.css.template"
+output_path = "/tmp/matugen/waybar-style.css"
+
+[templates.warpstash]
+input_path = "~/.config/matugen/templates/warpstash-config.toml.template"
+output_path = "/tmp/matugen/warpstash-colors.toml"
+
 [templates.neovim]
 input_path = "~/.config/matugen/templates/nvim-colors.lua.template"
 output_path = "/tmp/matugen/nvim-colors.lua"
