@@ -72,6 +72,7 @@ scripts/niri-outputs/niri-outputs
 niri-modifications/outputs/niri-outputs
 harness/target/
 session-tracker/target/
+shell/target/
 
 # Go binaries
 niri-modifications/scripts/dashboard-ctl

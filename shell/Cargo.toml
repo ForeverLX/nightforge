@@ -5,6 +5,12 @@ edition = "2021"
 description = "S187 Phase 0 spike — wgpu layer-shell proof on Niri (text + rounded rect + gradient + animated quad)"
 license = "MIT"
 
+# Lib target: widget data-core (MPD parser etc.) that is testable without the
+# Wayland/wgpu spike. The binary in src/main.rs stays the spike app.
+[lib]
+name = "nightforge_shell"
+path = "src/lib.rs"
+
 [dependencies]
 bytemuck = { version = "1", features = ["derive"] }
 cosmic-text = "0.19.0"
