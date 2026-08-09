@@ -1,0 +1,9 @@
+<clickhouse>
+    <!-- Hard memory cap for CR1MS0N single-node Langfuse analytics.
+         Default max_server_memory_usage_to_ram_ratio is 0.9 (= 90% of RAM!),
+         which let ClickHouse balloon to ~35GB on this 39GB workstation.
+         2 GiB is ample for a single-operator Langfuse events table.
+         NOTE: only server-level settings here; query-level settings live in users.d. -->
+    <max_server_memory_usage>2147483648</max_server_memory_usage>
+    <max_server_memory_usage_to_ram_ratio>0.05</max_server_memory_usage_to_ram_ratio>
+</clickhouse>

@@ -10,11 +10,14 @@ services:
     command: ["--config=/etc/otelcol-contrib/config.yaml"]
     ports:
       - "127.0.0.1:31744:4317"
+      - "127.0.0.1:4318:4318"
     volumes:
       - ./otel-collector.yml:/etc/otelcol-contrib/config.yaml:ro
     environment:
       LANGFUSE_AUTH_STRING: ${LANGFUSE_AUTH_STRING:-REPLACE_WITH_BASE64_PUBLIC_KEY_COLON_SECRET}
 
+  # Retention extended 15d->180d (2026-08-08) to retain node_snapshots
+  # backfill history (Apr 19 - May 30 2026) migrated from cr1ms0n dashboard.
   prometheus:
     image: prom/prometheus:v3.5.0
     restart: unless-stopped
@@ -22,7 +25,7 @@ services:
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
-      - --storage.tsdb.retention.time=15d
+      - --storage.tsdb.retention.time=180d
       - --web.listen-address=127.0.0.2:31745
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
@@ -136,6 +139,9 @@ services:
     volumes:
       - langfuse_clickhouse_data:/var/lib/clickhouse
       - langfuse_clickhouse_logs:/var/log/clickhouse-server
+      # Memory cap: default 0.9 RAM ratio let ClickHouse balloon to ~35GB.
+      # This override pins it to 2 GiB (see clickhouse-config.d/memory-limit.xml).
+      - ./clickhouse-config.d/memory-limit.xml:/etc/clickhouse-server/config.d/memory-limit.xml:ro
     healthcheck:
       test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1"]
       interval: 5s
