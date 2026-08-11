@@ -1,5 +1,5 @@
 [package]
-name = "gn"
+name = "maestro"
 version = "0.1.0"
 edition = "2024"
 description = "libghostty-based terminal emulator with agent-mode panes"

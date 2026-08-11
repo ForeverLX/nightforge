@@ -10,10 +10,10 @@ use tracing_subscriber::{fmt, EnvFilter};
 fn main() -> Result<()> {
     // Initialize logging
     fmt()
-        .with_env_filter(EnvFilter::from_default_env().add_directive("gn=debug".parse()?))
+        .with_env_filter(EnvFilter::from_default_env().add_directive("maestro=debug".parse()?))
         .init();
 
-    tracing::info!("Starting GN harness v{}", env!("CARGO_PKG_VERSION"));
+    tracing::info!("Starting Maestro v{}", env!("CARGO_PKG_VERSION"));
 
     // Load config
     let config = config::load()?;

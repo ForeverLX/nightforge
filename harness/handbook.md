@@ -1,8 +1,8 @@
-# GN Harness Handbook — Prompt, Context, Loop, and Harness Engineering
+# Maestro Harness Handbook — Prompt, Context, Loop, and Harness Engineering
 
 **Scope:** This is the integration guide for `~/Github/nightforge/harness`.
 It translates high-quality external research into concrete implementation decisions
-for the GN harness (`gn`) runtime.
+for the Maestro harness (`maestro`) runtime.
 
 **Truth tests:** This handbook must stay consistent with:
 - `src/main.rs`
@@ -79,7 +79,7 @@ quality gate
 
 ---
 
-## 3. Harness Engineering — GN Runtime Constraints
+## 3. Harness Engineering — Maestro Runtime Constraints
 
 ### Current truth
 The runtime is an early stage TUI + agent process manager with:
