@@ -23,7 +23,7 @@ yay -S niri
 ### 2. Deploy Configs
 ```bash
 mkdir -p ~/.config/niri
-cp -r ~/Github/offsec-workstation/dotfiles/niri/* ~/.config/niri/
+cp -r ~/Github/nightforge/dotfiles/niri/* ~/.config/niri/
 
 # Create monitor config from template
 cp ~/.config/niri/includes/local.kdl.template ~/.config/niri/includes/local.kdl
