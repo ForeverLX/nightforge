@@ -1,4 +1,4 @@
-# System Configuration - offsec-workstation
+# System Configuration - NightForge
 
 ## Overview
 
@@ -89,7 +89,7 @@ Complete configuration documentation for the CR1MS0N-Operator NightForge worksta
 ### ZSH Configuration
 
 **Primary:** `~/.zshrc` (44 lines)  
-**Integration:** `~/.config/offsec-workstation/offsec.zsh`  
+**Integration:** `~/.config/operator-terminal/operator-init.sh`  
 **Startup Time:** 0.023s (instant)
 
 **Features:**
@@ -241,7 +241,7 @@ Complete configuration documentation for the CR1MS0N-Operator NightForge worksta
 
 ---
 
-## Containers (offsec-workstation)
+## Containers (NightForge)
 
 ### Profiles
 
@@ -288,11 +288,11 @@ Complete configuration documentation for the CR1MS0N-Operator NightForge worksta
 - `~/.config/starship.toml`
 - `~/.config/ghostty/config`
 - `~/.config/nvim/`
-- `~/.config/offsec-workstation/offsec.zsh`
+- `~/.config/operator-terminal/operator-init.sh`
 - `~/.gitconfig`
 - `~/.ssh/` (encrypted)
 
-**Location:** `~/Backups/` or `~/.offsec-workstation-backups/`
+**Location:** `~/Backups/` or `~/.nightforge-backups/`
 
 ### System Recovery
 
@@ -353,7 +353,7 @@ nethogs     # Per-process network usage
 
 ## Support
 
-**Repository:** ~/Github/offsec-workstation  
+**Repository:** ~/Github/nightforge  
 **Documentation:** `docs/` in repo  
 **Configs:** Managed via dotfiles
 

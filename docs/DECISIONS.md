@@ -56,7 +56,7 @@ Engagement layout (per name):
 ## NightOwl integration approach (locked)
 
 - NightOwl is a separate repo and remains independent.
-- offsec-workstation provides:
+- NightForge provides:
   - deterministic session layouts
   - directory contract
   - docs for paths and evidence handling
@@ -65,9 +65,9 @@ Engagement layout (per name):
 - NightOwl run artifacts:
   - ~/engage/nightowl/runs
 
-## Container artifact (later)
+## Container profiles (implemented)
 
-- A team-ready container environment is planned later, after:
-  - profiles/manifests stabilize
-  - NightOwl paths stabilize
-- Likely modeled after an Exegol-style approach (containerized operator environment + wrapper).
+A team-ready container environment is implemented: rootless Podman base
+(`toolbox`) plus `ad`, `re`, and `web` profiles with directory-contract
+mounts, versioned tags, and air-gapped export/import. See
+[README.md](../README.md#container-profiles).

@@ -1,5 +1,5 @@
 # Niri Keybindings Cheatsheet
-**offsec-workstation** - Quick reference guide
+**NightForge** — Quick reference guide
 
 Generated automatically from `keybinds.kdl`
 
