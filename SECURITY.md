@@ -35,15 +35,11 @@ vulnerabilities.
 - Session handoffs (`docs/archive/`) are sanitized templates only — never
   commit operational data in handoff notes
 
-## Known Token Exposure (2026-08-01)
+## Remediation Log
 
-The local `forgejo` remote URL in `.git/config` previously contained an
-embedded credential token. Remediation completed:
-
-- Token removed from the remote URL (now `http://localhost:3000/...`)
-- No occurrence of the token remains in `.git/config`
-- **Action required by operator:** rotate the token at the forgejo instance —
-  it was exposed in local config and may exist in shell history/backups
+- **2026-08-01** — removed an embedded credential from the local `forgejo`
+  remote URL in `.git/config`. No secret content is present in this
+  repository; details in [CHANGELOG.md](CHANGELOG.md).
 
 ## Network Posture
 

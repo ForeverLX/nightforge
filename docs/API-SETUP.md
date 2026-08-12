@@ -3,7 +3,7 @@
 **Version**: v0.5.0  
 **Date**: February 2026
 
-This guide covers API key setup for OSINT and reconnaissance tools used in the offsec-workstation environment.
+This guide covers API key setup for OSINT and reconnaissance tools used in the NightForge environment.
 
 ---
 

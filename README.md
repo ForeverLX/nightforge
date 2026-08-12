@@ -1,11 +1,18 @@
 # NightForge
 
-**Operator workstation for CR1MS0N-Operator** — Arch Linux + Niri desktop
-environment, rootless Podman container profiles, and the `harnessd`
-monitoring dashboard. Part of the [Veil](https://github.com/CR1MS0N-Operator/veil)
-infrastructure project.
+**Reproducible Arch Linux red team operator workstation** — Niri compositor,
+Quickshell shell and bar, Matugen theming, rootless Podman toolchains, and
+the `harnessd` validation dashboard. NightForge is the **measurement and
+mobilization layer** of the
+[CR1MS0N continuous adversarial validation platform](https://github.com/CR1MS0N-Operator/veil).
 
 Built and operated by [CR1MS0N-Operator](https://github.com/CR1MS0N-Operator).
+
+[![CI](https://img.shields.io/github/actions/workflow/status/CR1MS0N-Operator/nightforge/ci.yml?label=CI&logo=github)](https://github.com/CR1MS0N-Operator/nightforge/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Go](https://img.shields.io/badge/Go-1.26-00ADD8?logo=go)](https://go.dev)
+[![OS: Arch Linux](https://img.shields.io/badge/OS-Arch_Linux-1793D1?logo=archlinux)](https://archlinux.org)
+[![WM: Niri](https://img.shields.io/badge/WM-Niri-1a1a2e)](https://github.com/YaLTeR/niri)
 
 ## Status
 
@@ -15,7 +22,43 @@ Built and operated by [CR1MS0N-Operator](https://github.com/CR1MS0N-Operator).
 | Active | Yes |
 | CI | GitHub Actions (`.github/workflows/ci.yml`) |
 | Tests | Go build + `go vet`, `bash -n` (CI) |
-| Last Updated | 2026-08-04 |
+| Last Updated | 2026-08-11 |
+
+## Continuous Adversarial Validation
+
+NightForge is where validation evidence becomes decisions: the 10-layer
+harness turns findings from the rest of the platform into proposals, gates,
+and measured benefit — closing the loop instead of stopping at a report.
+
+| Framework | NightForge's Role |
+|-----------|-------------------|
+| **CTEM** (Continuous Threat Exposure Management) | **Mobilize** — the 10-layer harness pipeline turns findings into proposals (L5) and validation gates (L6), driving remediation and risk acceptance. **Validate** — `harnessd` surfaces live posture and validation state. |
+| **FAIR** (Factor Analysis of Information Risk) | L9 benefit measurement (designed) quantifies risk reduction in dollars — the FAIR return-on-security-investment loop for the whole platform. |
+| **AEV** (Adversarial Exposure Validation) | The harness is the evaluation + optimization loop for agentic validation: failure mining (L4) → proposals (L5) → gates (L6) → routing and weight updates (L8–L10). |
+| **GRC Engineering** | JSONL evidence data dirs (sessions, gates, failures, tokens) are the audit-ready compliance substrate. |
+
+Sibling projects: [Veil](https://github.com/CR1MS0N-Operator/veil) (validation substrate) · [C4](https://github.com/CR1MS0N-Operator/c4) (validation engine) · [Lantern](https://github.com/CR1MS0N-Operator/ACLGuard-Active-Directory-Permission-Auditor) (identity exposure validation).
+
+---
+
+## Features
+
+- **Reproducible desktop** — version-controlled Niri / Quickshell / Matugen
+  dotfiles and manifests; a fresh install reproduces the same environment
+- **Material-You theming** — one wallpaper → Matugen HCT palette → Ghostty,
+  GTK/Qt, Neovim, btop, Mako, Rofi, Starship, Quickshell
+- **Rootless Podman toolchains** — `toolbox` / `ad` / `re` / `web` profiles,
+  explicit mounts only, export/import for air-gapped engagements
+- **Operator terminal framework** — VPN/engagement/network/git/system
+  context with MITRE ATT&CK technique logging (`mitre log`)
+- **`harnessd` dashboard** — single-binary Go daemon on `127.0.0.1:9191`:
+  health, 10-layer state, sessions, routing, cost
+- **10-layer validation harness** — failure mining → proposals → gates →
+  versioning → routing, orchestrated by `scripts/harness/`
+- **Observability substrate** — OTel / Prometheus / Grafana / Langfuse stack
+  for traces and future L9 benefit measurement
+- **CUE-validated config** — Niri configuration authored in CUE, validated
+  and exported by Go tooling (`cmd/cue-*`)
 
 ---
 
@@ -50,6 +93,23 @@ go build ./cmd/harnessd/
 
 See [docs/INSTALL.md](docs/INSTALL.md) for the full procedure and
 [profiles/](profiles/) for `local-only`, `solo-operator`, `team-operator`.
+
+---
+
+## Architecture Overview
+
+Three collaborating layers (full design in
+[ARCHITECTURE.md](ARCHITECTURE.md)):
+
+| Layer | What it is | Tech |
+|-------|-----------|------|
+| **Desktop** | Compositor, shell/bar, theming, terminal framework | Niri, Quickshell (QML), Matugen, Ghostty |
+| **Harness** | 10-layer validation pipeline + dashboard + data store | Go (`harnessd`), bash (`scripts/harness/`), JSONL (`data/`) |
+| **Substrate** | Trace + metrics + benefit measurement (L2/L9) | Docker Compose (OTel, Prometheus, Grafana, Langfuse) |
+
+The harness pipeline: L4 failure mining → L5 proposals → L6 gates → L7
+versioning → L8 routing — each stage written to `data/` and surfaced by
+`harnessd` at `127.0.0.1:9191`.
 
 ---
 
@@ -118,7 +178,7 @@ single-file HTML frontend. No database, no build step. Depends only on
 | L6 | Validation Gate | complete |
 | L7 | Versioning & Rollback | complete |
 | L8 | Routing Matrix | complete |
-| L9 | Benefit Measurement | not-designed |
+| L9 | Benefit Measurement | in-design (observability substrate live) |
 | L10 | Weight Update | not-designed |
 
 Run with `systemctl --user status harnessd` on the workstation. See
@@ -129,7 +189,8 @@ Run with `systemctl --user status harnessd` on the workstation. See
 
 ## Observability Stack
 
-Docker Compose stack in [`10-layer-stack/observability-stack/`](10-layer-stack/observability-stack/)
+Docker Compose stack in
+[`10-layer-stack/observability-stack/`](10-layer-stack/observability-stack/)
 serving L2 (trace log) and the future L9 (benefit measurement): OTel
 Collector, Prometheus, Grafana, node-exporter, and Langfuse. It collects
 AgentGateway traces and host/agent metrics. **Not started automatically** —
@@ -230,6 +291,7 @@ nightforge/
 ├── cmd/niri-backup/         # Niri config snapshot before changes
 ├── cmd/niri-staging-validate/ # staged-config CUE validation
 ├── cue/                     # CUE schemas (nightforge.cue, schema.cue)
+├── harness/                 # Rust workspace — libghostty-based terminal emulator (agent-mode panes)
 ├── internal/
 │   ├── server/              # Router, middleware
 │   ├── handler/             # API handlers (health, layers, sessions, snapshots, routes, cost)
@@ -257,6 +319,9 @@ nightforge/
 ├── .github/workflows/ci.yml # Go build/vet + bash syntax
 ├── AGENTS.md                # Agent guidance (pi/OMP/zero, harness ops)
 ├── CONTRIBUTING.md          # Contribution guide
+├── CHANGELOG.md             # Change history
+├── SECURITY.md              # Security policy + OPSEC commitments
+├── LICENSE                  # MIT
 └── TROUBLESHOOTING.md
 ```
 
@@ -313,5 +378,10 @@ All tooling is for authorized security research and engagement work only.
 Sensitive configurations and live operational details are intentionally
 excluded from this repository.
 
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE).
+
 **Author:** Darrius Grate | CR1MS0N-Operator
-**License:** MIT
