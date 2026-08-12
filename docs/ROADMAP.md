@@ -1,65 +1,71 @@
 # Roadmap
 
-This roadmap tracks the evolution of offsec-workstation from a reproducible host setup
-to a production-grade Red Team operator environment.
+NightForge evolves in two tracks: the **workstation** (reproducible host,
+desktop shell, toolchains) and the **validation platform** (10-layer harness,
+observability, measurement). Completed items are recorded in
+[CHANGELOG.md](../CHANGELOG.md); this document tracks what is next.
 
-## Phase 1 — Foundation ✅ COMPLETE
+## Workstation Track
+
+### Phase 1 — Foundation ✅ COMPLETE
 - Profile-driven installer
 - Deterministic tmux layouts
 - Directory contract (engage/loot/notes/exploitdev/projects)
 - Minimal Neovim IDE (Telescope + rg/fd)
 - Locked decision documentation
 
-## Phase 2 — Workflow Hardening ✅ COMPLETE
+### Phase 2 — Workflow Hardening ✅ COMPLETE
 - Refine manifests (base vs solo vs team)
 - Remove accidental bloat
 - Improve tmux ergonomics
 - Harden loot handling (permissions + safe defaults)
 - Audit enabled services for minimal surface
 
-## Phase 3 — Performance + Package Audit (NEXT)
-Goal: reduce package count (target: stay <900 if possible) without sacrificing operator workflow.
+### Phase 3 — Container Profile Architecture ✅ COMPLETE (2026-02)
+- Rootless Podman baseline (no daemon)
+- Minimal `toolbox` base image (explicit mounts only)
+- Three modular profiles: `ad`, `re`, `web`
+- Wrapper scripts enforce directory-contract mounts
+- Version + date tagging; export/import for air-gapped engagements
 
-- Export full package inventory + classify (core / workflow / optional / remove)
-- Remove overlaps (duplicate tools with the same job)
-- Measure boot + session performance (track deltas)
-- Record decisions in docs/performance + docs/DECISIONS
+### Phase 4 — Desktop Shell Modernization ✅ COMPLETE
+- Niri compositor migration (from Sway)
+- Quickshell shell + per-screen bar (from waybar)
+- Matugen Material-You theming across all apps
+- Ghostty terminal with OPSEC theme switching
 
-## Phase 4 — Container Profile Architecture ✅ COMPLETE
-- ✅ Rootless Podman baseline (no daemon)
-- ✅ Minimal "offsec-toolbox" base image (explicit mounts only)
-- ✅ Three modular profiles: ad, re, web
-- ✅ Wrapper scripts enforce directory contract mounts
-- ✅ Version + date tagging for reproducibility
-- ✅ Export/import for air-gapped engagements
-- ✅ Package manifests: official repos only, documented exceptions
+### Phase 5 — Config Management (NEXT)
+- Finish CUE migration of Niri config (`cue/` + `cmd/cue-*`)
+- Extend CUE schemas to more config surfaces (Quickshell, Ghostty)
+- Keep `fidelity-check` green on the live workstation
 
-**Completed Feb 14, 2026**
-
-### Built Profiles
-- `toolbox:0.1.0` - Base layer (~1.1 GB)
-- `ad:0.1.0` - Active Directory engagement tooling (~1.3 GB)
-- `re:0.1.0` - Reverse engineering & vuln research (~1.8 GB)
-- `web:0.1.0` - Web recon & enumeration (~1.1 GB)
-
-### Known Limitations
-- Some Python packages incompatible with Python 3.14 (using maintained alternatives)
-- AUR tools like ffuf/naabu require manual install (using official alternatives)
-- Per-engagement bring-up/tear-down (Mythic/Dradis) deferred to Phase 6
-
-## Phase 5 — AI-VM Profile (Agentic, opt-in)
-- OpenClaw introduced ONLY here (VM profile), sandboxed and opt-in
-- Allowlist-only tools; no marketplace installs by default
-- Strict mounts + explicit operator approval for host access
-
-## Phase 6 — Engagement Orchestration
-- Per-engagement C2 bring-up (Mythic, Sliver)
-- Collaborative tooling (Dradis, CherryTree)
-- Automated engagement teardown scripts
-- Engagement versioning + snapshot management
-
-## Phase 7 — archiso Build
+### Phase 6 — archiso Build (planned)
 - Convert profiles → archiso profile
-- Minimal ISO build
-- Solo + Team flavors
+- Minimal ISO build, solo + team flavors
 - Live boot + persistence options
+
+## Validation Platform Track
+
+### Phase A — 10-Layer Harness ✅ COMPLETE
+- `harnessd` dashboard (Go, `127.0.0.1:9191`) replaces `nightforged`
+- Pipeline scripts: failure mining (L4) → proposals (L5) → gates (L6) →
+  versioning/rollback (L7) → routing (L8)
+- JSONL evidence store under `data/`
+
+### Phase B — Observability Substrate ✅ COMPLETE
+- OTel Collector, Prometheus, Grafana, node-exporter, Langfuse
+  (`10-layer-stack/observability-stack/`)
+- AgentGateway trace + host/agent metric collection (loopback-only ports)
+
+### Phase C — Benefit Measurement (NEXT)
+- **L9** — FAIR-modeled benefit measurement from validation evidence
+  (risk reduction quantified in dollars)
+- **L10** — weight update loop from measured benefit back into routing
+- Depends on the observability substrate (Phase B) and a stable routing table
+
+## Historical Notes
+
+- The workstation was originally branded `offsec-workstation` (pre-2026);
+  docs, branding, and config paths now use **NightForge** — report any
+  stragglers as issues.
+- Performance work is tracked in [docs/performance-optimization.md](performance-optimization.md).

@@ -1,6 +1,6 @@
 # Performance & Network Optimization
 
-This document captures safe, incremental tuning steps for the offsec workstation. Each change is optional and should be applied only after testing.
+This document captures safe, incremental tuning steps for NightForge. Each change is optional and should be applied only after testing.
 
 ## Baseline (2026-02-10)
 - Boot time: 21.331s total (firmware 9.967s, loader 2.061s, kernel 5.704s, userspace 3.598s)
