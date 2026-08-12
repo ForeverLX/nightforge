@@ -1,7 +1,7 @@
 # Security Baseline — Host Firewall (iptables)
 
 Last updated: 2026-02-12  
-Profile intent: **local-first / OPSEC-by-default** host baseline for the offsec-workstation.
+Profile intent: **local-first / OPSEC-by-default** host baseline for NightForge.
 
 This baseline is designed for a Red Team workstation where:
 - the host should not accept unsolicited inbound connections by default
