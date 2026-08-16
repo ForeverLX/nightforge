@@ -9,11 +9,15 @@ type Route struct {
 	Provider string `json:"provider"`
 }
 
+// routes is the authoritative model/provider mapping for the S210 stack
+// (source of truth per AGENTS.md, served at GET /api/v1/routes and consumed
+// by GET /api/v1/status). Deprecated agents OMP/Zero/Buzz and the
+// decommissioned opengateway provider are removed; local lane is now the
+// Qwen models (Bonsai name retired).
 var routes = []Route{
-	{Role: "Hermes BRAIN", Model: "mimo-v2.5-pro", Provider: "opengateway"},
-	{Role: "dsh EXECUTOR", Model: "deepseek-v4-flash", Provider: "dsh"},
-	{Role: "Subagents", Model: "deepseek-v4-flash-free", Provider: "opencode-zen"},
-	{Role: "Local", Model: "Qwen3.8-27B-Q6_K", Provider: "local-llama (:18234, GPU -ngl 15)"},
+	{Role: "Hermes BRAIN", Model: "hermes-brain", Provider: "hermes (profile home)"},
+	{Role: "dsh EXECUTOR", Model: "deepseek-v4-flash", Provider: "cline-pass (:3080)"},
+	{Role: "Pi Agent LOCAL LANES", Model: "Qwen3.8-27B / Qwen3-1.7B", Provider: "local-llama (:18234 quality / :18236 aux)"},
 }
 
 // HandleRoutes returns the active model routing table.
