@@ -20,6 +20,7 @@ func New(frontend embed.FS) http.Handler {
 	mux.HandleFunc("GET /api/v1/sessions", handler.HandleSessions)
 	mux.HandleFunc("GET /api/v1/snapshots", handler.HandleSnapshots)
 	mux.HandleFunc("GET /api/v1/routes", handler.HandleRoutes)
+	mux.HandleFunc("GET /api/v1/tid", handler.HandleTID)
 	mux.HandleFunc("GET /api/v1/sbom", handler.HandleSbom)
 	mux.HandleFunc("GET /api/v1/cost", handler.HandleCost)
 	mux.HandleFunc("GET /metrics", handler.HandleMetrics)
