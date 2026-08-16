@@ -1,11 +1,8 @@
 # NightForge
 
-**Operator workstation for CR1MS0N-Operator** — Arch Linux + Niri desktop
-environment, rootless Podman container profiles, and the `harnessd`
-monitoring dashboard. NightForge is the **measurement and mobilization layer**
-of the [CR1MS0N continuous adversarial validation platform](https://github.com/CR1MS0N-Operator/veil).
+**Operator workstation for CR1MS0N-Operator** — Arch Linux + Niri/Quickshell desktop environment, rootless Podman container profiles, and the `harnessd` monitoring dashboard.
 
-Built and operated by [CR1MS0N-Operator](https://github.com/CR1MS0N-Operator).
+NightForge is the **measurement and mobilization layer** of the [CR1MS0N continuous adversarial validation platform](https://github.com/CR1MS0N-Operator/veil).
 
 ## Status
 
@@ -15,13 +12,11 @@ Built and operated by [CR1MS0N-Operator](https://github.com/CR1MS0N-Operator).
 | Active | Yes |
 | CI | GitHub Actions (`.github/workflows/ci.yml`) |
 | Tests | Go build + `go vet`, `bash -n` (CI) |
-| Last Updated | 2026-08-04 |
+| Last Updated | 2026-08-16 |
 
 ## Continuous Adversarial Validation
 
-NightForge is where validation evidence becomes decisions: the 10-layer
-harness turns findings from the rest of the platform into proposals, gates,
-and measured benefit — closing the loop instead of stopping at a report.
+NightForge is where validation evidence becomes decisions: the 10-layer harness turns findings from the rest of the platform into proposals, gates, and measured benefit — closing the loop instead of stopping at a report.
 
 | Framework | NightForge's Role |
 |-----------|-------------------|
@@ -30,9 +25,7 @@ and measured benefit — closing the loop instead of stopping at a report.
 | **AEV** (Adversarial Exposure Validation) | The harness is the evaluation + optimization loop for agentic validation: failure mining (L4) → proposals (L5) → gates (L6) → routing and weight updates (L8–L10). |
 | **GRC Engineering** | JSONL evidence data dirs (sessions, gates, failures, tokens) are the audit-ready compliance substrate. |
 
-Sibling projects: [Veil](https://github.com/CR1MS0N-Operator/veil) (validation substrate) · [C4](https://github.com/CR1MS0N-Operator/c4) (validation engine) · [Lantern](https://github.com/CR1MS0N-Operator/ACLGuard-Active-Directory-Permission-Auditor) (identity exposure validation).
-
----
+**Sibling projects:** [Veil](https://github.com/CR1MS0N-Operator/veil) (validation substrate) · [C4](https://github.com/CR1MS0N-Operator/c4) (validation engine) · [Lantern](https://github.com/CR1MS0N-Operator/ACLGuard-Active-Directory-Permission-Auditor) (identity exposure validation).
 
 ## Quick Start
 
@@ -63,27 +56,17 @@ go build ./cmd/harnessd/
 ./scripts/benchmark/system-baseline.sh
 ```
 
-See [docs/INSTALL.md](docs/INSTALL.md) for the full procedure and
-[profiles/](profiles/) for `local-only`, `solo-operator`, `team-operator`.
-
----
+See [docs/INSTALL.md](docs/INSTALL.md) for the full procedure and [profiles/](profiles/) for `local-only`, `solo-operator`, `team-operator`.
 
 ## Harness Dashboard (`harnessd`)
 
-The active monitoring system: a Go backend on `127.0.0.1:9191` serving a
-single-file HTML frontend. No database, no build step. Depends only on
-`go-chi/chi/v5` (router) plus the standard library. Replaces the former
-`nightforged` daemon.
+The active monitoring system: a Go backend on `127.0.0.1:9191` serving a single-file HTML frontend. No database, no build step. Depends only on `go-chi/chi/v5` (router) plus the standard library.
 
-- **Daemon:** `cmd/harnessd/main.go` — embeds the frontend, starts the health
-  collector, serves all routes
-- **Router:** `internal/server/server.go` — API + static frontend, CORS and
-  request logging middleware
+- **Daemon:** `cmd/harnessd/main.go` — embeds the frontend, starts the health collector, serves all routes
+- **Router:** `internal/server/server.go` — API + static frontend, CORS and request logging middleware
 - **Handlers:** `internal/handler/` — one file per endpoint
-- **Collector:** `internal/collector/health.go` — 5-minute health snapshot
-  ticker, JSONL persistence
-- **Frontend:** `cmd/harnessd/frontend/index.html` — inline CSS/JS, Matugen
-  dark theme, 6 tabs, 30s auto-refresh on the health tab
+- **Collector:** `internal/collector/health.go` — 5-minute health snapshot ticker, JSONL persistence
+- **Frontend:** `cmd/harnessd/frontend/index.html` — inline CSS/JS, Matugen dark theme, 6 tabs, 30s auto-refresh on the health tab
 
 ### API
 
@@ -98,6 +81,8 @@ single-file HTML frontend. No database, no build step. Depends only on
 | `GET /metrics` | Prometheus exposition (`harness_*`, `agentgateway_requests_total`) |
 
 ### Data Store (`data/`)
+
+> **Note:** `data/` directory has been purged from version control — runtime artifacts. See migration path below.
 
 | Path | Contents |
 |------|----------|
@@ -125,7 +110,7 @@ single-file HTML frontend. No database, no build step. Depends only on
 
 | Layer | Name | Status |
 |-------|------|--------|
-| L1 | Hardware/Infra (Arch, Niri, NightForge) | complete |
+| L1 | Hardware/Infra (Arch, Niri/Hyprland, NightForge) | complete |
 | L2 | Gateway/Cost (flat-rate, no tracking needed) | not-applicable |
 | L3 | Routing (v5 routing matrix) | complete |
 | L4 | Failure Mining | complete |
@@ -136,28 +121,15 @@ single-file HTML frontend. No database, no build step. Depends only on
 | L9 | Benefit Measurement | not-designed |
 | L10 | Weight Update | not-designed |
 
-Run with `systemctl --user status harnessd` on the workstation. See
-[ARCHITECTURE.md](ARCHITECTURE.md) for the full design and
-[scripts/harness/](scripts/harness/) for the pipeline implementation.
-
----
+Run with `systemctl --user status harnessd` on the workstation. See [ARCHITECTURE.md](ARCHITECTURE.md) for the full design and [scripts/harness/](scripts/harness/) for the pipeline implementation.
 
 ## Observability Stack
 
-Docker Compose stack in [`10-layer-stack/observability-stack/`](10-layer-stack/observability-stack/)
-serving L2 (trace log) and the future L9 (benefit measurement): OTel
-Collector, Prometheus, Grafana, node-exporter, and Langfuse. It collects
-AgentGateway traces and host/agent metrics. **Not started automatically** —
-operator starts it after populating `.env` (see the
-[stack README](10-layer-stack/README.md) for ports and the startup
-procedure).
-
----
+`10-layer-stack/observability-stack/` (Docker Compose: OTel Collector, Prometheus, Grafana, Langfuse, node-exporter) — L2/L9 substrate for AgentGateway traces and host metrics. **Not started automatically** — operator starts it after populating `.env`; ports 31744–31750, all loopback-bound. See `10-layer-stack/README.md` for ports and the startup procedure.
 
 ## CUE Config Migration
 
-NightForge configs are being migrated to [CUE](https://cuelang.org/) schemas
-(`cue/nightforge.cue`, `cue/schema.cue`) with a Go toolchain under `cmd/`:
+NightForge configs are being migrated to [CUE](https://cuelang.org/) schemas (`cue/nightforge.cue`, `cue/schema.cue`) with a Go toolchain under `cmd/`:
 
 | Tool | Purpose |
 |------|---------|
@@ -167,19 +139,11 @@ NightForge configs are being migrated to [CUE](https://cuelang.org/) schemas
 | `cmd/niri-backup` | Snapshot current Niri config before changes |
 | `cmd/niri-staging-validate` | Validate staged config against CUE before apply |
 
-Scripts in `scripts/` (`cue-to-kdl.sh`, `cue-validate.sh`, `fidelity-check.sh`,
-`niri-staging-validate.sh`, `backup-niri-config.sh`) are thin launchers that
-build into `build/bin/` on demand. See [docs/CUE-MIGRATION.md](docs/CUE-MIGRATION.md).
-
----
+Scripts in `scripts/` (`cue-to-kdl.sh`, `cue-validate.sh`, `fidelity-check.sh`, `niri-staging-validate.sh`, `backup-niri-config.sh`) are thin launchers that build into `build/bin/` on demand. See [docs/CUE-MIGRATION.md](docs/CUE-MIGRATION.md).
 
 ## Desktop Stack
 
-Wayland desktop built around Niri with a Quickshell overlay + top bar.
-`dotfiles/niri/.config/niri/config.kdl` autostart (the "replace DMS" block):
-`awww-daemon` (wallpaper), Quickshell overlay (`shell.qml`) + top bar
-(`TopBar.qml`), `matugen-sync.sh` (theming), `podman-restart.service`,
-`wallpaper-rotate.timer`, `mpd.service`.
+Wayland desktop built around Niri with a Quickshell overlay + top bar. Niri is the default compositor; Hyprland is the Omarchy companion path.
 
 | Component | Role |
 |-----------|------|
@@ -192,20 +156,15 @@ Wayland desktop built around Niri with a Quickshell overlay + top bar.
 
 ### Design Decisions (condensed)
 
-- **Niri over Sway** — scrolling layout keeps window geometry stable during
-  multi-window work; built-in overview; per-monitor workspaces.
-- **Quickshell over eww/AGS** — GPU-accelerated QML, watcher-based scripts
-  (no polling loops), live Matugen color sync.
-- **Matugen** — HCT tonal palette extraction, one wallpaper → configs for
-  Ghostty/GTK/Qt/Neovim/btop/Mako/Rofi/Starship/Quickshell.
-- **Rootless Podman over Docker** — no daemon, `--userns=keep-id`, local
-  images only, export/import for air-gapped work.
-- **Ghostty over Kitty/Alacritty/WezTerm** — multi-config dark/light maps to
-  OPSEC theme switching; SIGUSR1 reload.
+- **Niri over Sway** — scrolling layout keeps window geometry stable during multi-window work; built-in overview; per-monitor workspaces.
+- **Quickshell over eww/AGS** — GPU-accelerated QML, watcher-based scripts (no polling loops), live Matugen color sync.
+- **Matugen** — HCT tonal palette extraction, one wallpaper → configs for Ghostty/GTK/Qt/Neovim/btop/Mako/Rofi/Starship/Quickshell.
+- **Rootless Podman over Docker** — no daemon, `--userns=keep-id`, local images only, export/import for air-gapped work.
+- **Ghostty over Kitty/Alacritty/WezTerm** — multi-config dark/light maps to OPSEC theme switching; SIGUSR1 reload.
 
 Full rationale in [docs/DECISIONS.md](docs/DECISIONS.md).
 
-### Container Profiles
+## Container Profiles
 
 Rootless Podman profiles, layered on a shared `toolbox` base:
 
@@ -223,59 +182,40 @@ Rootless Podman profiles, layered on a shared `toolbox` base:
 ./modules/container/scripts/container.sh export ad   # air-gapped export .tar
 ```
 
-> **Status:** Manifests and Containerfiles are version-controlled; treat
-> profiles as in-progress and verify before use in engagements.
+**Status:** Manifests and Containerfiles are version-controlled; treat profiles as in-progress and verify before use in engagements.
 
-### Operator Terminal Framework
+## Operator Terminal Framework
 
-Contextual shell (dotfiles/operator-terminal): VPN/WireGuard status, active
-engagement context, network awareness, podman status, git context, system
-health, MITRE ATT&CK technique logging (`mitre log T1059.004 "…"`).
-
----
+Contextual shell (dotfiles/operator-terminal): VPN/WireGuard status, active engagement context, network awareness, podman status, git context, system health, MITRE ATT&CK technique logging (`mitre log T1059.004 "…"`).
 
 ## Repository Structure
 
-```
+```text
 nightforge/
 ├── cmd/harnessd/            # Go daemon entry point (+ embedded frontend/)
-├── cmd/cue-to-kdl/          # CUE → KDL export (config migration)
-├── cmd/cue-validate/        # CUE schema/config validation
-├── cmd/fidelity-check/      # exported-config vs live-state comparison
-├── cmd/niri-backup/         # Niri config snapshot before changes
-├── cmd/niri-staging-validate/ # staged-config CUE validation
-├── cue/                     # CUE schemas (nightforge.cue, schema.cue)
-├── internal/
-│   ├── server/              # Router, middleware
-│   ├── handler/             # API handlers (health, layers, sessions, snapshots, routes, cost)
-│   ├── collector/           # 5-min health collector, JSONL persistence
-│   └── nfutil/              # Shared repo-root + cue-export helpers
-├── data/                    # Harness telemetry (proposals, gates, failures, snapshots, tokens, cost, history)
-├── scripts/
-│   ├── harness/             # Pipeline scripts (failure-miner, proposal-engine, gate-check, …)
-│   ├── maintenance/         # Weekly/monthly/quarterly upkeep
-│   ├── audit/ benchmark/ engagement/ helpers/ recon/ security/ setup/
-│   ├── qs-watcher/ niri-outputs/   # Small Go helpers
-│   ├── security/            # Tool-agnostic safety hooks (block destructive/credential ops)
-│   ├── cue-to-kdl.sh, cue-validate.sh, fidelity-check.sh, …
-│   └── apply-dotfiles.sh, deploy.sh, matugen-sync.sh, …
-├── dotfiles/                # Stow-style per-app configs (niri, quickshell, ghostty, matugen, …)
-├── modules/                 # Quickshell QML sources (Bar.qml, widgets) + niri/ shell/ container/ nightowl/
-├── services/                # Quickshell QML services (MatugenColors, MpdClient, VpnStatus, PodmanStatus)
-├── manifests/               # Package lists (host, aur, container, ad/re/web tooling)
-├── profiles/                # install.sh profiles (local-only, solo-operator, team-operator)
-├── 10-layer-stack/          # L2/L9 substrate: observability-stack (OTel/Prometheus/Grafana/Langfuse)
-├── 10-Stack/ 80-Operations/ # Planning scaffolding (mostly empty — see docs/CLEANUP-CANDIDATES.md)
-├── niri-modifications/      # Niri experiment scripts + README
-├── system/optimizations/    # Sysctl/kernel tuning
-├── docs/                    # INSTALL, ARCHITECTURE-referenced guides, plans/, solutions/, security/
-├── .github/workflows/ci.yml # Go build/vet + bash syntax
-├── AGENTS.md                # Agent guidance (pi/OMP/zero, harness ops)
-├── CONTRIBUTING.md          # Contribution guide
+├── cmd/l9-benefit-measurement/   # L9 benefit measurement
+├── cmd/m3tid/                 # Assessment tool
+├── cmd/cue-to-kdl/            # CUE → KDL export (config migration)
+├── cmd/cue-validate/          # CUE schema/config validation
+├── cmd/fidelity-check/        # exported-config vs live-state comparison
+├── cue/                       # CUE schemas (nightforge.cue, schema.cue)
+├── internal/                  # Go backend: server, collectors, handlers, m3tid, health monitoring
+├── data/                      # Harness telemetry (proposals, gates, failures, snapshots, tokens, cost, history)
+├── scripts/                   # Pipeline scripts + maintenance helpers
+├── dotfiles/                  # Stow-style per-app configs (niri, quickshell, ghostty, matugen, …)
+├── modules/                   # Quickshell QML sources (Bar.qml, widgets) + niri/ shell/ container/ nightowl/
+├── services/                  # Quickshell QML services (MatugenColors, MpdClient, VpnStatus, PodmanStatus)
+├── manifests/                 # Package lists (host, aur, container, ad/re/web tooling)
+├── profiles/                  # install.sh profiles (local-only, solo-operator, team-operator)
+├── 10-layer-stack/            # L2/L9 substrate: observability-stack (OTel/Prometheus/Grafana/Langfuse)
+├── niri-modifications/        # Niri experiment scripts + README
+├── system/optimizations/      # Sysctl/kernel tuning
+├── docs/                      # INSTALL, ARCHITECTURE-referenced guides, plans/, solutions/, security/
+├── .github/workflows/ci.yml   # Go build/vet + bash syntax
+├── AGENTS.md                  # Agent guidance (pi/OMP/zero, harness ops)
+├── CONTRIBUTING.md            # Contribution guide
 └── TROUBLESHOOTING.md
 ```
-
----
 
 ## Performance & Benchmarks
 
@@ -288,45 +228,28 @@ Measured on the operator workstation (i3-10105F, GTX 1650):
 | Terminal startup | ~87ms (operator framework) |
 | Container build (toolbox) | ~3m45s first, ~30s cached |
 
-Run `./scripts/benchmark/system-baseline.sh` for a full baseline
-(`docs/benchmarks/` is gitignored — generated reports).
-
----
+Run `./scripts/benchmark/system-baseline.sh` for a full baseline (`docs/benchmarks/` is gitignored — generated reports).
 
 ## Troubleshooting
 
-See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) — Niri start/config, container
-build failures, terminal framework, Matugen theming, maintenance timers,
-network/VPN.
-
----
+See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) — Niri start/config, container build failures, terminal framework, Matugen theming, network/VPN.
 
 ## Changelog & Roadmap
 
 - [CHANGELOG.md](CHANGELOG.md) — full history
 - [docs/ROADMAP.md](docs/ROADMAP.md) — planned work
 
----
-
 ## Design Principles
 
-1. **Reproducible by default.** Configs and manifests version-controlled; a
-   fresh install should produce an identical environment.
-2. **Minimal attack surface.** No Docker daemon, rootless containers, explicit
-   mounts only.
-3. **OPSEC-aware workflows.** Theme switching, VPN-aware terminal, engagement
-   isolation, MITRE technique logging.
+1. **Reproducible by default.** Configs and manifests version-controlled; a fresh install should produce an identical environment.
+2. **Minimal attack surface.** No Docker daemon, rootless containers, explicit mounts only.
+3. **OPSEC-aware workflows.** Theme switching, VPN-aware terminal, engagement isolation, MITRE technique logging.
 4. **Local-first.** All tooling runs locally; export/import for air-gapped ops.
-5. **Maintainable over clever.** Boring tech (bash, KDL, QML, Go stdlib) with
-   documented trade-offs.
-
----
+5. **Maintainable over clever.** Boring tech (bash, KDL, QML, Go stdlib) with documented trade-offs.
 
 ## Disclaimer
 
-All tooling is for authorized security research and engagement work only.
-Sensitive configurations and live operational details are intentionally
-excluded from this repository.
+All tooling is for authorized security research and engagement work only. Sensitive configurations and live operational details are intentionally excluded from this repository.
 
-**Author:** Darrius Grate | CR1MS0N-Operator
+**Author:** Darrius Grate | CR1MS0N-Operator  
 **License:** MIT
