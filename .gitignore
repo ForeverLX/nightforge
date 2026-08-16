@@ -115,3 +115,10 @@ package-lock.json
 
 # CUE migration generated artifacts
 /build/
+
+# Runtime telemetry / harness data (never commit)
+data/
+
+# Removed broken Quickshell plugin concept (prevents accidental re-add)
+dotfiles/quickshell/.config/quickshell/plugins/
+
