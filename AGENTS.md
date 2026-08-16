@@ -3,23 +3,39 @@
 ## Purpose
 
 Operator workstation repository for CR1MS0N-Operator. Contains the desktop
-environment (Niri/Quickshell/Matugen dotfiles), rootless Podman container
-profiles, and the `harnessd` monitoring dashboard (Go, `127.0.0.1:9191`).
+environment (Quickshell/Matugen dotfiles), rootless Podman container profiles,
+and the `harnessd` monitoring dashboard (Go, `127.0.0.1:9191`).
 
-## Agent Architecture (current)
+## Agent Architecture (S210 stack — current)
 
-| Role | Scope |
-|------|-------|
-| **pi** | Brain — planning, proposals, decisions, roadmap |
-| **OMP** | Executor — implements approved plans, code, docs, verification |
-| **zero** | Offsec / cron — quick fixes, scheduled maintenance tasks |
-| **Hermes** | **Deprecated** — do not route new work to Hermes |
+> Two deployments of the same `harnessd` agent coordinator serve this repo:
+> the **local lanes** executor (Pi Agent) and the **deepseek** executor (dsh).
+> Each routes to a single local model via its own serving endpoint; see the
+> live routing table (`GET http://127.0.0.1:9191/api/v1/routes`) for the
+> authoritative model/provider mapping.
+
+| Role | Agent | Scope |
+|------|-------|-------|
+| **brain / research** | **Hermes** | planning, proposals, decisions, roadmap |
+| **deepseek executor** | **dsh** (`deepseek-harness`) | implements approved plans, code, docs, verification |
+| **local lanes executor** | **Pi Agent** | local-lane execution; Qwen models via local endpoints |
+
+### Model assignments (S210)
+
+- **Hermes** (brain) — owned by the Hermes profile home; drives the roadmap.
+- **dsh** (deepseek-harness) — routes to `cline-pass`/`deepseek-v4-flash` at
+  `:3080` for execution-heavy work.
+- **Pi Agent** (local lanes) — routes to local Qwen models:
+  - quality lane: `Qwen3.8-27B` at `:18234`
+  - aux lane: `Qwen3-1.7B` at `:18236` (CPU-only work)
 
 Model/provider truth is the **live routing table** served by the harness at
 `GET http://127.0.0.1:9191/api/v1/routes` (source:
 `internal/handler/routes.go`). Do not hardcode model claims in docs; the
-served table is authoritative. Note: that table still contains a legacy
-"Hermes BRAIN" entry — reconciliation is a candidate, not a doc change.
+served table is authoritative.
+
+Deprecated agents (OMP, Zero, pi-as-brain, Hermes-deprecated) are **removed**.
+Do not reintroduce them; route new work to the three-agent S210 stack above.
 
 ## Session Strategy
 
@@ -43,7 +59,7 @@ Execute in order, adapted to this repo:
 go build ./cmd/harnessd/
 ./harnessd                       # 127.0.0.1:9191
 curl -s http://127.0.0.1:9191/api/v1/health
-systemctl --user status harnessd # deployed service
+systemctl --user status nightforge-harnessd   # deployed unit
 ```
 
 Pipelines live in `scripts/harness/`; telemetry in `data/`; plans/solutions
