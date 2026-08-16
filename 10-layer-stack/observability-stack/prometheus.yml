@@ -21,11 +21,14 @@ scrape_configs:
           service: nightforge
           layer: l4
 
-  - job_name: harnessd
+  # harnessd job removed 2026-08-08: harnessd purged (dashboard decommission).
+
+  - job_name: otel-langfuse
     metrics_path: /metrics
+    scrape_interval: 10s
     static_configs:
       - targets:
-          - 127.0.0.1:9191
+          - 127.0.0.1:8889
         labels:
-          service: harnessd
-          layer: l5
+          service: langfuse-otel
+          layer: observability

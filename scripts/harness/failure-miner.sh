@@ -56,6 +56,7 @@ categories = {
     'authz_escalation':  {'id': 'authz_escalation',   'label': 'Authorization Escalation',    'severity': 'critical','count': 0, 'p': 0},
     'data_loss':         {'id': 'data_loss',          'label': 'Data Loss',                   'severity': 'critical','count': 0, 'p': 0},
     'resource_error':    {'id': 'resource_error',     'label': 'Resource Exhaustion',         'severity': 'critical','count': 0, 'p': 0},
+    'config_error':      {'id': 'config_error',      'label': 'Configuration Error',         'severity': 'medium',  'count': 0, 'p': 0},
 }
 
 failures = []
@@ -96,6 +97,8 @@ for s in sessions:
             cat_id = 'timeout'
         elif 'auth' in str(s.get('last_error', '')).lower() or 'key' in str(s.get('last_error', '')).lower():
             cat_id = 'auth_error'
+        elif 'config' in str(s.get('last_error', '')).lower() or 'configuration' in str(s.get('last_error', '')).lower():
+            cat_id = 'config_error'
         else:
             cat_id = 'tool_error'
     elif err_count > 5:

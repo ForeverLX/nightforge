@@ -59,8 +59,8 @@
       "gridPos": {"h": 6, "w": 6, "x": 18, "y": 1},
       "id": 5,
       "options": {"colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto"},
-      "targets": [{"expr": "DCGM_FI_DEV_GPU_UTIL", "legendFormat": "GPU", "refId": "A"}],
-      "title": "GPU Utilization",
+      "targets": [{"expr": "agentgateway_process_rss", "legendFormat": "RSS", "refId": "A"}],
+      "title": "Gateway RSS",
       "type": "stat"
     },
     {
@@ -79,7 +79,7 @@
       "gridPos": {"h": 7, "w": 12, "x": 12, "y": 7},
       "id": 7,
       "options": {"legend": {"displayMode": "table", "placement": "bottom"}, "tooltip": {"mode": "multi", "sort": "desc"}},
-      "targets": [{"expr": "sum(rate(agentgateway_requests_total[5m]))", "legendFormat": "gateway requests", "refId": "A"}, {"expr": "sum(rate(agentgateway_mcp_requests_total[5m]))", "legendFormat": "MCP requests", "refId": "B"}],
+      "targets": [{"expr": "sum by (protocol) (rate(agentgateway_requests_total[5m]))", "legendFormat": "{{protocol}}", "refId": "A"}],
       "title": "24h Health History",
       "type": "timeseries"
     },
@@ -88,80 +88,42 @@
       "gridPos": {"h": 1, "w": 24, "x": 0, "y": 14},
       "id": 8,
       "panels": [],
-      "title": "L5 Proposals",
-      "type": "row"
-    },
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "blue", "value": null}, {"color": "green", "value": 1}]}}, "overrides": []},
-      "gridPos": {"h": 7, "w": 8, "x": 0, "y": 15},
-      "id": 9,
-      "options": {"colorMode": "value", "graphMode": "area", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}},
-      "targets": [{"expr": "sum(harness_proposals_total)", "legendFormat": "proposals", "refId": "A"}],
-      "title": "Proposal Status",
-      "type": "stat"
-    },
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100, "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "orange", "value": 50}, {"color": "green", "value": 80}]}}, "overrides": []},
-      "gridPos": {"h": 7, "w": 8, "x": 8, "y": 15},
-      "id": 10,
-      "options": {"colorMode": "value", "graphMode": "area", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}},
-      "targets": [{"expr": "100 * sum(rate(harness_proposals_success_total[1h])) / clamp_min(sum(rate(harness_proposals_total[1h])), 1)", "legendFormat": "success", "refId": "A"}],
-      "title": "Proposal Success Rate",
-      "type": "stat"
-    },
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "orange", "value": 10}, {"color": "red", "value": 25}]}}, "overrides": []},
-      "gridPos": {"h": 7, "w": 8, "x": 16, "y": 15},
-      "id": 11,
-      "options": {"colorMode": "value", "graphMode": "area", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}},
-      "targets": [{"expr": "100 * sum(rate(harness_proposals_failure_total[1h])) / clamp_min(sum(rate(harness_proposals_total[1h])), 1)", "legendFormat": "failure", "refId": "A"}],
-      "title": "Proposal Failure Rate",
-      "type": "stat"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 22},
-      "id": 12,
-      "panels": [],
       "title": "L8 Routes",
       "type": "row"
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "fieldConfig": {"defaults": {"unit": "reqps", "color": {"mode": "palette-classic"}}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 23},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 15},
       "id": 13,
       "options": {"legend": {"displayMode": "table", "placement": "bottom"}, "tooltip": {"mode": "multi", "sort": "desc"}},
-      "targets": [{"expr": "sum by (gen_ai_request_model) (rate(agentgateway_llm_requests_total[5m]))", "legendFormat": "{{gen_ai_request_model}}", "refId": "A"}],
+      "targets": [{"expr": "sum by (gen_ai_request_model) (rate(agentgateway_gen_ai_server_request_duration_count[5m]))", "legendFormat": "{{gen_ai_request_model}}", "refId": "A"}],
       "title": "Model Routing",
       "type": "timeseries"
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "orange", "value": 1}, {"color": "red", "value": 5}]}}, "overrides": []},
-      "gridPos": {"h": 8, "w": 6, "x": 12, "y": 23},
-      "id": 14,
-      "options": {"colorMode": "value", "graphMode": "area", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}},
-      "targets": [{"expr": "sum(increase(agentgateway_route_failovers_total[24h]))", "legendFormat": "failovers", "refId": "A"}],
-      "title": "Failover Events",
-      "type": "stat"
-    },
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
       "fieldConfig": {"defaults": {"unit": "s", "color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "orange", "value": 1}, {"color": "red", "value": 3}]}}, "overrides": []},
-      "gridPos": {"h": 8, "w": 6, "x": 18, "y": 23},
+      "gridPos": {"h": 8, "w": 6, "x": 12, "y": 15},
       "id": 15,
       "options": {"colorMode": "value", "graphMode": "area", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}},
-      "targets": [{"expr": "histogram_quantile(0.95, sum by (le) (rate(agentgateway_llm_request_duration_seconds_bucket[5m])))", "legendFormat": "p95", "refId": "A"}],
+      "targets": [{"expr": "histogram_quantile(0.95, sum by (le) (rate(agentgateway_gen_ai_server_request_duration_bucket[5m])))", "legendFormat": "p95", "refId": "A"}],
       "title": "Route Latency p95",
       "type": "stat"
     },
     {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "s", "color": {"mode": "palette-classic"}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 6, "x": 18, "y": 15},
+      "id": 19,
+      "options": {"legend": {"displayMode": "table", "placement": "bottom"}, "tooltip": {"mode": "multi", "sort": "desc"}},
+      "targets": [{"expr": "histogram_quantile(0.50, sum by (le, gen_ai_request_model) (rate(agentgateway_gen_ai_server_request_duration_bucket[5m])))", "legendFormat": "{{gen_ai_request_model}} p50", "refId": "A"}, {"expr": "histogram_quantile(0.95, sum by (le, gen_ai_request_model) (rate(agentgateway_gen_ai_server_request_duration_bucket[5m])))", "legendFormat": "{{gen_ai_request_model}} p95", "refId": "B"}],
+      "title": "Latency by Model",
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
-      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 31},
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 23},
       "id": 16,
       "panels": [],
       "title": "Cost / Tokens",
@@ -170,7 +132,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "palette-classic"}}, "overrides": []},
-      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 32},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24},
       "id": 17,
       "options": {"legend": {"displayMode": "table", "placement": "bottom"}, "tooltip": {"mode": "multi", "sort": "desc"}},
       "targets": [{"expr": "sum by (gen_ai_request_model, gen_ai_token_type) (rate(agentgateway_gen_ai_client_token_usage_sum[5m]))", "legendFormat": "{{gen_ai_request_model}} {{gen_ai_token_type}}", "refId": "A"}],
@@ -179,33 +141,23 @@
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "currencyUSD", "color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "orange", "value": 1}, {"color": "red", "value": 10}]}}, "overrides": []},
-      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 32},
+      "fieldConfig": {"defaults": {"unit": "none", "color": {"mode": "palette-classic"}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24},
       "id": 18,
-      "options": {"colorMode": "value", "graphMode": "area", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}},
-      "targets": [{"expr": "sum(increase(agentgateway_llm_cost_usd_total[24h]))", "legendFormat": "USD", "refId": "A"}],
-      "title": "Cost per Model (24h)",
-      "type": "stat"
-    },
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "s", "color": {"mode": "palette-classic"}}, "overrides": []},
-      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 32},
-      "id": 19,
       "options": {"legend": {"displayMode": "table", "placement": "bottom"}, "tooltip": {"mode": "multi", "sort": "desc"}},
-      "targets": [{"expr": "histogram_quantile(0.50, sum by (le, gen_ai_request_model) (rate(agentgateway_llm_request_duration_seconds_bucket[5m])))", "legendFormat": "{{gen_ai_request_model}} p50", "refId": "A"}, {"expr": "histogram_quantile(0.95, sum by (le, gen_ai_request_model) (rate(agentgateway_llm_request_duration_seconds_bucket[5m])))", "legendFormat": "{{gen_ai_request_model}} p95", "refId": "B"}],
-      "title": "Latency by Model",
+      "targets": [{"expr": "sum by (route) (rate(agentgateway_request_processing_seconds_sum[5m])) / clamp_min(sum by (route) (rate(agentgateway_request_processing_seconds_count[5m])), 0.001)", "legendFormat": "{{route}}", "refId": "A"}],
+      "title": "Avg Processing Time by Route",
       "type": "timeseries"
     }
   ],
   "refresh": "15s",
   "schemaVersion": 39,
-  "tags": ["s189", "four-agent", "l4", "l5", "l8", "l9"],
+  "tags": ["s189", "four-agent", "l4", "l8", "cost"],
   "templating": {"list": []},
   "time": {"from": "now-24h", "to": "now"},
   "timepicker": {},
   "timezone": "browser",
   "title": "CR1MS0N Four-Agent Architecture",
   "uid": "cr1mson-four-agent-s189",
-  "version": 1
+  "version": 2
 }

@@ -2,8 +2,8 @@
 
 **Operator workstation for CR1MS0N-Operator** — Arch Linux + Niri desktop
 environment, rootless Podman container profiles, and the `harnessd`
-monitoring dashboard. Part of the [Veil](https://github.com/CR1MS0N-Operator/veil)
-infrastructure project.
+monitoring dashboard. NightForge is the **measurement and mobilization layer**
+of the [CR1MS0N continuous adversarial validation platform](https://github.com/CR1MS0N-Operator/veil).
 
 Built and operated by [CR1MS0N-Operator](https://github.com/CR1MS0N-Operator).
 
@@ -16,6 +16,21 @@ Built and operated by [CR1MS0N-Operator](https://github.com/CR1MS0N-Operator).
 | CI | GitHub Actions (`.github/workflows/ci.yml`) |
 | Tests | Go build + `go vet`, `bash -n` (CI) |
 | Last Updated | 2026-08-04 |
+
+## Continuous Adversarial Validation
+
+NightForge is where validation evidence becomes decisions: the 10-layer
+harness turns findings from the rest of the platform into proposals, gates,
+and measured benefit — closing the loop instead of stopping at a report.
+
+| Framework | NightForge's Role |
+|-----------|-------------------|
+| **CTEM** (Continuous Threat Exposure Management) | **Mobilize** — the 10-layer harness pipeline turns findings into proposals (L5) and validation gates (L6), driving remediation and risk acceptance. **Validate** — `harnessd` surfaces live posture and validation state. |
+| **FAIR** (Factor Analysis of Information Risk) | L9 benefit measurement (designed) quantifies risk reduction in dollars — the FAIR return-on-security-investment loop for the whole platform. |
+| **AEV** (Adversarial Exposure Validation) | The harness is the evaluation + optimization loop for agentic validation: failure mining (L4) → proposals (L5) → gates (L6) → routing and weight updates (L8–L10). |
+| **GRC Engineering** | JSONL evidence data dirs (sessions, gates, failures, tokens) are the audit-ready compliance substrate. |
+
+Sibling projects: [Veil](https://github.com/CR1MS0N-Operator/veil) (validation substrate) · [C4](https://github.com/CR1MS0N-Operator/c4) (validation engine) · [Lantern](https://github.com/CR1MS0N-Operator/ACLGuard-Active-Directory-Permission-Auditor) (identity exposure validation).
 
 ---
 

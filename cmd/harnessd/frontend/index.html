@@ -179,6 +179,7 @@
   <button class="tab-btn" data-tab="gates">L6 Gates</button>
   <button class="tab-btn" data-tab="snapshots">L7 Snapshots</button>
   <button class="tab-btn" data-tab="routes">L8 Routes</button>
+  <button class="tab-btn" data-tab="sbom">SBOM</button>
   <button class="tab-btn" data-tab="cost">Cost/Tokens</button>
 </div>
 
@@ -192,6 +193,7 @@
   <div class="tab-panel" id="panel-gates"><div id="gatesContent"></div></div>
   <div class="tab-panel" id="panel-snapshots"><div id="snapshotsContent"></div></div>
   <div class="tab-panel" id="panel-routes"><div id="routesContent"></div></div>
+  <div class="tab-panel" id="panel-sbom"><div id="sbomContent"></div></div>
   <div class="tab-panel" id="panel-cost"><div id="costContent"></div></div>
   <div class="timestamp" id="lastUpdate"></div>
 </div>
@@ -215,8 +217,8 @@ function loadTab(name) {
     case 'health': loadHealth(); break;
     case 'proposals': loadProposals(); break;
     case 'gates': loadGates(); break;
-    case 'snapshots': loadSnapshots(); break;
     case 'routes': loadRoutes(); break;
+    case 'sbom': loadSbom(); break;
     case 'cost': loadCost(); break;
   }
 }
@@ -415,6 +417,42 @@ async function loadRoutes() {
       </div>`;
   } catch (e) {
     document.getElementById('routesContent').innerHTML = '<div class="error">Failed to load routes</div>';
+  }
+}
+
+// --- SBOM / Supply Chain ---
+async function loadSbom() {
+  try {
+    const res = await fetch(API + '/sbom');
+    if (!res.ok) {
+      document.getElementById('sbomContent').innerHTML = '<div class="card"><div class="error">No SBOM data yet — run cmd/sbomgen</div></div>';
+      return;
+    }
+    const data = await res.json();
+    const profiles = data.profiles || [];
+    const totalComponents = profiles.reduce((s, p) => s + (p.components || 0), 0);
+    const totalCritical = profiles.reduce((s, p) => s + (p.critical || 0), 0);
+
+    let html = '<div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">';
+    html += '<div class="card"><h3>Profiles</h3><div class="value">' + profiles.length + '</div><div class="sub">Podman images</div></div>';
+    html += '<div class="card"><h3>Total Components</h3><div class="value">' + totalComponents.toLocaleString() + '</div><div class="sub">CycloneDX components</div></div>';
+    html += '<div class="card"><h3>Critical Vulns</h3><div class="value" style="color:' + (totalCritical > 0 ? 'var(--danger)' : 'var(--success)') + '">' + totalCritical + '</div><div class="sub">grype scan</div></div>';
+    html += '<div class="card"><h3>Last Generated</h3><div class="value" style="font-size:14px">' + (data.generated_at ? data.generated_at.slice(0, 16).replace('T', ' ') : '?') + '</div><div class="sub">UTC</div></div>';
+    html += '</div>';
+
+    if (profiles.length > 0) {
+      html += '<div class="card"><h3>Profile SBOMs</h3><table><thead><tr><th>Profile</th><th>Image</th><th>Components</th><th>Critical</th><th>High</th><th>Medium</th><th>Low</th><th>Negligible</th></tr></thead><tbody>';
+      profiles.forEach(p => {
+        const critColor = (p.critical || 0) > 0 ? 'var(--danger)' : 'var(--success)';
+        html += '<tr><td><strong>' + p.profile + '</strong></td><td class="model-cell">' + p.image + '</td><td>' + (p.components || 0).toLocaleString() + '</td><td style="color:' + critColor + ';font-weight:600">' + (p.critical || 0) + '</td><td>' + (p.high || 0) + '</td><td>' + (p.medium || 0) + '</td><td>' + (p.low || 0) + '</td><td>' + (p.negligible || 0) + '</td></tr>';
+      });
+      html += '</tbody></table></div>';
+      html += '<div class="card"><div class="sub">Toolchain: ' + (data.syft_version || '?') + ' · ' + (data.grype_version || '?') + '</div></div>';
+    }
+
+    document.getElementById('sbomContent').innerHTML = html;
+  } catch (e) {
+    document.getElementById('sbomContent').innerHTML = '<div class="error">Failed to load SBOM data</div>';
   }
 }
 

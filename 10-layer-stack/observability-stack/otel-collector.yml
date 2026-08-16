@@ -1,10 +1,12 @@
-# S189 OTLP pipeline: AgentGateway -> Collector -> Langfuse.
+# S189 OTLP pipeline: AgentGateway -> Collector -> Langfuse + Prometheus.
 # LANGFUSE_AUTH_STRING is injected by docker-compose from .env; never commit credentials.
 receivers:
   otlp:
     protocols:
       grpc:
         endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
 
 processors:
   memory_limiter:
@@ -22,10 +24,29 @@ exporters:
     headers:
       Authorization: "Basic ${env:LANGFUSE_AUTH_STRING}"
       x-langfuse-ingestion-version: "4"
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    namespace: langfuse
+    resource_to_telemetry_conversion:
+      enabled: true
+
+connectors:
+  spanmetrics:
+    histogram:
+      explicit:
+        buckets: [50ms, 100ms, 250ms, 500ms, 1s, 2.5s, 5s, 10s, 30s]
+    dimensions:
+      - name: gen_ai.system
+      - name: gen_ai.request.model
+      - name: gen_ai.operation.name
 
 service:
   pipelines:
     traces:
       receivers: [otlp]
       processors: [memory_limiter, batch]
-      exporters: [otlphttp/langfuse, debug]
+      exporters: [otlphttp/langfuse, debug, spanmetrics]
+    metrics:
+      receivers: [spanmetrics]
+      processors: [memory_limiter, batch]
+      exporters: [prometheus]

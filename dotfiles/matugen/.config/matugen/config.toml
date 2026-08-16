@@ -84,3 +84,4 @@ output_path = "/tmp/matugen/fastfetch-config.jsonc"
 [templates.hunk]
 input_path = "~/.config/matugen/templates/hunk-config.toml.template"
 output_path = "/tmp/matugen/hunk-config.toml"
+

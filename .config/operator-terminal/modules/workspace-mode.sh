@@ -1,1 +1,0 @@
-../../../dotfiles/operator-terminal/.config/operator-terminal/modules/workspace-mode.sh

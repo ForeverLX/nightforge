@@ -217,3 +217,11 @@ window-rule {
     opacity 0.90
     default-column-width { proportion 0.5; }
 }
+// ========== BROWSER TRANSPARENCY (Zen matugen glass) ==========
+// Official niri docs: background-effect requires the window to be semitransparent,
+// which Zen provides via zen.widget.linux.transparency + userChrome.css alpha.
+// blur=true + xray (auto) = see-through blurred chrome over wallpaper.
+window-rule {
+    match app-id=r#"^zen$"#
+    background-effect { blur true }
+}

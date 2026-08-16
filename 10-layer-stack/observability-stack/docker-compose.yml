@@ -11,6 +11,7 @@ services:
     ports:
       - "127.0.0.1:31744:4317"
       - "127.0.0.1:4318:4318"
+      - "127.0.0.1:8889:8889"  # Prometheus metrics export
     volumes:
       - ./otel-collector.yml:/etc/otelcol-contrib/config.yaml:ro
     environment:
@@ -111,6 +112,7 @@ services:
       REDIS_PORT: "6379"
       REDIS_AUTH: ${REDIS_AUTH:-REPLACE_REDIS_PASSWORD}
       LANGFUSE_BULLMQ_SKIP_REDIS_VERSION_CHECK: "false"
+      LANGFUSE_MIGRATION_V4_WRITE_MODE: ${LANGFUSE_MIGRATION_V4_WRITE_MODE:-dual}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-REPLACE_WITH_RANDOM_NEXTAUTH_SECRET}
       LANGFUSE_INIT_ORG_ID: ${LANGFUSE_INIT_ORG_ID:-}
       LANGFUSE_INIT_ORG_NAME: ${LANGFUSE_INIT_ORG_NAME:-}

@@ -27,7 +27,7 @@ Automated host package audit, cleanup, and monitoring for offsec-workstation.
 ## Installation
 
 ```bash
-cd ~/Github/offsec-workstation/scripts/maintenance
+cd scripts/maintenance
 sudo ./install-maintenance.sh
 ```
 
@@ -291,7 +291,7 @@ sudo offsec-maintenance
 ls -la /usr/local/bin/offsec-maintenance
 
 # Reinstall if needed
-cd ~/Github/offsec-workstation/scripts/maintenance
+cd scripts/maintenance
 sudo ./install-maintenance.sh
 ```
 

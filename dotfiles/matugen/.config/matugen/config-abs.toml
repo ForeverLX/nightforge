@@ -72,3 +72,4 @@ output_path = "/tmp/matugen/hyprlock.conf"
 [templates.fastfetch]
 input_path = "/home/ForeverLX/.config/matugen/templates/fastfetch-config.jsonc.template"
 output_path = "/tmp/matugen/fastfetch-config.jsonc"
+
