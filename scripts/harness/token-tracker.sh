@@ -5,9 +5,9 @@ set -euo pipefail
 # Run: scripts/harness/token-tracker.sh
 # Output: data/tokens/current.json
 #
-# Reads every ~/.hermes/profiles/<name>/state.db (cr1ms0n, omp, local, ...)
+# Reads every ~/.hermes/profiles/<name>/state.db (cr1ms0n, dsh, pi, ...)
 # and merges per-model / per-day / total rollups. Previously only the
-# cr1ms0n profile was read, silently dropping omp/local (Bonsai-27B, Qwen3.5)
+# cr1ms0n profile was read, silently dropping dsh/pi (Qwen3.8-27B, Qwen3-1.7B)
 # sessions from the dashboard.
 
 OUT="$HOME/Github/nightforge/data/tokens/current.json"

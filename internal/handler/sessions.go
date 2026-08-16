@@ -40,7 +40,7 @@ type PiCostSession struct {
 func HandleSessions(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]any{
 		"hermes":   readHermesSessions(),
-		"omp":      readOMPSessions(),
+		"pi":       readPiSessions(),
 		"pi_costs": readPiCosts(),
 	})
 }
@@ -50,9 +50,9 @@ func readHermesSessions() []Session {
 	return readSessionDir(filepath.Join(home, ".hermes", "sessions"))
 }
 
-func readOMPSessions() []Session {
+func readPiSessions() []Session {
 	home, _ := os.UserHomeDir()
-	return readSessionDir(filepath.Join(home, ".omp", "agent", "sessions"))
+	return readSessionDir(filepath.Join(home, ".pi", "agent", "sessions"))
 }
 
 func readSessionDir(dir string) []Session {
