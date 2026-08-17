@@ -30,14 +30,16 @@ func TestComputeOverall(t *testing.T) {
 	// Component scores 4,2,3,2,2 -> CTI 2.6 (weight 0.3)
 	//                  4,2,4,2,4 -> DM  3.2 (weight 0.5)
 	//                  4,4,2,6,4 -> T&E 4.0 (weight 0.2)
-	// overall = (0.3*2.6 + 0.5*3.2 + 0.2*4.0) / 6 = 3.18/6 = 0.53
+	// weighted = (0.3*2.6 + 0.5*3.2 + 0.2*4.0) = 3.18 -> round1 = 3.2 on the 0..6 scale
+	// Percent = 3.18/6*100 = 53.0 (converts the 0..6 score to 0..100)
 	dims := []Dimension{
 		{ID: "CTI", Weight: 0.3, Components: comps(4, 2, 3, 2, 2)},
 		{ID: "DM", Weight: 0.5, Components: comps(4, 2, 4, 2, 4)},
 		{ID: "T&E", Weight: 0.2, Components: comps(4, 4, 2, 6, 4)},
 	}
-	if o.WeightedScore != 3.18 {
-		t.Errorf("weighted score: got %v want 3.18", o.WeightedScore)
+	o := ComputeOverall(dims)
+	if o.WeightedScore != 3.2 {
+		t.Errorf("weighted score: got %v want 3.2", o.WeightedScore)
 	}
 	if o.Percent != 53.0 {
 		t.Errorf("percent: got %v want 53.0", o.Percent)
