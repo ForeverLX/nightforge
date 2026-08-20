@@ -4,7 +4,7 @@ Rectangle {
     id: root
     property string icon: ""
     property string value: ""
-    property color color: "#cdd6f4"
+    property color accentColor: "#cdd6f4"
     signal clicked()
 
     height: 28
@@ -24,13 +24,13 @@ Rectangle {
 
         Text {
             text: root.icon
-            color: root.color
+            color: root.accentColor
             font.pixelSize: 11
             font.family: "Font Awesome 6 Free Solid"
         }
         Text {
             text: root.value
-            color: root.color
+            color: root.accentColor
             font.pixelSize: 11
             font.weight: Font.Medium
         }

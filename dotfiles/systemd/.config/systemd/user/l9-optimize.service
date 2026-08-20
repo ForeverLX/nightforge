@@ -1,0 +1,10 @@
+[Unit]
+Description=L9 Benefit Measurement — EWMA optimization
+Documentation=https://github.com/ForeverLX/ai-lab-vault
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/ForeverLX/Documents/ai-lab-vault/80-Operations/scripts/l9-optimize.sh
+StandardOutput=journal
+StandardError=journal

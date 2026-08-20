@@ -1,0 +1,8 @@
+[Unit]
+Description=Harness token tracker — query Hermes state.db -> data/tokens/current.json
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/Github/nightforge/scripts/harness/token-tracker.sh
+WorkingDirectory=%h/Github/nightforge

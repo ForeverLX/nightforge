@@ -1,0 +1,8 @@
+[Unit]
+Description=Fix PipeWire card profiles (avoid Dummy Output / auto_null)
+After=pipewire.service pipewire-pulse.service wireplumber.service
+Wants=pipewire.service pipewire-pulse.service wireplumber.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash -lc '%h/.local/bin/audio-fixup; sleep 2; %h/.local/bin/audio-fixup'

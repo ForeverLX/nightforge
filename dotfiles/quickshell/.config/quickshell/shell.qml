@@ -18,8 +18,8 @@ Scope {
     PodmanStatus { id: podmanStatus }
 
     // === PER-SCREEN BAR ===
-    // Keep existing Bar for now (Subagent 2 will rewrite it)
-    Bar { id: bar }
+    // Bar handled by waybar — removed quickshell Bar.qml
+    // See ~/.config/waybar/ for the actual config
 
     // === FULL-SCREEN OVERLAY ===
     // Single PanelWindow on Overlay layer. All widgets live here.
@@ -47,9 +47,12 @@ Scope {
             }
         }
 
-        // Escape key handler
-        Keys.onEscapePressed: { stackView.clear(); root.clearWidgetState() }
-        focus: true
+        // Escape key handler (on child Item since PanelWindow isn't an Item in QS 0.3)
+        Item {
+            anchors.fill: parent
+            Keys.onEscapePressed: { stackView.clear(); root.clearWidgetState() }
+            focus: false
+        }
 
         // StackView for widgets
         StackView {

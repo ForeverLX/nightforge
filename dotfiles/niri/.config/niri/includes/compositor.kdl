@@ -35,11 +35,10 @@ layout {
         // offset x=0 y=5
         // color "#0007"
     }
-    
-        // Focus ring — disabled
-        focus-ring {
-            off
-        }
+    // Focus ring — disabled
+    focus-ring {
+        off
+    }
 }
 
 // Cursor theme
@@ -81,3 +80,4 @@ hotkey-overlay {
     // Skip the "Important Hotkeys" popup at startup
     skip-at-startup
 }
+

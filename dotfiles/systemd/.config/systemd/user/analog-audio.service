@@ -1,0 +1,15 @@
+[Unit]
+Description=NightForge Analog Audio Setup
+After=pipewire.service wireplumber.service pipewire-pulse.service
+Requires=pipewire.service wireplumber.service pipewire-pulse.service
+PartOf=pipewire.service
+
+[Service]
+Type=oneshot
+ExecStartPre=/bin/sh -c 'sleep 1'
+ExecStart=/usr/bin/amixer -c0 sset "Front" unmute
+ExecStartPost=/usr/bin/pw-metadata -n default 0 default.audio.sink '{"name":"alsa_output.pci-0000_00_1f.3.analog-stereo"}'
+RemainAfterExit=yes
+
+[Install]
+WantedBy=pipewire.service

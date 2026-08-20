@@ -1,0 +1,18 @@
+[Unit]
+Description=no-mistakes background daemon
+
+[Service]
+Type=simple
+ExecStart=/home/ForeverLX/go/bin/no-mistakes daemon run --root /home/ForeverLX/.no-mistakes
+WorkingDirectory=/home/ForeverLX/.no-mistakes
+Environment="HOME=/home/ForeverLX"
+Environment="PATH=/home/ForeverLX/.local/bin:/home/ForeverLX/go/bin:/home/ForeverLX/.cargo/bin:/home/ForeverLX/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
+Environment="NO_PROXY=api.bitwarden.com,vault.bitwarden.com,vault.bitwarden.eu,node.gitlawb.com,api.gitlawb.com,localhost,127.0.0.1,::1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,169.254.0.0/16,*.local"
+Environment="no_proxy=api.bitwarden.com,vault.bitwarden.com,vault.bitwarden.eu,node.gitlawb.com,api.gitlawb.com,localhost,127.0.0.1,::1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,169.254.0.0/16,*.local"
+StandardOutput=append:/home/ForeverLX/.no-mistakes/logs/daemon-bootstrap.log
+StandardError=append:/home/ForeverLX/.no-mistakes/logs/daemon-bootstrap.log
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target

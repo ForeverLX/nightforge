@@ -1,67 +1,79 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
 import "../services"
 
-RowLayout {
-    id: root
-
-    property string icon: "🔊"
-    property int value: 50
+Rectangle {
+    id: slider
+    property string icon: "󰕾"
     property string textColor: ""
     property string primaryColor: ""
     property string surfaceVariantColor: ""
+    property int value: 50
     property var onChange: function(v) {}
 
     MatugenColors { id: mocha }
 
-    spacing: 8
+    height: 48
+    radius: 8
+    color: Qt.rgba((surfaceVariantColor || mocha.surface0).r, (surfaceVariantColor || mocha.surface0).g, (surfaceVariantColor || mocha.surface0).b, 0.4)
 
-    Text {
-        text: root.icon
-        font.pixelSize: 14
-        color: mocha.subtext0
-    }
+    RowLayout {
+        anchors.fill: parent
+        anchors.margins: 8
+        spacing: 8
 
-    Slider {
-        id: slider
-        from: 0
-        to: 100
-        value: root.value
-        Layout.fillWidth: true
+        Text {
+            text: slider.icon
+            color: textColor || mocha.text
+            font.family: "Iosevka Nerd Font"
+            font.pixelSize: 14
+        }
 
-        background: Rectangle {
-            implicitHeight: 6
+        Rectangle {
+            Layout.fillWidth: true
+            height: 6
             radius: 3
-            color: mocha.surface0
+            color: surfaceVariantColor || mocha.surface0
+
             Rectangle {
                 width: parent.width * (slider.value / 100)
                 height: parent.height
                 radius: 3
-                color: mocha.mauve
+                color: primaryColor || mocha.mauve
+
+                Behavior on width { NumberAnimation { duration: 100 } }
+            }
+
+            Rectangle {
+                x: parent.width * (slider.value / 100) - 6
+                y: -3
+                width: 12
+                height: 12
+                radius: 6
+                color: primaryColor || mocha.mauve
+                border.width: 2
+                border.color: textColor || mocha.text
+
+                Behavior on x { NumberAnimation { duration: 100 } }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    var newVal = Math.max(0, Math.min(100, Math.round((mouse.x / width) * 100)))
+                    slider.value = newVal
+                    if (slider.onChange) slider.onChange(newVal)
+                }
             }
         }
 
-        handle: Rectangle {
-            width: 14
-            height: 14
-            radius: 7
-            color: mocha.text
-            x: slider.visualPosition * (slider.width - width)
-            anchors.verticalCenter: parent.verticalCenter
+        Text {
+            text: slider.value + "%"
+            color: textColor || mocha.text
+            font.pixelSize: 11
+            font.family: "Google Sans"
+            Layout.minimumWidth: 30
         }
-
-        onMoved: {
-            root.value = slider.value;
-            if (root.onChange) root.onChange(Math.round(slider.value));
-        }
-    }
-
-    Text {
-        text: root.value + "%"
-        font.pixelSize: 11
-        color: mocha.text
-        Layout.minimumWidth: 30
     }
 }

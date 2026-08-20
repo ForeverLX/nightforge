@@ -1,4 +1,3 @@
-# shellcheck disable=SC2148
 # === MODERN COMMAND REPLACEMENTS ===
 alias ls='eza --icons --group-directories-first'
 alias ll='eza -l --icons --group-directories-first'
@@ -12,48 +11,9 @@ alias catp='bat'
 alias top='htop'
 
 # === SAFETY ALIASES ===
-# Choose one: interactive rm or trash
-alias rm='rm -i'                     # interactive deletion
-# alias rm='trash-put'                # uncomment if you install trash-cli
-
+alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
-
-# === OFFENSIVE SECURITY & ENGAGEMENT ===
-alias engage='cd ~/engage/current'
-alias loot='cd ~/engage/current/loot'
-alias recon='cd ~/engage/current/recon'
-alias notes='cd ~/engage/current/notes'
-
-# Container management
-alias ctb='~/Github/nightforge/modules/container/scripts/container.sh'
-alias cad='ctb run ad'
-alias cre='ctb run re'
-alias cweb='ctb run web'
-alias ctool='ctb run toolbox'
-alias cls='podman ps'
-alias clsa='podman ps -a'
-alias cstop='podman stop $(podman ps -q) 2>/dev/null || true'
-alias crm='podman rm $(podman ps -aq) 2>/dev/null || true'
-
-# MITRE log viewer (from current directory)
-alias mitre='cat mitre.log 2>/dev/null | column -t -s " "'
-
-# Network tools
-alias myip='curl -s ifconfig.me'
-alias ports='sudo ss -tulpn'
-alias scan='nmap -T4 -sV'                     # your standard scan
-alias scan-quick='nmap -T4 -F -sV'             # fast scan (top 100 ports)
-alias scan-full='nmap -T4 -p- -sV'              # all ports
-alias scan-deep='nmap -T4 -A -p-'                # aggressive all ports
-
-# Git shortcuts
-alias g='git'
-alias gs='git status'
-alias ga='git add'
-alias gc='git commit'
-alias gp='git push'
-alias gl='git log --oneline --graph'
 
 # === WIREGUARD ===
 alias wgup='sudo resolvconf -u && sudo wg-quick up wg0'
@@ -67,51 +27,45 @@ alias nftreload='sudo nft -f /etc/nftables.conf'
 
 # === AUR (paru) ===
 alias aur='paru -S'
-alias aurupdate='paru -Sua'
 alias aurinfo='paru -Si'
-alias aurupgrade='paru'
 
-# === VAULT AND OPS NAVIGATION ===
-alias vault='cd ~/Documents/azrael-vault'
-alias ops='cd ~/Documents/azrael-ops'
-alias research='cd ~/Github/security-research'
+# === GIT ===
+alias g='git'
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git log --oneline --graph'
 
-# === STOW ===
-alias stow='stow --dir ~/Github/nightforge/dotfiles --target ~'
-
-# Tmux shortcuts
+# === TMUX ===
 alias ts='~/Github/nightforge/scripts/tmux-session.sh'
 alias ta='tmux attach -t'
 alias tl='tmux list-sessions'
 alias tn='tmux new-session -s'
 
-# Engagement initialization
-alias new-engagement='~/Github/nightforge/scripts/engagement/init-engagement.sh'
+# === AGENT OBSERVER (AgentsView) — decommissioned 2026-08-08 (archived) ===
+# av / av-serve / av-usage / av-stop + agent-budget removed with agentsview
 
-# System update
-alias update='sudo reflector --latest 10 --protocol https --sort rate --save /etc/pacman.d/mirrorlist && sudo pacman -Syu && paru -Sua'
+# === AGENT WRAPPERS (bws run -- for secret injection) ===
 
-# === NAVIGATION SHORTCUTS ===
+# === HERMES ===
+# hermes launcher already wraps bws in ~/.local/bin/hermes
+alias h='hermes'
+
+# === VAULT & OPS NAVIGATION ===
+alias vault='cd ~/Documents/cr1ms0n-vault'
+alias ops='cd ~/Documents/cr1ms0n-ops'
+alias research='cd ~/Github/security-research'
+
+# === STOW ===
+alias stow='stow --dir ~/Github/nightforge/dotfiles --target ~'
+
+# === SYSTEM UPDATE ===
+alias update='cr1ms0n-update'
+
+# === NAVIGATION ===
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias ~='cd ~'
 alias -- -='cd -'
-
-# === LOCAL LLM ===
-alias llm-serve='~/Tools/scripts/llm-serve.sh'
-alias llm-status='ss -tlpn | grep 49200'
-alias llm-stop='pkill -f llama-server'
-
-# === VENV TOOL ACTIVATION ===
-# Usage: use <venv-name> — adds venv bin to PATH without full activation
-# # Available: impacket, pwn, yt-dlp, huggingface-tools (use 'hf' CLI)
-use() {
-    local venv="$HOME/Tools/venvs/$1"
-    if [[ -d "$venv" ]]; then
-        export PATH="$venv/bin:$PATH"
-        echo "activated $1"
-    else
-        echo "no venv: $1 (available: $(ls ~/Tools/venvs/))"
-    fi
-}

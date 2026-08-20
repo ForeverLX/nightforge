@@ -1,14 +1,1 @@
-.toolbar {
-    background-color: #0D0F1A;
-    border-bottom: 1px solid #8B6FEF;
-}
-.toolbutton {
-    background-color: #0D0F1A;
-    color: #E6B450;
-    border: 1px solid transparent;
-}
-.toolbutton:checked,
-.toolbutton:hover {
-    background-color: #8B6FEF;
-    color: #0D0F1A;
-}
+../../Github/nightforge/dotfiles/satty/.config/satty/overrides.css

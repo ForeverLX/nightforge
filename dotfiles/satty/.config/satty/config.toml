@@ -1,6 +1,1 @@
-[general]
-early-exit = true
-initial-tool = "arrow"
-copy-command = "wl-copy"
-annotation-size-factor = 2.0
-corner-roundness = 8
+../../Github/nightforge/dotfiles/satty/.config/satty/config.toml

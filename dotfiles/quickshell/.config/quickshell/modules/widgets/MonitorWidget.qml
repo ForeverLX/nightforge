@@ -19,7 +19,7 @@ Item {
 
     Process {
         id: outputPoller
-        command: ["sh", "-c", "niri msg outputs 2>/dev/null || echo '[]'"]
+        command: ["sh", "-c", "niri msg --json outputs 2>/dev/null | jq '[.[] | {name: .name, make: .make, model: .model, mode: (.current_mode | tostring)}]' 2>/dev/null || echo '[]'"]
         running: true
         stdout: StdioCollector {
             onStreamFinished: {
@@ -30,6 +30,7 @@ Item {
     Timer { interval: 10000; running: true; repeat: true; onTriggered: { outputPoller.running = false; outputPoller.running = true } }
 
     GlassPanel {
+        MouseArea { anchors.fill: parent }
         anchors.fill: parent
         matugen: mocha
         glassRadius: 20

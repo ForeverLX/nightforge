@@ -6,6 +6,7 @@ import QtQuick.Layouts
 
 import "../components"
 import "../services"
+import "../WindowRegistry.js" as LayoutMath
 
 PanelWindow {
     id: controlCenter
@@ -19,7 +20,10 @@ PanelWindow {
     MatugenColors { id: mocha }
 
     anchors { top: true; bottom: true; right: true }
-    implicitWidth: 320
+
+    property var layoutInfo: LayoutMath.getLayoutSimple(Screen.width, Screen.height, "controlcenter")
+    implicitWidth: layoutInfo ? layoutInfo.w : 320
+    implicitHeight: layoutInfo ? layoutInfo.h : Screen.height
 
     MouseArea {
         anchors.fill: parent
@@ -31,7 +35,7 @@ PanelWindow {
         x: parent.width - width
         width: 320; height: parent.height
         matugen: mocha
-        glassRadius: 0
+        glassRadius: 14
         anchors.top: parent.top; anchors.bottom: parent.bottom
 
         MouseArea { anchors.fill: parent }
@@ -45,22 +49,39 @@ PanelWindow {
                 Layout.fillWidth: true
 
                 Text {
-                    text: "\u2699 Control Center"
-                    color: mocha.text; font.pixelSize: 15; font.bold: true
+                    text: "󰒓 Control Center"
+                    color: mocha.text; font.family: "Iosevka Nerd Font"; font.pixelSize: 15; font.bold: true
                     Layout.fillWidth: true
                 }
 
                 Text {
-                    text: networkState === "connected" ? "\uD83C\uDF10 Connected" : "\uD83C\uDF10 Disconnected"
+                    text: networkState === "connected" ? "󰖟 Connected" : "󰖟 Disconnected"
                     color: networkState === "connected" ? mocha.green : mocha.red
-                    font.pixelSize: 11
+                    font.family: "Iosevka Nerd Font"; font.pixelSize: 11
                     Layout.alignment: Qt.AlignRight
                 }
 
                 Rectangle {
-                    width: 26; height: 26; radius: 13; color: mocha.surface0
-                    Text { anchors.centerIn: parent; text: "\u2715"; color: mocha.subtext0; font.pixelSize: 11 }
+                    width: 26; height: 26; radius: 13; color: Qt.rgba(mocha.surface0.r, mocha.surface0.g, mocha.surface0.b, 0.5)
+                    Text { anchors.centerIn: parent; text: "󰅖"; color: mocha.subtext0; font.family: "Iosevka Nerd Font"; font.pixelSize: 11 }
                     MouseArea { anchors.fill: parent; onClicked: controlCenter.visible = false }
+                }
+            }
+
+            // === ECG WAVEFORM ===
+            Rectangle {
+                Layout.fillWidth: true
+                height: 60
+                radius: 8
+                color: Qt.rgba(mocha.surface0.r, mocha.surface0.g, mocha.surface0.b, 0.3)
+                clip: true
+
+                EcgWaveform {
+                    anchors.fill: parent
+                    anchors.margins: 4
+                    lineColor: mocha.mauve
+                    amplitude: 15
+                    speed: 3
                 }
             }
 
@@ -68,7 +89,7 @@ PanelWindow {
             VolumeSlider {
                 id: volSlider
                 Layout.fillWidth: true
-                icon: "\uD83D\uDD0A"
+                icon: "󰕾"
                 textColor: mocha.text
                 primaryColor: mocha.mauve
                 surfaceVariantColor: mocha.surface0
@@ -80,7 +101,7 @@ PanelWindow {
             VolumeSlider {
                 id: brightSlider
                 Layout.fillWidth: true
-                icon: "\uD83D\uDD06"
+                icon: "󰃟"
                 textColor: mocha.text
                 primaryColor: mocha.mauve
                 surfaceVariantColor: mocha.surface0
@@ -91,7 +112,9 @@ PanelWindow {
             // === MPD CONTROLS ===
             Rectangle {
                 Layout.fillWidth: true; height: 88; radius: 10
-                color: mocha.surface0
+                color: Qt.rgba(mocha.surface0.r, mocha.surface0.g, mocha.surface0.b, 0.4)
+                border.width: 1
+                border.color: Qt.rgba(mocha.text.r, mocha.text.g, mocha.text.b, 0.04)
 
                 ColumnLayout {
                     anchors.fill: parent; anchors.margins: 10
@@ -110,13 +133,13 @@ PanelWindow {
                     RowLayout {
                         Layout.alignment: Qt.AlignHCenter; spacing: 14
                         Rectangle { width: 30; height: 30; radius: 15; color: mocha.surface1
-                            Text { anchors.centerIn: parent; text: "\u23EE"; color: mocha.text; font.pixelSize: 11 }
+                            Text { anchors.centerIn: parent; text: "󰒮"; color: mocha.text; font.family: "Iosevka Nerd Font"; font.pixelSize: 11 }
                             MouseArea { anchors.fill: parent; onClicked: mpd.prev() } }
                         Rectangle { width: 34; height: 34; radius: 17; color: mocha.mauve
-                            Text { anchors.centerIn: parent; text: mpd.playing ? "\u23F8" : "\u25B6"; color: "#fff"; font.pixelSize: 13 }
+                            Text { anchors.centerIn: parent; text: mpd.playing ? "󰏤" : "󰐊"; color: "#fff"; font.family: "Iosevka Nerd Font"; font.pixelSize: 13 }
                             MouseArea { anchors.fill: parent; onClicked: mpd.playPause() } }
                         Rectangle { width: 30; height: 30; radius: 15; color: mocha.surface1
-                            Text { anchors.centerIn: parent; text: "\u23ED"; color: mocha.text; font.pixelSize: 11 }
+                            Text { anchors.centerIn: parent; text: "󰒭"; color: mocha.text; font.family: "Iosevka Nerd Font"; font.pixelSize: 11 }
                             MouseArea { anchors.fill: parent; onClicked: mpd.next() } }
                     }
                 }
@@ -125,7 +148,9 @@ PanelWindow {
             // === MPRIS CONTROLS ===
             Rectangle {
                 Layout.fillWidth: true; height: 88; radius: 10
-                color: mocha.surface0
+                color: Qt.rgba(mocha.surface0.r, mocha.surface0.g, mocha.surface0.b, 0.4)
+                border.width: 1
+                border.color: Qt.rgba(mocha.text.r, mocha.text.g, mocha.text.b, 0.04)
                 visible: mprisDetected && (mprisStatus === "Playing" || mprisStatus === "Paused")
 
                 ColumnLayout {
@@ -145,13 +170,13 @@ PanelWindow {
                     RowLayout {
                         Layout.alignment: Qt.AlignHCenter; spacing: 14
                         Rectangle { width: 30; height: 30; radius: 15; color: mocha.surface1
-                            Text { anchors.centerIn: parent; text: "\u23EE"; color: mocha.text; font.pixelSize: 11 }
+                            Text { anchors.centerIn: parent; text: "󰒮"; color: mocha.text; font.family: "Iosevka Nerd Font"; font.pixelSize: 11 }
                             MouseArea { anchors.fill: parent; onClicked: mprisPrev() } }
                         Rectangle { width: 34; height: 34; radius: 17; color: mocha.teal
-                            Text { anchors.centerIn: parent; text: mprisStatus === "Playing" ? "\u23F8" : "\u25B6"; color: "#fff"; font.pixelSize: 13 }
+                            Text { anchors.centerIn: parent; text: mprisStatus === "Playing" ? "󰏤" : "󰐊"; color: "#fff"; font.family: "Iosevka Nerd Font"; font.pixelSize: 13 }
                             MouseArea { anchors.fill: parent; onClicked: mprisPlayPause() } }
                         Rectangle { width: 30; height: 30; radius: 15; color: mocha.surface1
-                            Text { anchors.centerIn: parent; text: "\u23ED"; color: mocha.text; font.pixelSize: 11 }
+                            Text { anchors.centerIn: parent; text: "󰒭"; color: mocha.text; font.family: "Iosevka Nerd Font"; font.pixelSize: 11 }
                             MouseArea { anchors.fill: parent; onClicked: mprisNext() } }
                     }
                 }
@@ -162,18 +187,18 @@ PanelWindow {
                 Layout.fillWidth: true
                 columns: 3; columnSpacing: 8; rowSpacing: 8
 
-                ToggleButton { icon: "\uD83D\uDCF6"; label: wifiOn ? "WiFi" : "WiFi Off"; active: wifiOn; onClicked: toggleWifi() }
-                ToggleButton { icon: "\uD83E\uDDB7"; label: btOn ? "BT" : "BT Off"; active: btOn; onClicked: toggleBluetooth() }
-                ToggleButton { icon: "\uD83D\uDD12"; label: vpn.connected ? "VPN" : "VPN Off"; active: vpn.connected; onClicked: vpn.toggle() }
-                ToggleButton { icon: "\uD83D\uDD15"; label: dndOn ? "DND" : "DND Off"; active: dndOn; onClicked: toggleDnd() }
-                ToggleButton { icon: "\u26A1"; label: mocha.performanceMode === "high" ? "Perf" : "Save"; active: mocha.performanceMode === "high"; onClicked: togglePerformance() }
-                ToggleButton { icon: powerProfile === "performance" ? "\u26A1" : "\uD83D\uDD0B"; label: powerProfile === "performance" ? "Perf" : (powerProfile === "balanced" ? "Balanced" : "Low"); active: powerProfile === "performance"; activeColor: powerProfile === "performance" ? mocha.green : (powerProfile === "balanced" ? mocha.peach : mocha.blue); onClicked: togglePowerProfile() }
+                ToggleButton { icon: "󰤨"; label: wifiOn ? "WiFi" : "WiFi Off"; active: wifiOn; onClicked: toggleWifi() }
+                ToggleButton { icon: "󰂯"; label: btOn ? "BT" : "BT Off"; active: btOn; onClicked: toggleBluetooth() }
+                ToggleButton { icon: "󰌾"; label: vpn.connected ? "VPN" : "VPN Off"; active: vpn.connected; onClicked: vpn.toggle() }
+                ToggleButton { icon: "󰂚"; label: dndOn ? "DND" : "DND Off"; active: dndOn; onClicked: toggleDnd() }
+                ToggleButton { icon: "󰂄"; label: mocha.performanceMode === "high" ? "Perf" : "Save"; active: mocha.performanceMode === "high"; onClicked: togglePerformance() }
+                ToggleButton { icon: powerProfile === "performance" ? "󰂄" : "󰁹"; label: powerProfile === "performance" ? "Perf" : (powerProfile === "balanced" ? "Balanced" : "Low"); active: powerProfile === "performance"; activeColor: powerProfile === "performance" ? mocha.green : (powerProfile === "balanced" ? mocha.peach : mocha.blue); onClicked: togglePowerProfile() }
             }
 
             // === PODMAN QUICK VIEW ===
             Text {
-                text: "\uD83D\uDC0B Containers (" + podman.count + ")"
-                color: mocha.text; font.pixelSize: 13; font.bold: true
+                text: "󰡨 Containers (" + podman.count + ")"
+                color: mocha.text; font.family: "Iosevka Nerd Font"; font.pixelSize: 13; font.bold: true
             }
 
             ListView {
@@ -183,7 +208,7 @@ PanelWindow {
 
                 delegate: Rectangle {
                     width: parent ? parent.width : 0; height: 34; radius: 8
-                    color: mocha.surface0
+                    color: Qt.rgba(mocha.surface0.r, mocha.surface0.g, mocha.surface0.b, 0.5)
 
                     RowLayout {
                         anchors.fill: parent; anchors.margins: 8
@@ -199,7 +224,7 @@ PanelWindow {
                         }
                         Rectangle {
                             width: 20; height: 20; radius: 4; color: mocha.red
-                            Text { anchors.centerIn: parent; text: "\u23F9"; color: "#fff"; font.pixelSize: 8 }
+                            Text { anchors.centerIn: parent; text: "󰓛"; color: "#fff"; font.family: "Iosevka Nerd Font"; font.pixelSize: 8 }
                             MouseArea { anchors.fill: parent; onClicked: podman.stopContainer(modelData.id) }
                         }
                     }

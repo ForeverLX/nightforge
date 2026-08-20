@@ -1,0 +1,147 @@
+# === MODERN COMMAND REPLACEMENTS ===
+alias ls='eza --icons --group-directories-first'
+alias ll='eza -l --icons --group-directories-first'
+alias la='eza -la --icons --group-directories-first'
+alias lt='eza --tree --level=2 --icons'
+alias lta='eza --tree -a --level=2 --icons'
+
+alias cat='bat --paging=never'
+alias catp='bat'
+
+alias top='htop'
+
+# === SAFETY ALIASES ===
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+# === OFFENSIVE SECURITY & ENGAGEMENT ===
+alias engage='cd ~/engage/current'
+alias loot='cd ~/engage/current/loot'
+alias recon='cd ~/engage/current/recon'
+alias notes='cd ~/engage/current/notes'
+
+# === AZRAEL TIERED AI ALIASES ===
+# TIER 1: OCG Free (brain) → auto-falls through to Zen when throttled
+# TIER 2: OpenRouter (execution) → pay-as-you-go, $15 hard limit
+# Zen balance: $16.13 prepaid (shared key with OCG)
+
+# --- BRAIN (TIER 1: OCG Free → Zen fallback) ---
+alias h='hermes'
+alias h-or='hermes-or'                    # TIER 2: OpenRouter (on-demand models)
+alias h-ocg='hermes-ocg'                  # TIER 1: OCG (default, free)
+
+# --- EXECUTOR (TIER 2: OpenRouter) ---
+alias omp='omp'
+alias omp-flash='omp --provider openrouter --model deepseek/deepseek-v4-flash'
+alias omp-pro='omp --provider openrouter --model deepseek/deepseek-v4-pro'
+alias omp-ocg='omp --provider openai --base-url https://opencode.ai/zen/go/v1 --model deepseek-v4-pro'
+alias omp-zen='omp --provider openai --base-url https://opencode.ai/zen/go/v1 --model deepseek-v4-pro'
+
+# --- ALT-EXECUTOR (TIER 2: OpenRouter) ---
+alias cw='codewhale'
+alias cw-flash='codewhale auth set --provider openrouter && codewhale'
+alias cw-pro='codewhale auth set --provider openrouter && codewhale'
+alias cw-claude='codewhale auth set --provider openrouter && codewhale'
+
+# --- FALLBACK EXECUTOR (TIER 1: OCG/Zen) ---
+alias pi='pi'
+alias pi-flash='pi --provider openai --base-url https://openrouter.ai/api/v1 --api-key "$OPENROUTER_API_KEY" --model deepseek/deepseek-v4-flash'
+alias pi-pro='pi --provider openai --base-url https://openrouter.ai/api/v1 --api-key "$OPENROUTER_API_KEY" --model deepseek/deepseek-v4-pro'
+alias pi-ocg='pi --provider openai --base-url https://opencode.ai/zen/go/v1 --api-key "$OPENCODE_API_KEY" --model deepseek-v4-flash'
+alias pi-zen='pi --provider openai --base-url https://opencode.ai/zen/go/v1 --api-key "$OPENCODE_API_KEY" --model deepseek-v4-flash'
+
+# --- OBSERVER (AgentsView) ---
+alias av='agentsview'
+alias av-serve='agentsview serve --background'
+alias av-usage='agentsview usage daily --breakdown'
+alias av-stop='agentsview serve stop'
+unalias agent-budget 2>/dev/null
+function agent-budget {
+    echo "=== 7-Day Agent Burn ==="
+    local since
+    since=$(date -d "7 days ago" +%Y-%m-%d 2>/dev/null || date -v-7d +%Y-%m-%d 2>/dev/null)
+    agentsview usage daily --breakdown --since "$since" | tail -10
+}
+
+# --- ENFORCER (Babysitter) ---
+alias bs='babysitter'
+alias bs-yolo='babysitter harness:yolo --harness internal'
+alias bs-call='babysitter harness:call --harness internal'
+
+# --- UTILITIES ---
+alias hd='~/.local/bin/hermes-desktop'
+alias bb='~/go/bin/bumblebee'
+
+# Container management
+alias ctb='~/Github/nightforge/modules/container/scripts/container.sh'
+alias cad='ctb run ad'
+alias cre='ctb run re'
+alias cweb='ctb run web'
+alias ctool='ctb run toolbox'
+alias cls='podman ps'
+alias clsa='podman ps -a'
+alias cstop='podman stop $(podman ps -q) 2>/dev/null || true'
+alias crm='podman rm $(podman ps -aq) 2>/dev/null || true'
+
+# MITRE log viewer
+alias mitre='cat mitre.log 2>/dev/null | column -t -s " "'
+
+# Network tools
+alias myip='curl -s ifconfig.me'
+alias ports='sudo ss -tulpn'
+alias scan='nmap -T4 -sV'
+alias scan-quick='nmap -T4 -F -sV'
+alias scan-full='nmap -T4 -p- -sV'
+alias scan-deep='nmap -T4 -A -p-'
+
+# Git shortcuts
+alias g='git'
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git log --oneline --graph'
+
+# === WIREGUARD ===
+alias wgup='sudo resolvconf -u && sudo wg-quick up wg0'
+alias wgdown='sudo wg-quick down wg0'
+alias wgstat='sudo wg show'
+alias mesh='sudo wg show && echo "---" && ping -c 1 -W 1 10.0.0.1 && ping -c 1 -W 1 10.0.0.4 && ping -c 1 -W 1 10.0.0.5'
+
+# === NFTABLES ===
+alias nftstat='sudo nft list ruleset'
+alias nftreload='sudo nft -f /etc/nftables.conf'
+
+# === AUR (paru) ===
+alias aur='paru -S'
+alias aurupdate='paru -Sua'
+alias aurinfo='paru -Si'
+alias aurupgrade='paru'
+
+# === VAULT AND OPS NAVIGATION ===
+alias vault='cd ~/Documents/azrael-vault'
+alias ops='cd ~/Documents/azrael-ops'
+alias research='cd ~/Github/security-research'
+
+# === STOW ===
+alias stow='stow --dir ~/Github/nightforge/dotfiles --target ~'
+
+# Tmux shortcuts
+alias ts='~/Github/nightforge/scripts/tmux-session.sh'
+alias ta='tmux attach -t'
+alias tl='tmux list-sessions'
+alias tn='tmux new-session -s'
+
+# Engagement initialization
+alias new-engagement='~/Github/nightforge/scripts/engagement/init-engagement.sh'
+
+# System update
+alias update='sudo reflector --latest 10 --protocol https --sort rate --save /etc/pacman.d/mirrorlist && sudo pacman -Syu && paru -Sua'
+
+# === NAVIGATION SHORTCUTS ===
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~='cd ~'
+alias -- -='cd -'

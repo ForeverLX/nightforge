@@ -1,7 +1,7 @@
 [Unit]
-Description=NightForge Wallpaper Rotation
-After=graphical-session.target
+Description=Rotate wallpaper with matugen color sync
 
 [Service]
 Type=oneshot
-ExecStart=%h/.local/bin/wallpaper-rotate.sh
+Environment=WAYLAND_DISPLAY=wayland-1
+ExecStart=%h/.config/quickshell/scripts/rotate-wallpaper.sh

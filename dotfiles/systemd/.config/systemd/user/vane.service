@@ -1,0 +1,14 @@
+[Unit]
+Description=Vane AI Search (production)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/Applications/Vane
+ExecStart=/usr/bin/npx next start -p 3000
+Restart=on-failure
+RestartSec=10
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=default.target

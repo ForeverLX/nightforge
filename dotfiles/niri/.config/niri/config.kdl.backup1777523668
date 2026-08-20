@@ -1,0 +1,30 @@
+// Niri Configuration - NightForge Operator Workstation
+// Migrated from DMS to Quickshell + Matugen stack
+// GPU: Nvidia GTX 1650 (nvidia-open-dkms)
+
+// === MATUGEN ENVIRONMENT ===
+// Colors injected via /tmp/matugen/colors.json
+// Sync: ~/.local/bin/matugen-sync.sh [wallpaper]
+
+// === AUTOSTART (replace DMS) ===
+// Quickshell bar (modular shell)
+spawn-at-startup "quickshell"
+
+// Matugen sync on startup (if wallpaper exists)
+spawn-at-startup "bash" "-c" "sleep 2 && $HOME/.local/bin/matugen-sync.sh $HOME/Pictures/wallpapers/current.jpg"
+
+// Podman services (NightForge operator stack)
+spawn-at-startup "systemctl" "--user" "start" "podman-restart.service"
+
+// MPD user service
+spawn-at-startup "systemctl" "--user" "start" "mpd.service"
+
+// === MODULAR INCLUDES ===
+include "includes/input.kdl"
+include "includes/keybinds.kdl"
+include "includes/window-rules.kdl"
+include "includes/compositor.kdl"
+include "includes/local.kdl"
+
+// NOTE: DMS configs removed - migrated to Quickshell
+// Old: include "dms/*.kdl" (removed)

@@ -1,0 +1,12 @@
+[Unit]
+Description=Hunk session daemon for interactive diff review
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/ForeverLX/.npm-global/bin/hunk daemon serve
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

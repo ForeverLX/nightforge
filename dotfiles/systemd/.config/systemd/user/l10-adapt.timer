@@ -1,0 +1,10 @@
+[Unit]
+Description=Run L10 Weight Update daily at midnight
+Requires=l10-adapt.service
+
+[Install]
+WantedBy=timers.target
+
+[Timer]
+OnCalendar=daily
+Persistent=true

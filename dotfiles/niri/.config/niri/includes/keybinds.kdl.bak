@@ -1,0 +1,180 @@
+// Keybindings - NightForge Operator Workstation
+// Mod = Super (Windows key)
+// IPC: Quickshell reads /tmp/qs_widget_state for widget toggles
+
+binds {
+    // ========== HELP ==========
+    Mod+Shift+Slash { show-hotkey-overlay; }
+    Mod+Slash { spawn "sh" "-c" "grep -E 'Mod[+]|Print|XF86' /home/ForeverLX/.config/niri/includes/keybinds.kdl | ghostty -e less"; }
+
+    // ========== APPLICATIONS ==========
+    Mod+Return { spawn "ghostty"; }
+
+    // Focus-or-spawn
+    Mod+B { spawn "sh" "-c" "~/.config/niri/scripts/focus-or-spawn.sh zen-browser"; }
+    Mod+F { spawn "ghostty" "-e" "/usr/sbin/tv" "files"; }
+
+    // ========== QUICKSHELL WIDGET TOGGLES ==========
+    // IPC: writes to /tmp/qs_widget_state — Quickshell reads this
+    Mod+Shift+C { spawn "sh" "-c" "echo toggle:settings > /tmp/qs_widget_state"; }
+    // Mod+M now launches music player + cava (see below)
+    Mod+Shift+N { spawn "ghostty" "-e" "net-status"; } 
+    Mod+Shift+W { spawn "sh" "-c" "quickshell -n -p /home/ForeverLX/.config/quickshell/WallpaperWidget.qml & sleep 0.3; printf toggle > /tmp/qs_wallpaper_state"; }
+    Mod+Shift+M { spawn "sh" "-c" "echo toggle:monitor > /tmp/qs_widget_state"; }
+    Mod+Comma  { spawn "sh" "-c" "echo toggle:music > /tmp/qs_widget_state"; }
+    Mod+Shift+V { spawn "sh" "-c" "echo toggle:clipboard > /tmp/qs_widget_state"; }
+    Mod+Shift+D { spawn "sh" "-c" "echo toggle:dashboard > /tmp/qs_widget_state"; }
+    Mod+Escape { spawn "sh" "-c" "echo close > /tmp/qs_widget_state"; }
+
+    // ========== SCREENSHOTS ==========
+    // Full screen: Print
+    Print { screenshot; }
+    // Active window: Alt+Print
+    Alt+Print { screenshot-window; }
+    // Area select: Mod+S → opens Satty for copy/save
+    Mod+S { spawn "sh" "-c" "~/.config/niri/scripts/screenshot.sh area-clipboard"; }
+    // Screen record toggle (wf-recorder)
+    Mod+Shift+R { spawn "sh" "-c" "~/.config/niri/scripts/screen-record.sh"; }
+
+    // ========== SWAYOSD OVERLAYS ==========
+    XF86AudioRaiseVolume allow-when-locked=true { spawn "swayosd-client" "--output-volume" "raise"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "swayosd-client" "--output-volume" "lower"; }
+    XF86AudioMute allow-when-locked=true { spawn "swayosd-client" "--output-volume" "toggle"; }
+    XF86AudioMicMute allow-when-locked=true { spawn "swayosd-client" "--input-volume" "toggle"; }
+
+    XF86MonBrightnessUp allow-when-locked=true { spawn "swayosd-client" "--brightness" "raise"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "swayosd-client" "--brightness" "lower"; }
+
+    XF86AudioPlay allow-when-locked=true { spawn "playerctl" "play-pause"; }
+    XF86AudioPrev allow-when-locked=true { spawn "playerctl" "previous"; }
+    XF86AudioNext allow-when-locked=true { spawn "playerctl" "next"; }
+
+    // ========== CLIPBOARD / NOTIFICATIONS ==========
+    Mod+V { spawn "sh" "-c" "~/.local/bin/clipboard-picker.sh"; }
+
+    // ========== POWER / LOCK ==========
+    Mod+Alt+L { spawn "sh" "-c" "~/.config/quickshell/scripts/lock-screen.sh"; }
+    Mod+Alt+Q { quit; }
+    Mod+Shift+E { spawn "bash" "/home/ForeverLX/Github/nightforge/scripts/engagement-edit.sh"; }
+
+    // ========== WINDOW MANAGEMENT ==========
+    Mod+Q { close-window; }
+    Mod+Space repeat=false hotkey-overlay-title="Toggle overview" { toggle-overview; }
+    Mod+Shift+Space { toggle-window-floating; }
+    Mod+Shift+X { maximize-column; }
+    Mod+W { toggle-column-tabbed-display; }
+    // Mod+G — free
+    Mod+C { center-column; }
+    // niri-tweaks
+    Mod+Backslash { spawn "bash" "-c" "~/.config/quickshell/scripts/niri_tweaks/tweaks window-details"; }
+    Mod+Shift+Backslash { spawn "bash" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_window_details.sh"; }
+
+    // ========== niri-tweaks (additional) ==========
+    // Focus-or-spawn fuzzel (toggle open/close with same key)
+    Mod+D { spawn "bash" "-c" "~/.config/quickshell/scripts/niri_tweaks/fuzzel_helper.sh"; }
+
+    // ========== MUSIC WIDGET ==========
+    Mod+M { spawn "sh" "-c" "quickshell -n -p /home/ForeverLX/.config/quickshell/MusicWidget.qml & sleep 0.3; printf toggle > /tmp/qs_music_state"; }
+
+    // ========== EDITOR ==========
+    Mod+E { spawn "sh" "-c" "/home/ForeverLX/.local/bin/editor-launcher.sh"; }
+
+    // Peek at adjacent column windows (pull into view)
+    Mod+N { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_peekaboo.py"; }
+    Mod+Shift+Period { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_peekaboo.py --peek_left"; }
+
+    // Overview-aware workspace navigation (skip empty, smart wrap)
+    Mod+Shift+U { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_workspace_helper.py previous --skip_empty --wrap"; }
+    Mod+Shift+I { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_workspace_helper.py next --skip_empty --wrap"; }
+    Mod+Alt+C hotkey-overlay-title="Center Window" { center-window; }
+
+    // ========== SMART NAVIGATION ==========
+    Mod+H { focus-column-left; }
+    Mod+L { focus-column-right; }
+    Mod+J { focus-window-or-workspace-down; }
+    Mod+K { focus-window-or-workspace-up; }
+    Mod+U { focus-workspace-down; }
+    Mod+I { focus-workspace-up; }
+
+    // ========== WINDOW MOVEMENT ==========
+    Mod+Shift+H { move-column-left; }
+    Mod+Shift+L { move-column-right; }
+    Mod+Shift+J { move-window-down-or-to-workspace-down; }
+    Mod+Shift+K { move-window-up-or-to-workspace-up; }
+
+    // ========== MULTI-MONITOR ==========
+    Mod+Shift+Left { move-column-to-monitor-left; }
+    Mod+Shift+Right { move-column-to-monitor-right; }
+    Mod+Alt+Left { focus-monitor-left; }
+    Mod+Alt+Right { focus-monitor-right; }
+
+    // ========== COLUMN MANAGEMENT ==========
+    Mod+BracketLeft { consume-or-expel-window-left; }
+    Mod+BracketRight { consume-or-expel-window-right; }
+    Mod+Period { expel-window-from-column; }
+    Mod+Tab { focus-workspace-previous; }
+
+    // ========== AUDIO ==========
+    Mod+A { spawn "sh" "-c" "~/.local/bin/audio-switch.sh toggle"; }
+
+    // ========== WORKSPACES ==========
+    Mod+1 { focus-workspace "1"; }
+    Mod+2 { focus-workspace "2"; }
+    Mod+3 { focus-workspace "3"; }
+    Mod+4 { focus-workspace "4"; }
+    Mod+5 { focus-workspace "5"; }
+    Mod+6 { focus-workspace "6"; }
+    Mod+7 { focus-workspace "7"; }
+    Mod+8 { focus-workspace "8"; }
+    Mod+9 { focus-workspace "9"; }
+
+    Mod+Shift+1 { move-column-to-workspace "1"; }
+    Mod+Shift+2 { move-column-to-workspace "2"; }
+    Mod+Shift+3 { move-column-to-workspace "3"; }
+    Mod+Shift+4 { move-column-to-workspace "4"; }
+    Mod+Shift+5 { move-column-to-workspace "5"; }
+    Mod+Shift+6 { move-column-to-workspace "6"; }
+    Mod+Shift+7 { move-column-to-workspace "7"; }
+    Mod+Shift+8 { move-column-to-workspace "8"; }
+    Mod+Shift+9 { move-column-to-workspace "9"; }
+
+    // ========== RESIZING ==========
+    Mod+Ctrl+H { set-window-width "-10%"; }
+    Mod+Ctrl+L { set-window-width "+10%"; }
+    Mod+Ctrl+J { set-window-height "-10%"; }
+    Mod+Ctrl+K { set-window-height "+10%"; }
+    Mod+R { switch-preset-column-width; }
+
+    // ========== OBSIDIAN (NightForge vaults) ==========
+    Mod+Alt+D { spawn "obsidian" "obsidian://daily"; }
+    Mod+Shift+O { spawn "obsidian" "obsidian://search"; }
+    Mod+O { spawn "obsidian" "obsidian://open?vault=azrael-vault"; }
+
+    // ========== SYSTEM ==========
+    Mod+P { spawn "bash" "/home/ForeverLX/Github/nightforge/scripts/toggle-performance-mode.sh"; }
+    Mod+Shift+P { spawn "bash" "/home/ForeverLX/Github/nightforge/scripts/toggle-performance-mode.sh"; }
+
+    // ========== WALLPAPER ROTATION ==========
+    // Mod+Alt+R — removed (wallpaper rotate is timer-based)
+
+    // ========== OPERATOR SHORTCUTS ==========
+    Mod+Shift+G { spawn "ghostty" "-e" "cat ~/.config/nightforge/engagement-context 2>/dev/null || echo 'No active engagement'"; }
+    Mod+Shift+T { spawn "ghostty" "-e" "podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'"; }
+    Mod+T { spawn "ghostty" "-e" "herdr agent attach Hermes"; }
+
+    // ========== AGENT LAUNCHERS (spawnjump: focus-or-spawn) ==========
+    Mod+Alt+H { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'ghostty -e herdr agent attach Hermes' ghostty"; }
+    // Mod+Alt+H --bind to "Hermes" workspace
+    Mod+Alt+I { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'ghostty -e zero exec' ghostty"; }
+    // Mod+Alt+I --bind to "PI" agent
+    Mod+Alt+K { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'ghostty -e herdr agent attach Codex' ghostty"; }
+    // Mod+Alt+K --bind to "Codex" workspace
+    Mod+Alt+Z { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py zed-editor zed"; }
+    // Mod+Alt+Z --bind to Zed editor (OpenCode ACP inside)
+    Mod+Alt+T { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'terax' terax"; }
+    // Mod+Alt+T --bind to Terax AI workspace
+    Mod+Alt+J { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'ghostty -e herdr agent attach T3MP3ST' ghostty"; }
+    // Mod+Alt+J --bind to T3MP3ST War Room
+    Mod+Alt+O { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'ghostty -e herdr agent attach OMP' ghostty"; }
+    // Mod+Alt+O --bind to OMP workspace
+}

@@ -1,0 +1,12 @@
+[Unit]
+Description=llama-server quality lane (Qwen3.8-27B Q6_K) - primary local inference
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/ForeverLX/.local/bin/llama-server -m /home/ForeverLX/models/Qwen3.8-27B-Q6_K.gguf --port 18234 -ngl 15 -c 8192 --host 127.0.0.1 --cache-type-k q8_0 --cache-type-v q8_0 --threads 4 --threads-batch 4 --flash-attn auto --jinja --batch-size 2048 --ubatch-size 512 --reasoning off
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

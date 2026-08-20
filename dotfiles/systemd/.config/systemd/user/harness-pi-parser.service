@@ -1,0 +1,8 @@
+[Unit]
+Description=Harness Pi session parser — extract cost data from Pi session JSONL
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/Github/nightforge/scripts/harness/pi-session-parser.sh
+WorkingDirectory=%h/Github/nightforge

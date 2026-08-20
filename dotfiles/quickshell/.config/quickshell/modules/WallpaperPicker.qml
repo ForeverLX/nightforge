@@ -2,8 +2,10 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Io
 import QtQuick
+import QtQuick.Layouts
 
 import "../services"
+import "../WindowRegistry.js" as LayoutMath
 
 PanelWindow {
     id: menu
@@ -19,6 +21,8 @@ PanelWindow {
     property var    wallpapers: []
     property var    _buf: []
     property string currentWall: ""
+    property string previewPath: ""
+    property string previewName: ""
 
     onVisibleChanged: {
         if (!visible) return
@@ -84,9 +88,14 @@ PanelWindow {
 
     Rectangle {
         anchors.centerIn: parent
-        width: 820; height: 620; radius: 20
-        color: Qt.rgba(mocha.mantle.r, mocha.mantle.g, mocha.mantle.b, 0.95)
-        border.color: mocha.surface0; border.width: 1
+
+        property var layoutInfo: LayoutMath.getLayoutSimple(Screen.width, Screen.height, "wallpaper")
+        width: layoutInfo ? layoutInfo.w : 820
+        height: layoutInfo ? layoutInfo.h : 620
+        radius: 14
+        color: Qt.rgba(mocha.base.r, mocha.base.g, mocha.base.b, 0.75)
+        border.width: 1
+        border.color: Qt.rgba(mocha.text.r, mocha.text.g, mocha.text.b, 0.06)
 
         MouseArea { anchors.fill: parent }
 
@@ -97,48 +106,43 @@ PanelWindow {
             Item { width: parent.width; height: 28
                 Text {
                     anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter
-                    text: "\u{1f5bc} Wallpaper"; color: mocha.mauve; font.pixelSize: 18; font.bold: true
+                    text: "󰋩 Wallpaper"; color: mocha.mauve; font.family: "Iosevka Nerd Font"; font.pixelSize: 18; font.bold: true
                 }
                 Rectangle {
                     anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
                     width: 28; height: 28; radius: 14; color: mocha.surface1
-                    Text { anchors.centerIn: parent; text: "\u2715"; color: mocha.subtext0; font.pixelSize: 12 }
+                    Text { anchors.centerIn: parent; text: "󰅖"; color: mocha.subtext0; font.family: "Iosevka Nerd Font"; font.pixelSize: 12 }
                     MouseArea { anchors.fill: parent; onClicked: menu.visible = false }
                 }
             }
 
-            // Thumbnail row
+            // Thumbnail grid
             Rectangle {
                 width: parent.width; height: 566; radius: 12; color: "transparent"; clip: true
 
                 Flickable {
                     id: flick
                     anchors.fill: parent; anchors.margins: 6
-                    contentWidth: wallRow.implicitWidth
-                    contentHeight: height
+                    contentWidth: width
+                    contentHeight: grid.implicitHeight
                     clip: true
-                    flickableDirection: Flickable.HorizontalFlick
+                    flickableDirection: Flickable.VerticalFlick
                     leftMargin: 4; rightMargin: 4
 
-                    WheelHandler {
-                        orientation: Qt.Horizontal
-                        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-                        rotationScale: -5
-                        target: flick
-                        property: "contentX"
-                    }
                     WheelHandler {
                         orientation: Qt.Vertical
                         acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
                         rotationScale: -5
                         target: flick
-                        property: "contentX"
+                        property: "contentY"
                     }
 
-                    Row {
-                        id: wallRow
-                        spacing: 10
-                        height: parent.height
+                    Grid {
+                        id: grid
+                        width: parent.width
+                        columns: Math.max(1, Math.floor(width / 172))
+                        columnSpacing: 8
+                        rowSpacing: 8
 
                         Repeater {
                             model: menu.wallpapers
@@ -152,7 +156,7 @@ PanelWindow {
 
                                 Rectangle {
                                     anchors.fill: parent
-                                    radius: 7; clip: true; color: mocha.surface0
+                                    radius: 7; clip: true; color: Qt.rgba(mocha.surface0.r, mocha.surface0.g, mocha.surface0.b, 0.5)
                                     Image {
                                         anchors.fill: parent
                                         source: "file://" + card.modelData.thumb
@@ -162,12 +166,14 @@ PanelWindow {
                                     }
                                 }
 
+                                // Hover glow / selection border
                                 Rectangle {
                                     anchors.fill: parent
                                     radius: 7
                                     color: "transparent"
                                     border.width: card.active ? 3 : (ma.containsMouse ? 2 : 0)
-                                    border.color: card.active ? mocha.mauve : (ma.containsMouse ? mocha.surface2 : "transparent")
+                                    border.color: card.active ? mocha.mauve : (ma.containsMouse ? mocha.mauve : "transparent")
+                                    Behavior on border.width { NumberAnimation { duration: 150 } }
                                 }
 
                                 Rectangle {
@@ -196,18 +202,89 @@ PanelWindow {
                                     anchors.fill: parent
                                     hoverEnabled: true
                                     cursorShape: Qt.PointingHandCursor
-                                    onClicked: menu.setWallpaper(card.modelData.orig)
+                                    onClicked: {
+                                        menu.previewPath = card.modelData.orig
+                                        menu.previewName = card.modelData.name
+                                    }
                                 }
                             }
                         }
+                    }
 
-                        Text {
-                            visible: menu.wallpapers.length === 0
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "Scanning wallpapers..."
-                            color: mocha.subtext0
-                            font.pixelSize: 14
-                            leftPadding: 20
+                    Text {
+                        visible: menu.wallpapers.length === 0
+                        anchors.centerIn: parent
+                        text: "Scanning wallpapers..."
+                        color: mocha.subtext0
+                        font.pixelSize: 14
+                    }
+                }
+            }
+        }
+    }
+
+    // Preview overlay
+    Rectangle {
+        id: previewOverlay
+        anchors.fill: parent
+        color: Qt.rgba(mocha.crust.r, mocha.crust.g, mocha.crust.b, 0.85)
+        visible: menu.previewPath !== ""
+        opacity: visible ? 1 : 0
+        Behavior on opacity { NumberAnimation { duration: 200 } }
+
+        MouseArea { anchors.fill: parent; onClicked: menu.previewPath = "" }
+
+        ColumnLayout {
+            anchors.centerIn: parent
+            spacing: 16
+
+            // Preview image
+            Rectangle {
+                Layout.preferredWidth: 640
+                Layout.preferredHeight: 400
+                radius: 12
+                color: mocha.surface0
+                clip: true
+
+                Image {
+                    anchors.fill: parent
+                    source: menu.previewPath !== "" ? "file://" + menu.previewPath : ""
+                    fillMode: Image.PreserveAspectCrop
+                    smooth: true
+                    asynchronous: true
+                }
+            }
+
+            // Filename
+            Text {
+                text: menu.previewName
+                color: mocha.text
+                font.pixelSize: 14
+                font.bold: true
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            // Buttons
+            RowLayout {
+                spacing: 12
+                Layout.alignment: Qt.AlignHCenter
+
+                Rectangle {
+                    width: 100; height: 36; radius: 8
+                    color: mocha.surface1
+                    Text { anchors.centerIn: parent; text: "Cancel"; color: mocha.text; font.pixelSize: 12 }
+                    MouseArea { anchors.fill: parent; onClicked: menu.previewPath = "" }
+                }
+
+                Rectangle {
+                    width: 100; height: 36; radius: 8
+                    color: mocha.mauve
+                    Text { anchors.centerIn: parent; text: "Apply"; color: "#fff"; font.pixelSize: 12 }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            menu.setWallpaper(menu.previewPath)
+                            menu.previewPath = ""
                         }
                     }
                 }

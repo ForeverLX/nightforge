@@ -1,0 +1,17 @@
+[Unit]
+Description=memlawb — E2E encrypted agent memory
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/bun run src/index.ts
+WorkingDirectory=%h/Docker/memlawb
+Restart=on-failure
+RestartSec=5
+Environment=PORT=8585
+Environment=STORE=fs
+Environment=DATA_DIR=%h/.memlawb
+Environment=ALLOW_UNAUTHENTICATED=true
+
+[Install]
+WantedBy=default.target

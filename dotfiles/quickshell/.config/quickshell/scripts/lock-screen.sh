@@ -6,11 +6,23 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Try gtklock first (best theming support)
 if command -v gtklock >/dev/null 2>&1; then
+    # Random wallpaper on each lock
+    BG="${HOME}/.cache/current_wallpaper"
+    SPECIFIC=$(find "${HOME}/Pictures/wallpapers" -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.png' -o -iname '*.jpeg' \) 2>/dev/null | shuf -n1)
+    [ -z "$SPECIFIC" ] && SPECIFIC="${HOME}/Pictures/wallpapers/mokka-tree.jpg"
+    if [ -f "$SPECIFIC" ]; then
+        BG_ARG="$SPECIFIC"
+    elif [ -f "$BG" ]; then
+        BG_ARG="$(cat "$BG")"
+    else
+        BG_ARG=""
+    fi
     exec gtklock \
-        --style "${SCRIPT_DIR}/../../../gtklock/style.css" \
-        --show-clock \
-        --show-user-image \
+        --style "${HOME}/Github/nightforge/dotfiles/gtklock/style.css" \
+        --time-format "%H:%M" \
+        --date-format "%A, %B %d" \
         --start-hidden \
+        ${BG_ARG:+--background "$BG_ARG"} \
         "$@"
 fi
 

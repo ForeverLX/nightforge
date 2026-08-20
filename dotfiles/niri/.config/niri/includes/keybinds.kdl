@@ -5,26 +5,25 @@
 binds {
     // ========== HELP ==========
     Mod+Shift+Slash { show-hotkey-overlay; }
-    Mod+Slash { spawn "sh" "-c" "~/.config/niri/scripts/keybind-cheatsheet.sh"; }
+    Mod+Slash { spawn "sh" "-c" "grep -E 'Mod[+]|Print|XF86' /home/ForeverLX/.config/niri/includes/keybinds.kdl | ghostty -e less"; }
 
     // ========== APPLICATIONS ==========
     Mod+Return { spawn "ghostty"; }
-    Mod+D { spawn "fuzzel"; }
 
     // Focus-or-spawn
-    Mod+B { spawn "sh" "-c" "~/.config/niri/scripts/focus-or-spawn.sh firefox"; }
-    Mod+F { spawn "ghostty" "-e" "yazi"; }
+    Mod+B { spawn "sh" "-c" "~/.config/niri/scripts/focus-or-spawn.sh zen-browser"; }
+    Mod+F { spawn "ghostty" "-e" "/usr/sbin/tv" "files"; }
 
     // ========== QUICKSHELL WIDGET TOGGLES ==========
     // IPC: writes to /tmp/qs_widget_state — Quickshell reads this
-    Mod+Shift+C { spawn "sh" "-c" "echo settings > /tmp/qs_widget_state"; }
-    Mod+M      { spawn "sh" "-c" "echo music > /tmp/qs_widget_state"; }
-    Mod+Shift+N { spawn "sh" "-c" "echo network > /tmp/qs_widget_state"; }
-    Mod+Shift+W { spawn "sh" "-c" "echo wallpaper > /tmp/qs_widget_state"; }
-    Mod+Shift+M { spawn "sh" "-c" "echo monitor > /tmp/qs_widget_state"; }
-    Mod+Comma  { spawn "sh" "-c" "echo settings > /tmp/qs_widget_state"; }
-    Mod+Shift+V { spawn "sh" "-c" "echo clipboard > /tmp/qs_widget_state"; }
-    Mod+Shift+D { spawn "sh" "-c" "echo dashboard > /tmp/qs_widget_state"; }
+    Mod+Shift+C { spawn "sh" "-c" "echo toggle:settings > /tmp/qs_widget_state"; }
+    // Mod+M now launches music player + cava (see below)
+    Mod+Shift+N { spawn "ghostty" "-e" "net-status"; } 
+    Mod+Shift+W { spawn "sh" "-c" "quickshell -n -p /home/ForeverLX/.config/quickshell/WallpaperWidget.qml & sleep 0.3; printf toggle > /tmp/qs_wallpaper_state"; }
+    Mod+Shift+M { spawn "sh" "-c" "echo toggle:monitor > /tmp/qs_widget_state"; }
+    Mod+Comma  { spawn "sh" "-c" "echo toggle:music > /tmp/qs_widget_state"; }
+    Mod+Shift+V { spawn "sh" "-c" "echo toggle:clipboard > /tmp/qs_widget_state"; }
+    Mod+Shift+D { spawn "sh" "-c" "echo toggle:dashboard > /tmp/qs_widget_state"; }
     Mod+Escape { spawn "sh" "-c" "echo close > /tmp/qs_widget_state"; }
 
     // ========== SCREENSHOTS ==========
@@ -51,7 +50,9 @@ binds {
     XF86AudioNext allow-when-locked=true { spawn "playerctl" "next"; }
 
     // ========== CLIPBOARD / NOTIFICATIONS ==========
-    Mod+V { spawn "sh" "-c" "~/.local/bin/clipboard-picker.sh"; }
+    Mod+V { spawn "warpstash-ui"; }
+    Mod+U { spawn "swaync-client" "-t"; }
+    Mod+Shift+U { spawn "swaync-client" "-d"; }
 
     // ========== POWER / LOCK ==========
     Mod+Alt+L { spawn "sh" "-c" "~/.config/quickshell/scripts/lock-screen.sh"; }
@@ -64,10 +65,29 @@ binds {
     Mod+Shift+Space { toggle-window-floating; }
     Mod+Shift+X { maximize-column; }
     Mod+W { toggle-column-tabbed-display; }
-    Mod+G { toggle-window-floating; }
+    // Mod+G — free
     Mod+C { center-column; }
     // niri-tweaks
     Mod+Backslash { spawn "bash" "-c" "~/.config/quickshell/scripts/niri_tweaks/tweaks window-details"; }
+    Mod+Shift+Backslash { spawn "bash" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_window_details.sh"; }
+
+    // ========== niri-tweaks (additional) ==========
+    // Focus-or-spawn fuzzel (toggle open/close with same key)
+    Mod+D { spawn "bash" "-c" "~/.config/quickshell/scripts/niri_tweaks/fuzzel_helper.sh"; }
+
+    // ========== MUSIC WIDGET ==========
+    Mod+M { spawn "sh" "-c" "quickshell -n -p /home/ForeverLX/.config/quickshell/MusicWidget.qml & sleep 0.3; printf toggle > /tmp/qs_music_state"; }
+
+    // ========== EDITOR ==========
+    Mod+E { spawn "sh" "-c" "/home/ForeverLX/.local/bin/editor-launcher.sh"; }
+
+    // Peek at adjacent column windows (pull into view)
+    Mod+N { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_peekaboo.py"; }
+    Mod+Shift+Period { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_peekaboo.py --peek_left"; }
+
+    // Overview-aware workspace navigation (skip empty, smart wrap)
+    // Mod+Shift+U moved to notification toggle
+    Mod+Shift+I { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_workspace_helper.py next --skip_empty --wrap"; }
     Mod+Alt+C hotkey-overlay-title="Center Window" { center-window; }
 
     // ========== SMART NAVIGATION ==========
@@ -75,7 +95,7 @@ binds {
     Mod+L { focus-column-right; }
     Mod+J { focus-window-or-workspace-down; }
     Mod+K { focus-window-or-workspace-up; }
-    Mod+U { focus-workspace-down; }
+    // Mod+U moved to notification toggle
     Mod+I { focus-workspace-up; }
 
     // ========== WINDOW MOVEMENT ==========
@@ -129,16 +149,48 @@ binds {
 
     // ========== OBSIDIAN (NightForge vaults) ==========
     Mod+Alt+D { spawn "obsidian" "obsidian://daily"; }
-    Mod+Shift+O { spawn "obsidian" "obsidian://search"; }
-    Mod+O { spawn "obsidian" "obsidian://open?vault=azrael-vault"; }
+    Mod+Shift+O { spawn "obsidian" "obsidian://switcher?vault=cr1ms0n-vault"; }
+    Mod+O { spawn "obsidian" "obsidian://open?vault=cr1ms0n-vault"; }
 
     // ========== SYSTEM ==========
-    Mod+Shift+P { spawn "bash" "/home/ForeverLX/Github/nightforge/scripts/toggle-performance-mode.sh"; }
+    Mod+P { spawn "bash" "/home/ForeverLX/Github/nightforge/scripts/toggle-performance-mode.sh"; }
 
     // ========== WALLPAPER ROTATION ==========
-    Mod+Alt+R { spawn "bash" "-c" "~/.local/bin/wallpaper-rotate.sh --notify && ~/.local/bin/matugen-sync.sh $(cat ~/.cache/current_wallpaper)"; }
+    // Mod+Alt+R — removed (wallpaper rotate is timer-based)
 
     // ========== OPERATOR SHORTCUTS ==========
     Mod+Shift+G { spawn "ghostty" "-e" "cat ~/.config/nightforge/engagement-context 2>/dev/null || echo 'No active engagement'"; }
-    Mod+Shift+T { spawn "ghostty" "-e" "podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'"; }
+    Mod+T { spawn "ghostty" "-e" "herdr agent attach Hermes"; }
+    Mod+Shift+Q { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'ghostty -e herdr workspace focus wZ' ghostty"; }
+    // Mod+Shift+Q --bind to OMP/ai-lab-vault workspace
+    Mod+Shift+F { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'ghostty -e herdr agent attach Hermes' ghostty"; }
+    // Mod+Shift+F --bind to Hermes agent
+    Mod+Shift+P { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'ghostty -e pi --model llama.cpp/Bonsai-27B-Q1_0' ghostty"; }
+    // Mod+Shift+P --bind to Pi agent
+    Mod+Shift+T { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'ghostty -e herdr workspace focus w11' ghostty"; }
+    // Mod+Shift+T --bind to T3MP3ST workspace
+
+    // ========== AGENT LAUNCHERS (spawnjump: focus-or-spawn) ==========
+    Mod+Alt+H { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'ghostty -e herdr agent attach Hermes' ghostty"; }
+    // Mod+Alt+H --bind to "Hermes" workspace
+    Mod+Alt+I { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'ghostty -e zero exec' ghostty"; }
+    // Mod+Alt+I --bind to "PI" agent
+    Mod+Alt+K { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'ghostty -e herdr agent attach Codex' ghostty"; }
+    // Mod+Alt+K --bind to "Codex" workspace
+    Mod+Alt+Z { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py zed-editor zed"; }
+    // Mod+Alt+Z --bind to Zed editor (OpenCode ACP inside)
+    Mod+Alt+T { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'terax' terax"; }
+    // Mod+Alt+T --bind to Terax AI workspace
+    Mod+Alt+J { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'ghostty -e herdr agent attach T3MP3ST' ghostty"; }
+    // Mod+Alt+J --bind to T3MP3ST War Room
+    Mod+Alt+O { spawn "sh" "-c" "~/.config/quickshell/scripts/niri_tweaks/niri_spawnjump.py 'ghostty -e herdr agent attach OMP' ghostty"; }
+
+    // ========== HERDR WORKSPACE SWITCHING ==========
+    // Herdr workspaces: 1=ai-lab-vault, 2=VPN, 3=hexstrike-ai, 4=t3mp3st
+    // Uses herdr CLI to focus workspaces (herdr runs as daemon)
+    Mod+Alt+1 { spawn "herdr" "workspace" "focus" "wZ"; }
+    Mod+Alt+2 { spawn "herdr" "workspace" "focus" "w13"; }
+    Mod+Alt+3 { spawn "herdr" "workspace" "focus" "w14"; }
+    Mod+Alt+4 { spawn "herdr" "workspace" "focus" "w11"; }
+    // Mod+Alt+O --bind to OMP workspace
 }

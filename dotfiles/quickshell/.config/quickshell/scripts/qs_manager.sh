@@ -1,103 +1,37 @@
-#!/bin/bash
-# Quickshell Widget IPC Router
-# Usage: qs_manager.sh <widget_name|close|osd:type:label:value|launcher|status|exec:cmd>
-#
-# Features:
-#   - Widget toggle/close via named pipes
-#   - OSD display: osd:TYPE:LABEL:VALUE
-#   - Launcher trigger
-#   - Status query for debugging
-#   - Race condition protection via flock
+#!/usr/bin/env bash
+# Niri-compatible qs_manager - adapted from ilyamiro's Hyprland version
 
-LOCK_FILE="/tmp/qs_manager.lock"
-STATE_FILE="/tmp/qs_widget_state"
-PIPE_FILE="/tmp/qs_widget_pipe"
-STATUS_DIR="/tmp/qs_widget_status"
+IPC_FILE="/tmp/qs_widget_state"
+ACTION="$1"
+TARGET="$2"
+SUBTARGET="$3"
 
-# Initialize
-touch "$STATE_FILE"
-mkdir -p "$STATUS_DIR"
-
-# Acquire lock with flock to prevent race conditions
-exec 200>"$LOCK_FILE"
-flock -n 200 || {
-    # If lock is held, queue via pipe if it exists
-    if [ -p "$PIPE_FILE" ]; then
-        echo "$*" > "$PIPE_FILE" 2>/dev/null
+# Fast path: workspace switching
+if [[ "$ACTION" =~ ^[0-9]+$ ]]; then
+    WORKSPACE_NUM="$ACTION"
+    echo "close" > "$IPC_FILE"
+    
+    if [[ "$2" == "move" ]]; then
+        # Move focused window to workspace
+        niri msg action move-column-to-workspace "$WORKSPACE_NUM" >/dev/null 2>&1
+    else
+        niri msg action focus-workspace "$WORKSPACE_NUM" >/dev/null 2>&1
     fi
     exit 0
-}
+fi
 
-case "$1" in
+# Toggle widgets
+case "$ACTION" in
+    toggle)
+        echo "toggle:$TARGET:$SUBTARGET" > "$IPC_FILE"
+        ;;
     close)
-        # Close the Quickshell overlay
-        echo "close" > "$STATE_FILE"
-        echo "{\"event\": \"close\", \"ts\": $(date +%s%N)}" > "$STATUS_DIR/last_event" 2>/dev/null &
+        echo "close" > "$IPC_FILE"
         ;;
-
-    launcher)
-        # Launch the application launcher
-        echo "launcher" > "$STATE_FILE"
-        echo "{\"event\": \"launcher\", \"ts\": $(date +%s%N)}" > "$STATUS_DIR/last_event" 2>/dev/null &
+    lock)
+        niri msg action lock-screen >/dev/null 2>&1
         ;;
-
-    status)
-        # Output current widget state for debugging
-        last_event="null"
-        [ -f "$STATUS_DIR/last_event" ] && last_event=$(cat "$STATUS_DIR/last_event")
-        widget_state="null"
-        [ -f "$STATE_FILE" ] && widget_state=$(cat "$STATE_FILE")
-        cat <<JSON
-{
-    "widget_state": $(echo "$widget_state" | jq -R . 2>/dev/null || echo "\"$widget_state\""),
-    "last_event": $last_event,
-    "lock_held": true,
-    "ts": $(date +%s%N)
-}
-JSON
-        ;;
-
-    osd:*)
-        # OSD display: osd:TYPE:LABEL:VALUE
-        echo "$1" > "$STATE_FILE"
-        echo "{\"event\": \"osd\", \"payload\": \"$1\", \"ts\": $(date +%s%N)}" > "$STATUS_DIR/last_event" 2>/dev/null &
-        ;;
-
-    exec:*)
-        # Execute a custom command and write output to state
-        cmd="${1#exec:}"
-        output=$(eval "$cmd" 2>/dev/null)
-        echo "$output" > "$STATE_FILE"
-        echo "{\"event\": \"exec\", \"cmd\": \"$cmd\", \"ts\": $(date +%s%N)}" > "$STATUS_DIR/last_event" 2>/dev/null &
-        ;;
-
-    batch:*)
-        # Process multiple commands: batch:cmd1|cmd2|cmd3
-        # Each command is processed sequentially
-        batch="${1#batch:}"
-        IFS='|' read -ra cmds <<< "$batch"
-        for cmd in "${cmds[@]}"; do
-            case "$cmd" in
-                close|launcher)
-                    echo "$cmd" > "$STATE_FILE"
-                    ;;
-                osd:*)
-                    echo "$cmd" > "$STATE_FILE"
-                    ;;
-                *)
-                    echo "$cmd" > "$STATE_FILE"
-                    ;;
-            esac
-            sleep 0.05  # Small delay between batched commands
-        done
-        echo "{\"event\": \"batch\", \"count\": ${#cmds[@]}, \"ts\": $(date +%s%N)}" > "$STATUS_DIR/last_event" 2>/dev/null &
-        ;;
-
     *)
-        # Widget toggle — write widget name to state file
-        echo "$1" > "$STATE_FILE"
-        echo "{\"event\": \"toggle\", \"widget\": \"$1\", \"ts\": $(date +%s%N)}" > "$STATUS_DIR/last_event" 2>/dev/null &
+        echo "$ACTION:" > "$IPC_FILE"
         ;;
 esac
-
-# Release lock (auto-released when subshell exits)

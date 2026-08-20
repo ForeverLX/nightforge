@@ -1,0 +1,13 @@
+[Unit]
+Description=AdaptixC2 Framework Server
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ForeverLX/Tools/c2/adaptix/dist
+ExecStart=/home/ForeverLX/Tools/c2/adaptix/dist/adaptixserver -profile profile.yaml
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

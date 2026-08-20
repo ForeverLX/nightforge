@@ -17,6 +17,7 @@ Item {
     MatugenColors { id: mocha }
 
     GlassPanel {
+        MouseArea { anchors.fill: parent }
         anchors.fill: parent
         matugen: mocha
         glassRadius: 20

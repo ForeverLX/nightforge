@@ -1,0 +1,6 @@
+[Unit]
+Description=Weekly workstation audit report (user)
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/weekly-audit

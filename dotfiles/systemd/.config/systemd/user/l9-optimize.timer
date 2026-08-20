@@ -1,0 +1,10 @@
+[Unit]
+Description=Run L9 Benefit Measurement hourly
+Requires=l9-optimize.service
+
+[Install]
+WantedBy=timers.target
+
+[Timer]
+OnCalendar=hourly
+Persistent=true

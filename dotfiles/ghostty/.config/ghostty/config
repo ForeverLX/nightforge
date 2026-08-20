@@ -10,14 +10,14 @@ font-family = "JetBrainsMono Nerd Font Mono"
 window-decoration = false
 window-padding-x = 12
 window-padding-y = 12
-background-opacity = 0.95
+background-opacity = 0.75
 background-blur-radius = 20
 
 # === Cursor ===
 cursor-style = block
 cursor-style-blink = false
 
-# === Scrollback (tmux handles real scrollback) ===
+## === Scrollback (tmux handles real scrollback) ===
 scrollback-limit = 10000
 
 # === Behavior ===
@@ -41,15 +41,12 @@ keybind = ctrl+minus=decrease_font_size:1
 keybind = ctrl+zero=reset_font_size
 keybind = shift+enter=text:\n
 
-# === Splits (use sparingly — tmux handles panes) ===
+## === Splits (use sparingly — tmux handles panes) ===
 unfocused-split-opacity = 0.7
 unfocused-split-fill = #0D0F1A
 
 # === Tab bar ===
 gtk-titlebar = false
-
-# === Fragment Shader ===
-fragment-shader = "/home/ForeverLX/.config/ghostty/shaders/space.glsl"
 
 # === Theme (Matugen auto-generated) ===
 # Colors are synced by ~/.local/bin/matugen-sync.sh
@@ -60,3 +57,76 @@ fragment-shader = "/home/ForeverLX/.config/ghostty/shaders/space.glsl"
 # background = <surface>
 # foreground = <onSurface>
 # cursor-color = <primary>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# === Shaders ===
+custom-shader = "/home/ForeverLX/.config/ghostty/shaders/space.glsl"
+# Freeze the custom shader's animation loop (iTime pinned) to cut idle GPU drain.
+# Docs: ghostty.5 custom-shader-animation — false renders only on terminal update.
+custom-shader-animation = false
+
+
+# === Matugen Colors BEGIN ===
+# === Matugen Colors (auto-generated) ===
+background = #1a1111
+foreground = #f0dede
+cursor-color = #ffb3b3
+cursor-text = #561d21
+selection-background = #e6bdbc
+selection-foreground = #44292a
+
+# === Terminal Colors ===
+# black
+palette = 0=#1a1111
+palette = 8=#524343
+
+# red
+palette = 1=#ffb4ab
+palette = 9=#ffb4ab
+
+# green
+palette = 2=#ffb3b3
+palette = 10=#ffb3b3
+
+# yellow
+palette = 3=#e5c18d
+palette = 11=#e5c18d
+
+# blue
+palette = 4=#e6bdbc
+palette = 12=#e6bdbc
+
+# magenta
+palette = 5=#ffdad9
+palette = 13=#ffdad9
+
+# cyan
+palette = 6=#ffddaf
+palette = 14=#ffddaf
+
+# white
+palette = 7=#f0dede
+palette = 15=#f0dede
+# === Matugen Colors END ===

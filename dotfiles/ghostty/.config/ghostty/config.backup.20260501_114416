@@ -1,0 +1,128 @@
+# === Ghostty Configuration - NightForge ===
+# Matugen-themed (auto-synced via matugen-sync.sh)
+# Font: JetBrainsMono Nerd Font Mono
+
+# === Font ===
+font-size = 12
+font-family = "JetBrainsMono Nerd Font Mono"
+
+# === Window ===
+window-decoration = false
+window-padding-x = 12
+window-padding-y = 12
+background-opacity = 0.95
+background-blur-radius = 20
+
+# === Cursor ===
+cursor-style = block
+cursor-style-blink = false
+
+# === Scrollback (tmux handles real scrollback) ===
+scrollback-limit = 10000
+
+# === Behavior ===
+mouse-hide-while-typing = true
+copy-on-select = false
+confirm-close-surface = false
+gtk-single-instance = true
+
+# === Notifications ===
+app-notifications = no-clipboard-copy,no-config-reload
+
+# === Shell integration ===
+shell-integration = detect
+shell-integration-features = cursor,sudo,title,no-cursor
+
+# === Keybinds ===
+keybind = ctrl+shift+n=new_window
+keybind = ctrl+t=new_tab
+keybind = ctrl+plus=increase_font_size:1
+keybind = ctrl+minus=decrease_font_size:1
+keybind = ctrl+zero=reset_font_size
+keybind = shift+enter=text:\n
+
+# === Splits (use sparingly — tmux handles panes) ===
+unfocused-split-opacity = 0.7
+unfocused-split-fill = #0D0F1A
+
+# === Tab bar ===
+gtk-titlebar = false
+
+# === Theme (Matugen auto-generated) ===
+# Colors are synced by ~/.local/bin/matugen-sync.sh
+# Manual override (commented out by default):
+# theme = dankcolors
+
+# === MATUGEN COLORS (auto-injected by matugen-sync.sh) ===
+# background = <surface>
+# foreground = <onSurface>
+# cursor-color = <primary>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# === Matugen Colors BEGIN ===
+# === Matugen Colors (auto-generated) ===
+background = #121318
+foreground = #e3e1e9
+cursor-color = #b8c3ff
+cursor-text = #202c61
+selection-background = #c3c5dd
+selection-foreground = #2c2f42
+
+# === Terminal Colors ===
+# black
+palette = 0=#121318
+palette = 8=#45464f
+
+# red
+palette = 1=#ffb4ab
+palette = 9=#ffb4ab
+
+# green
+palette = 2=#b8c3ff
+palette = 10=#b8c3ff
+
+# yellow
+palette = 3=#e4bad9
+palette = 11=#e4bad9
+
+# blue
+palette = 4=#c3c5dd
+palette = 12=#c3c5dd
+
+# magenta
+palette = 5=#dde1ff
+palette = 13=#dde1ff
+
+# cyan
+palette = 6=#ffd7f3
+palette = 14=#ffd7f3
+
+# white
+palette = 7=#e3e1e9
+palette = 15=#e3e1e9
+# === Matugen Colors END ===

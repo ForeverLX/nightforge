@@ -1,0 +1,13 @@
+[Unit]
+Description=llama-server aux lane (Qwen3-1.7B Q4_K_M) - CPU-only fast aux tasks
+After=network.target
+
+[Service]
+Type=simple
+Environment=CUDA_VISIBLE_DEVICES=""
+ExecStart=/home/ForeverLX/.local/bin/llama-server -m /home/ForeverLX/models/Qwen3-1.7B-Q4_K_M.gguf --port 18236 -ngl 0 -c 4096 --host 127.0.0.1 --threads 2 --threads-batch 2 --batch-size 512 --ubatch-size 256
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

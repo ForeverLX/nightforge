@@ -1,0 +1,8 @@
+[Unit]
+Description=Harness pipeline — failure-miner + proposal-engine + gate-check
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/Github/nightforge/scripts/harness/pipeline-runner.sh
+WorkingDirectory=%h/Github/nightforge

@@ -1,0 +1,14 @@
+# /home/ForeverLX/.config/systemd/user/cr1ms0n-feed-sync.service
+[Unit]
+Description=Cr1ms0n Feed Sync Pipeline
+After=network.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/ForeverLX/Github/cr1ms0n-ops-dashboard
+ExecStart=/home/ForeverLX/Github/cr1ms0n-ops-dashboard/.venv/bin/python /home/ForeverLX/Github/cr1ms0n-ops-dashboard/feeds/sync.py
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

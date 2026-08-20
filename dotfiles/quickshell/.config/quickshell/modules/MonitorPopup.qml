@@ -5,12 +5,12 @@ import Quickshell.Io
 import Quickshell.Wayland
 
 import "../services"
+import "../WindowRegistry.js" as LayoutMath
 
 PanelWindow {
     id: window
     visible: false
     color: "transparent"
-    anchors.fill: parent
 
     MatugenColors { id: mocha }
 
@@ -35,15 +35,17 @@ PanelWindow {
 
     Item {
         anchors.centerIn: parent
-        width: 420
-        height: 380
+
+        property var layoutInfo: LayoutMath.getLayoutSimple(Screen.width, Screen.height, "monitor")
+        width: layoutInfo ? layoutInfo.w : 420
+        height: layoutInfo ? layoutInfo.h : 380
 
         Rectangle {
             anchors.fill: parent
-            radius: 20
-            color: Qt.rgba(mocha.mantle.r, mocha.mantle.g, mocha.mantle.b, 0.95)
-            border.color: mocha.surface0
+            radius: 14
+            color: Qt.rgba(mocha.base.r, mocha.base.g, mocha.base.b, 0.75)
             border.width: 1
+            border.color: Qt.rgba(mocha.text.r, mocha.text.g, mocha.text.b, 0.06)
 
             ColumnLayout {
                 anchors.fill: parent
@@ -60,8 +62,9 @@ PanelWindow {
                     }
                     Item { Layout.fillWidth: true }
                     Text {
-                        text: "X"
+                        text: "󰅖"
                         color: mocha.subtext0
+                        font.family: "Iosevka Nerd Font"
                         font.pixelSize: 14
                     }
                 }
@@ -82,19 +85,49 @@ PanelWindow {
 
                     delegate: Rectangle {
                         width: ListView.view ? ListView.view.width : 0
-                        height: 70
+                        height: 90
                         radius: 10
-                        color: mocha.surface0
+                        color: Qt.rgba(mocha.surface0.r, mocha.surface0.g, mocha.surface0.b, 0.4)
 
                         ColumnLayout {
                             anchors.fill: parent
                             anchors.margins: 12
                             spacing: 4
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Text {
+                                    text: modelData.name || "Unknown"
+                                    color: mocha.text
+                                    font.pixelSize: 13
+                                    font.bold: true
+                                }
+                                Item { Layout.fillWidth: true }
+                                Text {
+                                    text: modelData.current_mode
+                                        ? (modelData.current_mode.width + "x" + modelData.current_mode.height + "@" + Math.round(modelData.current_mode.refresh / 1000) + "Hz")
+                                        : ""
+                                    color: mocha.subtext0
+                                    font.pixelSize: 11
+                                }
+                            }
+
                             Text {
-                                text: (typeof modelData === "object" ? (modelData.name || "Unknown") : "Unknown")
-                                color: mocha.text
-                                font.pixelSize: 13
-                                font.bold: true
+                                text: modelData.logical
+                                    ? "Position: " + modelData.logical.x + "," + modelData.logical.y + " | Scale: " + (modelData.scale || 1.0) + "x"
+                                    : ""
+                                color: mocha.subtext0
+                                font.pixelSize: 10
+                                visible: text !== ""
+                            }
+
+                            Text {
+                                text: modelData.make && modelData.model
+                                    ? (modelData.make + " " + modelData.model)
+                                    : ""
+                                color: mocha.overlay0
+                                font.pixelSize: 10
+                                visible: text !== ""
                             }
                         }
                     }

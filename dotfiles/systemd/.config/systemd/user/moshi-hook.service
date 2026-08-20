@@ -1,0 +1,17 @@
+[Unit]
+Description=Moshi hook daemon (SSH/Easy Connect bridge + agent hooks)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Point moshi-hook's agent-hook checks at the active Hermes profile home so
+# `moshi-hook status` / daemon startup validation resolve the profile-scoped
+# moshi-hooks plugin (installed at $HERMES_HOME/plugins/moshi-hooks).
+Environment=HERMES_HOME=%h/.hermes/profiles/cr1ms0n
+ExecStart=%h/.local/bin/moshi-hook serve
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

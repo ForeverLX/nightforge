@@ -43,36 +43,17 @@ window-rule {
     max-height 650
 }
 
-// ========== BROWSERS ==========
 window-rule {
-    match app-id=r#"^waterfox$"#
-    opacity 0.92
-    default-column-width { proportion 0.66667; }
-}
-
-window-rule {
-    match app-id=r#"^waterfox$"# title=r#"^.*Picture-in-Picture$"#
+    match app-id=r#"^zen$"# title=r#"^.*Picture-in-Picture$"#
     open-floating true
     max-width 400
     max-height 300
 }
 
 window-rule {
-    match title=r#"^.* — Waterfox$"#
-    open-floating true
-}
-
-window-rule {
-    match app-id=r#"firefox$"#
+    match app-id=r#"^brave$"#
     opacity 0.92
     default-column-width { proportion 0.66667; }
-}
-
-window-rule {
-    match app-id=r#"firefox$"# title=r#"^.*Picture-in-Picture$"#
-    open-floating true
-    max-width 400
-    max-height 300
 }
 
 // ========== TERMINALS ==========
@@ -217,11 +198,16 @@ window-rule {
     opacity 0.90
     default-column-width { proportion 0.5; }
 }
-// ========== BROWSER TRANSPARENCY (Zen matugen glass) ==========
-// Official niri docs: background-effect requires the window to be semitransparent,
-// which Zen provides via zen.widget.linux.transparency + userChrome.css alpha.
-// blur=true + xray (auto) = see-through blurred chrome over wallpaper.
+// ========== BROWSER TRANSPARENCY (Zen whole-window) ==========
+// Option A: niri whole-window opacity (guaranteed transparency on Wayland).
+// Note: makes web content translucent too. Adjust 0.85 to taste.
+// draw-border-with-background=false: stop niri's border/focus-ring rectangle
+// showing up as a grey frame around the transparent window.
+// clip-to-geometry=true: remove Firefox-family's 1px dark border edge.
 window-rule {
-    match app-id=r#"^zen$"#
-    background-effect { blur true }
+    match app-id="^zen$"
+    opacity 0.85
+    draw-border-with-background false
+    clip-to-geometry true
 }
+

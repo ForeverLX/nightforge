@@ -1,0 +1,13 @@
+[Unit]
+Description=L4 Failure Mining Pipeline — daily failure report generation
+Documentation=https://github.com/ForeverLX/ai-lab-vault
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/ForeverLX/Documents/ai-lab-vault/80-Operations/scripts/l4/failure-miner.sh
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=Run weekly workstation audit report (user)
+
+[Timer]
+OnCalendar=weekly
+Persistent=true
+RandomizedDelaySec=12h
+
+[Install]
+WantedBy=timers.target

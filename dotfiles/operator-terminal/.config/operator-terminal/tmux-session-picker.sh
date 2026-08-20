@@ -1,3 +1,1 @@
-#!/bin/bash
-# Passthrough to the unified tmux session launcher in the nightforge repo.
-exec ~/Github/nightforge/scripts/tmux-session.sh "$@"
+../../Github/nightforge/dotfiles/operator-terminal/.config/operator-terminal/tmux-session-picker.sh

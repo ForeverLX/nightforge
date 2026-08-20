@@ -1,0 +1,37 @@
+# ~/.config/fuzzel/fuzzel.ini
+# Fuzzel Configuration - offsec-workstation
+
+[main]
+dpi-aware=yes
+font=MesloLGS NF:size=12
+prompt=" > "
+icon-theme=Papirus-Dark
+icons-enabled=yes
+fields=name,generic,comment,categories,filename,keywords
+fuzzy=yes
+show-actions=yes
+terminal=ghostty -e
+launch-prefix=
+
+[colors]
+# Background (semi-transparent dark)
+background=0f0f12dd
+# Text color
+text=e6e6e6ff
+# Matched text
+match=b23a48ff
+# Selected background
+selection=22181fff
+# Selected text
+selection-text=e6e6e6ff
+# Selected matched text
+selection-match=ff6b7aff
+# Border
+border=2a2026ff
+
+[border]
+width=2
+radius=12
+
+[dmenu]
+exit-immediately-if-empty=yes

@@ -1,0 +1,11 @@
+[Unit]
+Description=Restart PipeWire after suspend
+After=sleep.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl --user restart pipewire pipewire-pulse
+Environment=DISPLAY=:0
+
+[Install]
+WantedBy=sleep.target

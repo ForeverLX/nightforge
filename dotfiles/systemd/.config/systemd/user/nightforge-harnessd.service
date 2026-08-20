@@ -1,0 +1,14 @@
+[Unit]
+Description=NightForge Harness Dashboard
+After=default.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ForeverLX/Github/nightforge
+ExecStart=/home/ForeverLX/Github/nightforge/harnessd
+Restart=on-failure
+RestartSec=5
+Environment=HARNESSD_ADDRESS=127.0.0.1:9191
+
+[Install]
+WantedBy=default.target

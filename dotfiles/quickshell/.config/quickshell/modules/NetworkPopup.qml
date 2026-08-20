@@ -5,6 +5,7 @@ import Quickshell.Io
 import Quickshell.Wayland
 
 import "../services"
+import "../WindowRegistry.js" as LayoutMath
 
 PanelWindow {
     id: window
@@ -165,13 +166,17 @@ PanelWindow {
     // === UI ===
     Item {
         anchors.centerIn: parent
-        width: 480; height: 420
+
+        property var layoutInfo: LayoutMath.getLayoutSimple(Screen.width, Screen.height, "network")
+        width: layoutInfo ? layoutInfo.w : 480
+        height: layoutInfo ? layoutInfo.h : 420
 
     Rectangle {
         anchors.fill: parent
-        radius: 20
-        color: Qt.rgba(mocha.mantle.r, mocha.mantle.g, mocha.mantle.b, 0.95)
-        border.color: mocha.surface0; border.width: 1
+        radius: 14
+        color: Qt.rgba(mocha.base.r, mocha.base.g, mocha.base.b, 0.75)
+        border.width: 1
+        border.color: Qt.rgba(mocha.text.r, mocha.text.g, mocha.text.b, 0.06)
         clip: true
 
         ColumnLayout {
@@ -182,11 +187,11 @@ PanelWindow {
             RowLayout {
                 Layout.fillWidth: true
                 Text {
-                    text: "\uD83C\uDF10 Network"; color: mocha.text; font.pixelSize: 16; font.bold: true
+                    text: "󰖟 Network"; color: mocha.text; font.family: "Iosevka Nerd Font"; font.pixelSize: 16; font.bold: true
                 }
                 Item { Layout.fillWidth: true }
                 Text {
-                    text: "\u2715"; color: mocha.subtext0; font.pixelSize: 14
+                    text: "󰅖"; color: mocha.subtext0; font.family: "Iosevka Nerd Font"; font.pixelSize: 14
                     MouseArea { anchors.fill: parent; onClicked: popupDismiss() }
                 }
             }
@@ -199,11 +204,11 @@ PanelWindow {
                 Rectangle {
                     id: ethTab
                     Layout.fillWidth: true; height: 34; radius: 10
-                    color: window.activeMode === "eth"
-                        ? Qt.rgba(mocha.mauve.r, mocha.mauve.g, mocha.mauve.b, 0.3)
-                        : mocha.surface0
+                        color: window.activeMode === "eth"
+                            ? Qt.rgba(mocha.mauve.r, mocha.mauve.g, mocha.mauve.b, 0.3)
+                            : Qt.rgba(mocha.surface0.r, mocha.surface0.g, mocha.surface0.b, 0.4)
                     opacity: window.ethPresent ? 1.0 : 0.4
-                    Text { anchors.centerIn: parent; text: "\uD83D\uDDE1\uFE0F ETH"; color: mocha.text; font.pixelSize: 11 }
+                    Text { anchors.centerIn: parent; text: "󰈀 ETH"; color: mocha.text; font.family: "Iosevka Nerd Font"; font.pixelSize: 11 }
                     MouseArea { anchors.fill: parent; enabled: window.ethPresent; onClicked: window.activeMode = "eth" }
                 }
 
@@ -212,8 +217,8 @@ PanelWindow {
                     Layout.fillWidth: true; height: 34; radius: 10
                     color: window.activeMode === "wifi"
                         ? Qt.rgba(mocha.mauve.r, mocha.mauve.g, mocha.mauve.b, 0.3)
-                        : mocha.surface0
-                    Text { anchors.centerIn: parent; text: "\uD83D\uDCF6 WiFi"; color: mocha.text; font.pixelSize: 11 }
+                        : Qt.rgba(mocha.surface0.r, mocha.surface0.g, mocha.surface0.b, 0.4)
+                    Text { anchors.centerIn: parent; text: "󰤨 WiFi"; color: mocha.text; font.family: "Iosevka Nerd Font"; font.pixelSize: 11 }
                     MouseArea { anchors.fill: parent; onClicked: window.activeMode = "wifi" }
                 }
 
@@ -222,9 +227,9 @@ PanelWindow {
                     Layout.fillWidth: true; height: 34; radius: 10
                     color: window.activeMode === "bt"
                         ? Qt.rgba(mocha.mauve.r, mocha.mauve.g, mocha.mauve.b, 0.3)
-                        : mocha.surface0
+                        : Qt.rgba(mocha.surface0.r, mocha.surface0.g, mocha.surface0.b, 0.4)
                     opacity: window.btPresent ? 1.0 : 0.4
-                    Text { anchors.centerIn: parent; text: "\uD83D\uDC1C BT"; color: mocha.text; font.pixelSize: 11 }
+                    Text { anchors.centerIn: parent; text: "󰂯 BT"; color: mocha.text; font.family: "Iosevka Nerd Font"; font.pixelSize: 11 }
                     MouseArea { anchors.fill: parent; enabled: window.btPresent; onClicked: window.activeMode = "bt" }
                 }
             }
@@ -259,14 +264,14 @@ PanelWindow {
             Rectangle {
                 Layout.fillWidth: true
                 height: connectedInfo.implicitHeight + 16
-                radius: 10; color: mocha.surface0
+                radius: 10; color: Qt.rgba(mocha.surface0.r, mocha.surface0.g, mocha.surface0.b, 0.4)
                 visible: activeMode === "wifi" && wifiConnected_ && wifiPower === "on"
 
                 ColumnLayout {
                     id: connectedInfo
                     anchors.fill: parent; anchors.margins: 10
                     spacing: 4
-                    Text { text: "\u26A1 Connected: " + safeGet(wifiConnected, "ssid"); color: mocha.green; font.pixelSize: 12; font.bold: true }
+                    Text { text: "󰂄 Connected: " + safeGet(wifiConnected, "ssid"); color: mocha.green; font.family: "Iosevka Nerd Font"; font.pixelSize: 12; font.bold: true }
                     Text { text: "Signal: " + safeGet(wifiConnected, "signal") + "%"; color: mocha.subtext0; font.pixelSize: 11 }
                     Text { text: "IP: " + safeGet(wifiConnected, "ip", "N/A"); color: mocha.subtext0; font.pixelSize: 11 }
                     Text { text: "Freq: " + safeGet(wifiConnected, "freq", "N/A"); color: mocha.subtext0; font.pixelSize: 11; visible: safeGet(wifiConnected,"freq","") !== "" }
@@ -282,14 +287,14 @@ PanelWindow {
             Rectangle {
                 Layout.fillWidth: true
                 height: ethInfo.implicitHeight + 16
-                radius: 10; color: mocha.surface0
+                radius: 10; color: Qt.rgba(mocha.surface0.r, mocha.surface0.g, mocha.surface0.b, 0.4)
                 visible: activeMode === "eth" && ethConnected_ && ethPower === "on"
 
                 ColumnLayout {
                     id: ethInfo
                     anchors.fill: parent; anchors.margins: 10
                     spacing: 4
-                    Text { text: "\uD83D\uDDE1\uFE0F LAN: " + safeGet(ethConnected, "name"); color: mocha.green; font.pixelSize: 12; font.bold: true }
+                    Text { text: "󰈀 LAN: " + safeGet(ethConnected, "name"); color: mocha.green; font.family: "Iosevka Nerd Font"; font.pixelSize: 12; font.bold: true }
                     Text { text: "IP: " + safeGet(ethConnected, "ip", "N/A"); color: mocha.subtext0; font.pixelSize: 11 }
                     Text { text: "Speed: " + safeGet(ethConnected, "speed", "N/A"); color: mocha.subtext0; font.pixelSize: 11; visible: safeGet(ethConnected,"speed","") !== "" }
                     Text { text: "MAC: " + safeGet(ethConnected, "mac", "N/A"); color: mocha.subtext0; font.pixelSize: 11; visible: safeGet(ethConnected,"mac","") !== "" }
@@ -299,7 +304,7 @@ PanelWindow {
             // Available networks/devices list
             Rectangle {
                 Layout.fillWidth: true; Layout.fillHeight: true
-                radius: 10; color: mocha.surface0; clip: true
+                radius: 10; color: Qt.rgba(mocha.surface0.r, mocha.surface0.g, mocha.surface0.b, 0.4); clip: true
 
                 ListView {
                     anchors.fill: parent; anchors.margins: 6; spacing: 4
@@ -327,9 +332,9 @@ PanelWindow {
 
                                 Text {
                                     text: activeMode === "wifi"
-                                        ? (parseInt(safeGet(modelData,"signal","0")) >= 80 ? "\uD83D\uDDA4" : parseInt(safeGet(modelData,"signal","0")) >= 40 ? "\uD83D\uDFE2" : "\uD83D\uDFE1")
-                                        : "\uD83D\uDC1C"
-                                    font.pixelSize: 14
+                                        ? (parseInt(safeGet(modelData,"signal","0")) >= 80 ? "󰤫" : parseInt(safeGet(modelData,"signal","0")) >= 40 ? "󰤥" : "󰤢")
+                                        : "󰂯"
+                                    font.family: "Iosevka Nerd Font"; font.pixelSize: 14
                                 }
 
                                 ColumnLayout {

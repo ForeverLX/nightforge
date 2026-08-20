@@ -1,0 +1,11 @@
+# /home/ForeverLX/.config/systemd/user/cr1ms0n-feed-sync.timer
+[Unit]
+Description=Run Cr1ms0n Feed Sync daily at 06:00
+Requires=cr1ms0n-feed-sync.service
+
+[Install]
+WantedBy=timers.target
+
+[Timer]
+OnCalendar=*-*-* 05:00:00
+Persistent=true
