@@ -1,8 +1,25 @@
 # NightForge
 
-**Operator workstation for CR1MS0N-Operator** — Arch Linux + Niri/Quickshell desktop environment, rootless Podman container profiles, and the `harnessd` monitoring dashboard.
+**AI-Enhanced Red Team Workflow Platform.** NightForge is the **measurement and
+mobilization layer** of the [CR1MS0N continuous adversarial validation
+platform](https://github.com/CR1MS0N-Operator/veil).
 
-NightForge is the **measurement and mobilization layer** of the [CR1MS0N continuous adversarial validation platform](https://github.com/CR1MS0N-Operator/veil).
+NightForge is built for the **operator/orchestrator** — the human who directs
+AI-enhanced red team workflows — with secondary audiences in security research,
+security engineering, offensive security engineering, and Cyber Solutions
+Architecture. It is not an agent platform that removes the human; it is the
+workbench where *you* — the human — orchestrate an AI-enhanced red team
+pipeline, and where its results are measured and mobilized into decisions.
+
+The repository ships a **hybrid-monorepo product**: a **Rust-first** CLI, theme
+engine, and wallpaper daemon in a QML shell, alongside a **Go** harness
+control plane and validation engine. It also serves as a reference operator
+desktop for CR1MS0N's continuous adversarial validation harness (desktop
+environment, rootless Podman container profiles, and the `harnessd` dashboard).
+
+NightForge is **not** "red-team-operator catering". It is an operator-grade
+platform for running, validating, and measuring AI-enhanced adversarial
+validation work.
 
 ## Status
 
@@ -31,7 +48,7 @@ NightForge is where validation evidence becomes decisions: the 10-layer harness 
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/CR1MS0N-Operator/nightforge.git
+git clone https://github.com/ForeverLX/nightforge.git  <!-- verify with `git remote -v` for actual push target -->
 cd nightforge
 
 # 2. Review what will be installed
@@ -219,16 +236,20 @@ nightforge/
 
 ## Performance & Benchmarks
 
-Measured on the operator workstation (i3-10105F, GTX 1650):
+Baseline timings (measured on a reference workstation; values are indicative,
+not a hardware commitment):
 
 | Metric | Value |
 |--------|-------|
 | Boot (systemd-analyze) | ~21.3s total (man-db 6.9s top offender) |
-| Idle RAM | ~1.8 GB (Niri + Quickshell) |
+| Idle RAM | ~1.8 GB (compositor + shell) |
 | Terminal startup | ~87ms (operator framework) |
 | Container build (toolbox) | ~3m45s first, ~30s cached |
 
-Run `./scripts/benchmark/system-baseline.sh` for a full baseline (`docs/benchmarks/` is gitignored — generated reports).
+Run `./scripts/benchmark/system-baseline.sh` for a full baseline
+(`docs/benchmarks/` is gitignored — generated reports). Requirements are
+intentionally modest; there is no hard hardware floor beyond a Wayland-capable
+platform.
 
 ## Troubleshooting
 

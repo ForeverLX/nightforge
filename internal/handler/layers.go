@@ -19,7 +19,7 @@ var layers = []Layer{
 	{ID: "L1", Name: "Hardware/Infra", Status: "complete", Description: "Arch Linux, Niri, NightForge"},
 	{ID: "L2", Name: "Gateway/Cost", Status: "not-applicable", Description: "Flat-rate pricing, no tracking needed"},
 	{ID: "L3", Name: "Routing", Status: "complete", Description: "v5 routing matrix in AGENTS.md"},
-	{ID: "L4", Name: "Failure Mining", Status: "complete", Description: "549 entries classified"},
+	{ID: "L4", Name: "Failure Mining", Status: "complete", Description: "46 entries classified"},
 	{ID: "L5", Name: "Proposal Engine", Status: "complete"},
 	{ID: "L6", Name: "Validation Gate", Status: "complete", Description: "5 gate rules"},
 	{ID: "L7", Name: "Versioning & Rollback", Status: "complete"},

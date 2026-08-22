@@ -45,17 +45,17 @@ if 'tool_error' in categories and categories['tool_error']['count'] > 5:
         'failure_source': 'tool_error'
     })
 
-if 'api_error' in categories and categories['api_error']['count'] > 0:
+if 'model_error' in categories and categories['model_error']['count'] > 0:
     proposals.append({
         'id': 'P2',
         'title': 'API Provider Error Handling',
-        'description': f"API/provider errors account for {categories['api_error']['count']} failures. "
-                       'Consider provider fallback and automatic retry on rate limits.',
+        'description': f"Model API errors account for {categories['model_error']['count']} failures. "
+                       'Consider provider fallback, retry on transient model errors, and clearer model-error surfacing.',
         'category': 'reliability',
         'impact': 'high',
         'effort': 'medium',
         'status': 'pending',
-        'failure_source': 'api_error'
+        'failure_source': 'model_error'
     })
 
 if 'timeout' in categories and categories['timeout']['count'] > 0:
@@ -71,17 +71,17 @@ if 'timeout' in categories and categories['timeout']['count'] > 0:
         'failure_source': 'timeout'
     })
 
-if 'stop_reason_error' in categories and categories['stop_reason_error']['count'] > 3:
+if 'workflow_error' in categories and categories['workflow_error']['count'] > 3:
     proposals.append({
         'id': 'P4',
         'title': 'Session Recovery on Error',
-        'description': f"{categories['stop_reason_error']['count']} sessions terminated by error. "
+        'description': f"{categories['workflow_error']['count']} workflows terminated by error. "
                        'Implement session checkpoint and recovery mechanism.',
         'category': 'reliability',
         'impact': 'high',
         'effort': 'high',
         'status': 'pending',
-        'failure_source': 'stop_reason_error'
+        'failure_source': 'workflow_error'
     })
 
 if total_failures > 50:

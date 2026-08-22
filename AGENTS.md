@@ -2,9 +2,17 @@
 
 ## Purpose
 
-Operator workstation repository for CR1MS0N-Operator. Contains the desktop
-environment (Quickshell/Matugen dotfiles), rootless Podman container profiles,
-and the `harnessd` monitoring dashboard (Go, `127.0.0.1:9191`).
+NightForge is the **AI-enhanced red team workflow platform** — the
+**measurement and mobilization layer** of the CR1MS0N continuous adversarial
+validation platform. The human is the **operator/orchestrator** of AI-enhanced
+red team workflows; agents (below) are first-class participants in that
+pipeline, not replacements for the operator.
+
+This repository contains the hybrid-monorepo product (Rust-first CLI/theme/
+wallpaper daemon + Go `harnessd`/`labd` control planes + QML shell), the
+Omarchy 4.0 DE layer, rootless Podman container profiles, and the harness
+pipeline that turns validation findings into proposals, gates, and measured
+benefit.
 
 ## Agent Architecture (S210 stack — current)
 

@@ -130,3 +130,6 @@ data/
 # Removed broken Quickshell plugin concept (prevents accidental re-add)
 dotfiles/quickshell/.config/quickshell/plugins/
 
+harnessd.bak.new
+m3tid
+m3tid/

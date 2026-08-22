@@ -1,25 +1,50 @@
 # NightForge Architecture
 
+NightForge is the **measurement and mobilization layer** of the CR1MS0N
+continuous adversarial validation platform, delivered as a **hybrid-monorepo
+product**:
+
+- **`labd`** — Orb fabric / microVM control plane (validation lease backing).
+- **`harnessd`** — the single operator/control plane (identity, policy,
+  approval, audit). Humans **and** agents are first-class.
+- **Rust-first** CLI, theme engine, and wallpaper daemon (`awww`) in a
+  **QML shell** (Quickshell).
+- **Go** harness control plane + validation engine.
+- **Omarchy 4.0 DE layer** where Omarchy's active state is the palette
+  authority.
+
 Active subsystems:
 
-1. **Harness Dashboard** (`harnessd`) — Go monitoring daemon on `127.0.0.1:9191`
-2. **Observability Stack** — Docker Compose (OTel/Prometheus/Grafana/Langfuse)
-3. **CUE Config Migration** — CUE schemas + Go toolchain for Niri config (now also Hyprland)
-4. **Desktop Shell** — Niri or Hyprland compositor + Quickshell UI + Matugen theming
-5. **Podman Container Profiles** — rootless containers for engagement tooling
+1. **Harness Control Plane** (`harnessd`) — the single operator plane on
+   `127.0.0.1:9191`; identity/policy/approval/audit for human and agent work.
+2. **Orb fabric / microVM control plane** (`labd`) — validation lease backing;
+   VMM behind lease.
+3. **Observability Stack** — Docker Compose (OTel/Prometheus/Grafana/Langfuse).
+4. **CUE Config Migration** — CUE schemas + Go toolchain for compositor config.
+5. **Desktop Shell** — Omarchy 4.0 DE layer (Quickshell UI, Matugen/Omarchy-
+   themed) over Niri or Hyprland.
+6. **Podman Container Profiles** — rootless containers for engagement tooling.
 
-The Go module is `github.com/ForeverLX/nightforge` (`go 1.26.5`), with
+The Go module is `github.com/ForeverLX/nightforge` (`go 1.26.5`), with  <!-- verify with `git remote -v` for actual push target -->
 `go-chi/chi/v5` as the only external dependency (dashboard API router).
 
-## 1. Harness Dashboard (`harnessd`)
+> Install paths are generic throughout (editor/`$XDG*` config dirs,
+> `--install-location`-style flags). Nothing assumes a personal home directory
+> or a specific host; a third-party operator can reproduce the environment
+> on any Wayland-capable platform.
+
+## 1. Harness Control Plane (`harnessd`)
 
 ### Overview
 
-A single-binary monitoring dashboard: 5-minute health collection, layered
-pipeline state (proposals/gates/failures/snapshots/tokens/cost), and a
-single-file HTML frontend embedded via `//go:embed`. No DB, no npm, no
-external deps. Runs as a systemd user service
-(`~/.config/systemd/user/harnessd.service`, deployed outside the repo).
+`harnessd` is the **single operator/control plane** for the platform:
+identity, policy, approval, and audit — with **humans and agents as
+first-class** participants. It exposes a single-binary dashboard: 5-minute
+health collection, layered pipeline state
+(proposals/gates/failures/snapshots/tokens/cost), and a single-file HTML
+frontend embedded via `//go:embed`. No DB, no npm, no external deps. Runs as
+a systemd user service (installed under the user's `systemd` user unit dir,
+deployed outside the repo).
 
 ### Components
 
@@ -30,6 +55,21 @@ external deps. Runs as a systemd user service
 | Handlers | One per endpoint, JSON responses | `internal/handler/` |
 | Collector | 5-min health ticker, JSONL persistence | `internal/collector/health.go` |
 | Frontend | Single `index.html`, inline CSS/JS, Matugen-dark | `cmd/harnessd/frontend/` |
+
+## 1b. Orb Fabric / MicroVM Control Plane (`labd`)
+
+`labd` is the validation-engine control plane that backs **leases** with a
+**VMM** (virtual machine monitor). It is the "Orb fabric": it materializes
+isolated validation environments on demand and tears them down when a lease
+expires. The VMM roadmap is staged:
+
+1. **QEMU** — v1 baseline + permanent fallback (max compatibility).
+2. **Cloud Hypervisor** — after qualification (performance + security).
+3. **Firecracker** — optional, for high-density lightweight leases.
+
+`labd` is the runtime counterpart to `harnessd`'s decision plane: `harnessd`
+approves and audits a validation, `labd` materializes the isolated substrate
+it runs in.
 
 ### API
 
@@ -260,20 +300,23 @@ Wallpaper change (awww) → matugen-sync.sh → /tmp/matugen/colors.json
 Templates live in `dotfiles/matugen/.config/matugen/templates/` (Ghostty,
 GTK/Qt, Neovim, btop, Mako, Rofi, Starship, Quickshell, Waybar).
 
-### Omarchy Pivot (Companion Layer)
+### Omarchy 4.0 DE Layer
 
-NightForge pivots from a standalone distro to an Omarchy-compatible workstation
-layer. Key changes:
+NightForge runs as an **Omarchy 4.0 DE layer** on top of a compositor, rather
+than as a standalone distro. Omarchy's **active state is the palette
+authority** — the active Omarchy theme-set drives theming downstream (the
+`theme-set.d` hook replaces standalone Matugen as the color source of truth).
+Key changes:
 
-| Aspect | Niri approach | Omarchy approach |
-|--------|--------------|-----------------|
-| Compositor | Niri Wayland | Hyprland (with Quattro = Omarchy 4.0 alpha) |
+| Aspect | Niri approach | Omarchy 4.0 approach |
+|--------|--------------|---------------------|
+| Compositor | Niri Wayland | Hyprland (Quattro = Omarchy 4.0 alpha) |
 | Shell / Bar | Quickshell QML | Quickshell-based `omarchy-shell` replaces Waybar/Walker/Mako |
-| Theme sync | Matugen standalone | Theme-set hook (`~/.config/omarchy/hooks/theme-set.d/`) |
-| Desktop entry | `nightforge.desktop` | `omarchy` runtime, read-only at `~/.local/share/omarchy` |
+| Theme sync | Matugen standalone | Theme-set hook (`$XDG_CONFIG_HOME/omarchy/hooks/theme-set.d/`); active state = palette authority |
+| Desktop entry | `nightforge.desktop` | `omarchy` runtime, read-only at `$XDG_DATA_HOME/omarchy` |
 | IPC / Script | `/tmp/qs_widget_state` | Shell plugin API around `omarchy-shell` |
-| User config | `~/.config/*` (Nightforge-owned) | `~/.config/omarchy/` (Omarchy-owned) |
-| State dirs | `~/.local/share/nightforge` | `~/.local/share/omarchy` |
+| User config | `$XDG_CONFIG_HOME/*` (NightForge-owned) | `$XDG_CONFIG_HOME/omarchy/` (Omarchy-owned) |
+| State dirs | `$XDG_DATA_HOME/nightforge` | `$XDG_DATA_HOME/omarchy` |
 
 ### Dependencies
 

@@ -131,6 +131,17 @@ services:
     environment: *langfuse-env
 
   clickhouse:
+    # Docker-level memory limit: 16GB total, 32GB swap (system has 40GB RAM, 4GB swap)
+    # This accounts for AI workload (LLM context, gradients, etc.) running on the same host.
+    # ClickHouse uses ~60-70% of its memory limit for internal memory pools.
+    # 16GB * 0.7 = ~11GB effective, which is safe for a single-node single-cluster deployment.
+    deploy:
+      resources:
+        limits:
+          memory: 16G
+          cpus: '1.0'
+        reservations:
+          memory: 4G
     image: docker.io/clickhouse/clickhouse-server:25.12
     restart: always
     user: "101:101"

@@ -15,7 +15,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/CR1MS0N-Operator/nightforge.git
+git clone https://github.com/ForeverLX/nightforge.git  <!-- verify with `git remote -v` for actual push target -->
 cd nightforge
 
 # Review manifests
