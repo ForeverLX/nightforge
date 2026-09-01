@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ForeverLX/nightforge/internal/collector"
+	"github.com/CR1MS0N-Operator/nightforge/internal/collector"
 )
 
 // Hub manages SSE client connections and broadcasts collector snapshots.

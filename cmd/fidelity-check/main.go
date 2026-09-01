@@ -33,7 +33,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ForeverLX/nightforge/internal/nfutil"
+	"github.com/CR1MS0N-Operator/nightforge/internal/nfutil"
 )
 
 var (

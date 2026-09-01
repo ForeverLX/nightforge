@@ -77,7 +77,7 @@ Item {
 
     Process {
         id: perfPoll
-        command: ["cat", "/home/ForeverLX/.config/nightforge/performance-mode"]
+        command: ["sh", "-c", "cat $HOME/.config/nightforge/performance-mode"]
         running: true
         stdout: StdioCollector {
             onStreamFinished: {

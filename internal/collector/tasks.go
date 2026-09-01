@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/ForeverLX/nightforge/internal/collector/model"
+	"github.com/CR1MS0N-Operator/nightforge/internal/collector/model"
 )
 
 // taskLogs maps task display names to their log files.

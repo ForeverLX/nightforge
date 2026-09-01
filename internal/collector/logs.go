@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ForeverLX/nightforge/internal/collector/model"
+	"github.com/CR1MS0N-Operator/nightforge/internal/collector/model"
 )
 
 // logsDir is the directory containing automation log files.

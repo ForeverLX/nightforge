@@ -6,7 +6,7 @@ set -euo pipefail
 
 SNAPSHOT_NAME="${1:-}"
 REASON="${2:-manual rollback}"
-LOG_FILE="$HOME/Github/nightforge/data/snapshots/snapshot-log.json"
+LOG_FILE="${NIGHTFORGE_DATA_DIR:-$HOME/nightforge/data}/snapshots/snapshot-log.json"
 NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 if [ -z "$SNAPSHOT_NAME" ]; then

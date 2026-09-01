@@ -56,7 +56,7 @@ config: #Config & {
 		// POWER / LOCK
 		{combo: "Mod+Alt+L", action: {kind: "spawn", argv: ["sh", "-c", "~/.config/quickshell/scripts/lock-screen.sh"]}},
 		{combo: "Mod+Alt+Q", action: {kind: "builtin", name: "quit"}},
-		{combo: "Mod+Shift+E", action: {kind: "spawn", argv: ["bash", "/home/ForeverLX/Github/nightforge/scripts/engagement-edit.sh"]}},
+		{combo: "Mod+Shift+E", action: {kind: "spawn", argv: ["bash", "$HOME/Github/nightforge/scripts/engagement-edit.sh"]}},
 		// WINDOW MANAGEMENT
 		{combo: "Mod+Q", action: {kind: "builtin", name: "close-window"}},
 		{combo: "Mod+Space", repeat: false, hotkeyOverlayTitle: "Toggle overview", action: {kind: "builtin", name: "toggle-overview"}},
@@ -121,7 +121,7 @@ config: #Config & {
 		{combo: "Mod+Shift+O", action: {kind: "spawn", argv: ["obsidian", "obsidian://search"]}},
 		{combo: "Mod+O", action: {kind: "spawn", argv: ["obsidian", "obsidian://open?vault=azrael-vault"]}},
 		// SYSTEM
-		{combo: "Mod+Shift+P", action: {kind: "spawn", argv: ["bash", "/home/ForeverLX/Github/nightforge/scripts/toggle-performance-mode.sh"]}},
+		{combo: "Mod+Shift+P", action: {kind: "spawn", argv: ["bash", "$HOME/Github/nightforge/scripts/toggle-performance-mode.sh"]}},
 		// WALLPAPER ROTATION
 		{combo: "Mod+Alt+R", action: {kind: "spawn", argv: ["bash", "-c", "~/.local/bin/wallpaper-rotate.sh --notify && ~/.local/bin/matugen-sync.sh $(cat ~/.cache/current_wallpaper)"]}},
 		// OPERATOR SHORTCUTS

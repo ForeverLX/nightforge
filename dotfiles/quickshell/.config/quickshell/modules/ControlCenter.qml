@@ -250,7 +250,7 @@ PanelWindow {
         stdout: StdioCollector { onStreamFinished: { controlCenter.wifiOn = text.trim() === "on" } } }
     Process { id: btPoll; command: ["sh","-c","rfkill unblock bluetooth 2>/dev/null; bluetoothctl show 2>/dev/null | grep -q 'Powered: yes' && echo on || echo off"]; running: false
         stdout: StdioCollector { onStreamFinished: { controlCenter.btOn = text.trim() === "on" } } }
-    Process { id: dndPoll; command: ["cat", "/home/ForeverLX/.config/nightforge/dnd"]; running: false
+    Process { id: dndPoll; command: ["sh", "-c", "cat $HOME/.config/nightforge/dnd"]; running: false
         stdout: StdioCollector { onStreamFinished: { controlCenter.dndOn = text.trim() === "1" } } }
     Process { id: mprisStatusPoll; command: ["sh","-c","playerctl -s status 2>/dev/null || echo 'No player'"]; running: false
         stdout: StdioCollector { onStreamFinished: {
@@ -287,12 +287,12 @@ PanelWindow {
     }
     function toggleDnd() {
         var proc = Qt.createQmlObject('import Quickshell.Io; Process {}', controlCenter)
-        proc.command = ["sh", "-c", dndOn ? "echo 0 > /home/ForeverLX/.config/nightforge/dnd" : "echo 1 > /home/ForeverLX/.config/nightforge/dnd"]
+        proc.command = ["sh", "-c", dndOn ? "echo 0 > $HOME/.config/nightforge/dnd" : "echo 1 > $HOME/.config/nightforge/dnd"]
         proc.running = true; dndOn = !dndOn
     }
     function togglePerformance() {
         var proc = Qt.createQmlObject('import Quickshell.Io; Process {}', controlCenter)
-        proc.command = ["bash", "/home/ForeverLX/Github/nightforge/scripts/toggle-performance-mode.sh"]
+        proc.command = ["sh", "-c", "bash $HOME/Github/nightforge/scripts/toggle-performance-mode.sh"]
         proc.running = true
     }
     function mprisPlayPause() {

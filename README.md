@@ -1,9 +1,15 @@
 # NightForge
 
-**Reproducible Arch Linux red team operator workstation** — Niri compositor,
-Quickshell shell and bar, Matugen theming, rootless Podman toolchains, and
-the `harnessd` validation dashboard. NightForge is the **measurement and
-mobilization layer** of the
+**The Kali Linux of the Agentic AI age.**
+
+A reproducible [Omarchy](https://omarchy.org/)-based operator workstation designed
+for the intersection of offensive security and AI agent orchestration. Where Kali
+Linux defined the penetration testing era, NightForge defines the agentic era —
+a purpose-built environment where red team operators work alongside AI agents.
+
+Features: Niri compositor, Quickshell shell and bar, Matugen theming, rootless
+Podman toolchains, and the `harnessd` validation dashboard. NightForge is the
+**measurement and mobilization layer** of the
 [CR1MS0N continuous adversarial validation platform](https://github.com/CR1MS0N-Operator/veil).
 
 Built and operated by [CR1MS0N-Operator](https://github.com/CR1MS0N-Operator).
@@ -11,7 +17,7 @@ Built and operated by [CR1MS0N-Operator](https://github.com/CR1MS0N-Operator).
 [![CI](https://img.shields.io/github/actions/workflow/status/CR1MS0N-Operator/nightforge/ci.yml?label=CI&logo=github)](https://github.com/CR1MS0N-Operator/nightforge/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Go](https://img.shields.io/badge/Go-1.26-00ADD8?logo=go)](https://go.dev)
-[![OS: Arch Linux](https://img.shields.io/badge/OS-Arch_Linux-1793D1?logo=archlinux)](https://archlinux.org)
+[![OS: Omarchy](https://img.shields.io/badge/OS-Omarchy-1793D1?logo=archlinux)](https://omarchy.org)
 [![WM: Niri](https://img.shields.io/badge/WM-Niri-1a1a2e)](https://github.com/YaLTeR/niri)
 
 ## Status
@@ -103,7 +109,7 @@ Three collaborating layers (full design in
 
 | Layer | What it is | Tech |
 |-------|-----------|------|
-| **Desktop** | Compositor, shell/bar, theming, terminal framework | Niri, Quickshell (QML), Matugen, Ghostty |
+| **Desktop** | Compositor, shell/bar, theming, terminal framework | Niri, Quickshell (QML), Matugen, Ghostty, Omarchy |
 | **Harness** | 10-layer validation pipeline + dashboard + data store | Go (`harnessd`), bash (`scripts/harness/`), JSONL (`data/`) |
 | **Substrate** | Trace + metrics + benefit measurement (L2/L9) | Docker Compose (OTel, Prometheus, Grafana, Langfuse) |
 
@@ -170,7 +176,7 @@ single-file HTML frontend. No database, no build step. Depends only on
 
 | Layer | Name | Status |
 |-------|------|--------|
-| L1 | Hardware/Infra (Arch, Niri, NightForge) | complete |
+| L1 | Hardware/Infra (Omarchy, Niri, NightForge) | complete |
 | L2 | Gateway/Cost (flat-rate, no tracking needed) | not-applicable |
 | L3 | Routing (v5 routing matrix) | complete |
 | L4 | Failure Mining | complete |
@@ -221,7 +227,7 @@ build into `build/bin/` on demand. See [docs/CUE-MIGRATION.md](docs/CUE-MIGRATIO
 
 ## Desktop Stack
 
-Wayland desktop built around Niri with a Quickshell overlay + top bar.
+Wayland desktop built around Niri on Omarchy with a Quickshell overlay + top bar.
 `dotfiles/niri/.config/niri/config.kdl` autostart (the "replace DMS" block):
 `awww-daemon` (wallpaper), Quickshell overlay (`shell.qml`) + top bar
 (`TopBar.qml`), `matugen-sync.sh` (theming), `podman-restart.service`,
@@ -384,4 +390,4 @@ excluded from this repository.
 
 MIT — see [LICENSE](LICENSE).
 
-**Author:** Darrius Grate | CR1MS0N-Operator
+**Author:** CR1MS0N-Operator

@@ -5,8 +5,8 @@ set -euo pipefail
 # Run: scripts/harness/proposal-engine.sh
 # Output: data/proposals/proposals.json
 
-FAILURES="$HOME/Github/nightforge/data/failures/failures.json"
-OUT_DIR="$HOME/Github/nightforge/data/proposals"
+FAILURES="${NIGHTFORGE_DATA_DIR:-$HOME/nightforge/data}/failures/failures.json"
+OUT_DIR="${NIGHTFORGE_DATA_DIR:-$HOME/nightforge/data}/proposals"
 NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 mkdir -p "$OUT_DIR"

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/ForeverLX/nightforge/internal/collector"
+	"github.com/CR1MS0N-Operator/nightforge/internal/collector"
 )
 
 // HandleHealth returns the latest health snapshot, 24h history, and daily summary.

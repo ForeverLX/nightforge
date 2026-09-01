@@ -46,11 +46,11 @@ mitre view
 ### Engagement Workflow
 ```bash
 # Initialize engagement
-new-engagement acme-corp 192.168.1.0/24
+new-engagement acme-corp 192.168.X.0/24
 
 # Terminal detects automatically:
 [⚡] ENGAGEMENT: acme-corp (active)
-[→] Target: 192.168.1.0/24
+[→] Target: 192.168.X.0/24
 ```
 
 ## Configuration
