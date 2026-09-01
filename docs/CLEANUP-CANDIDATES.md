@@ -21,7 +21,7 @@ the recommended action. Update this file when a candidate is resolved.
 | # | Issue | Evidence | Recommended action |
 |---|-------|----------|--------------------|
 | 8 | `internal/handler/routes.go` serves a legacy "Hermes BRAIN" role | Live table at `GET /api/v1/routes`; current guidance (AGENTS.md) deprecates Hermes, Pi is brain | Reconcile the static table (code change — separate pass, not docs) |
-| 9 | `go.mod` module path `github.com/ForeverLX/nightforge` vs remote `CR1MS0N-Operator/nightforge` | `go.mod` module line; `git remote -v` origin URL | Rename in a dedicated pass (breaks imports); update ARCHITECTURE.md after |
+| 9 | `go.mod` module path `github.com/CR1MS0N-Operator/nightforge` vs remote `CR1MS0N-Operator/nightforge` | `go.mod` module line; `git remote -v` origin URL | Rename in a dedicated pass (breaks imports); update ARCHITECTURE.md after |
 | 10 | Root `modules/Bar.qml` + `services/` vs `dotfiles/quickshell/` drift | Files differ; root is canonical per `main.qml` imports | Consolidate in a QML pass; keep one source |
 | 11 | No `LICENSE` file | README claims MIT; no LICENSE in tree | Add a LICENSE file (operator decision on license text) |
 | 12 | GitNexus index missing for nightforge | `gitnexus list_repos` registry contains only `euphrates` | Run `npx gitnexus analyze` + register repo; AGENTS.md section already documents this |

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ForeverLX/nightforge/internal/collector/model"
+	"github.com/CR1MS0N-Operator/nightforge/internal/collector/model"
 )
 
 // costLogsDir is the directory where cost/usage JSON logs live.

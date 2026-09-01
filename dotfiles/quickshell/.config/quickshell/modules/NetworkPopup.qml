@@ -15,7 +15,7 @@ PanelWindow {
 
     MatugenColors { id: mocha }
 
-    readonly property string scriptsDir: "/home/ForeverLX/Github/nightforge/scripts/qs-network"
+    readonly property string scriptsDir: "$HOME/Github/nightforge/scripts/qs-network"
 
     // === STATE ===
     property bool ethPresent: false

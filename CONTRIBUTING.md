@@ -49,7 +49,7 @@ The daemon runs as a systemd user service on the workstation
 - Update `README.md` / `ARCHITECTURE.md` whenever structure changes; docs
   must match actual code and config
 - The universal template at
-  `/home/ForeverLX/Documents/ai-lab-vault/50-Exports/templates/repo-docs-template.md`
+  `$HOME/Documents/ai-lab-vault/50-Exports/templates/repo-docs-template.md`
   is guidance only — keep docs project-specific and concise, no boilerplate
 
 ## Commits

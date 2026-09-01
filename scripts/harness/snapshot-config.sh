@@ -2,7 +2,7 @@
 set -euo pipefail
 
 LABEL="${1:-baseline}"
-SNAPSHOT_DIR="${HOME}/Github/nightforge/data/snapshots"
+SNAPSHOT_DIR="${NIGHTFORGE_DATA_DIR:-$HOME/nightforge/data}/snapshots"
 NOW=$(date -u +%Y%m%dT%H%M%SZ)
 TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 SNAPSHOT_NAME="${NOW}-${LABEL}"
@@ -25,11 +25,11 @@ snapshot_file() {
 }
 
 snapshot_file "${HOME}/.config/niri/config.kdl" "niri/config.kdl"
-snapshot_file "${HOME}/Github/nightforge/AGENTS.md" "AGENTS.md"
-snapshot_file "${HOME}/Github/nightforge/go.mod" "go.mod"
-snapshot_file "${HOME}/Github/nightforge/data/tokens/current.json" "data/tokens.json"
-snapshot_file "${HOME}/Github/nightforge/data/cost/pi-costs.json" "data/pi-costs.json"
-snapshot_file "${HOME}/Github/nightforge/data/failures/failures.json" "data/failures.json"
+snapshot_file "${NIGHTFORGE_DATA_DIR:-$HOME/nightforge}/AGENTS.md" "AGENTS.md"
+snapshot_file "${NIGHTFORGE_DATA_DIR:-$HOME/nightforge}/go.mod" "go.mod"
+snapshot_file "${NIGHTFORGE_DATA_DIR:-$HOME/nightforge/data}/tokens/current.json" "data/tokens.json"
+snapshot_file "${NIGHTFORGE_DATA_DIR:-$HOME/nightforge/data}/cost/pi-costs.json" "data/pi-costs.json"
+snapshot_file "${NIGHTFORGE_DATA_DIR:-$HOME/nightforge/data}/failures/failures.json" "data/failures.json"
 
 python3 /dev/stdin "${TS}" "${LABEL}" "${SNAPSHOT_NAME}" "${SNAPSHOT_DIR}" << 'PYEOF'
 import json, sys, os

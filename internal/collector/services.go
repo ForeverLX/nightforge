@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ForeverLX/nightforge/internal/collector/model"
+	"github.com/CR1MS0N-Operator/nightforge/internal/collector/model"
 )
 
 // knownServices is the list of services to monitor.

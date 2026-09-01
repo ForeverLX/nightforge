@@ -94,7 +94,7 @@ Scope {
 
     Process {
         id: engagementPoll
-        command: ["cat", "/home/ForeverLX/.config/nightforge/engagement-context"]
+        command: ["sh", "-c", "cat $HOME/.config/nightforge/engagement-context"]
         running: true
         stdout: StdioCollector {
             onStreamFinished: {
@@ -123,7 +123,7 @@ Scope {
 
     Process {
         id: perfPoll
-        command: ["cat", "/home/ForeverLX/.config/nightforge/performance-mode"]
+        command: ["sh", "-c", "cat $HOME/.config/nightforge/performance-mode"]
         running: true
         stdout: StdioCollector {
             onStreamFinished: {
@@ -142,13 +142,13 @@ Scope {
 
     function togglePerformanceMode() {
         var proc = Qt.createQmlObject('import Quickshell.Io; Process { running: true }', barRoot)
-        proc.command = ["bash", "/home/ForeverLX/Github/nightforge/scripts/toggle-performance-mode.sh"]
+        proc.command = ["sh", "-c", "bash $HOME/Github/nightforge/scripts/toggle-performance-mode.sh"]
         proc.running = true
     }
 
     function editEngagement() {
         var proc = Qt.createQmlObject('import Quickshell.Io; Process { running: true }', barRoot)
-        proc.command = ["bash", "/home/ForeverLX/Github/nightforge/scripts/engagement-edit.sh"]
+        proc.command = ["sh", "-c", "bash $HOME/Github/nightforge/scripts/engagement-edit.sh"]
         proc.running = true
     }
 

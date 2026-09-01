@@ -21,7 +21,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/ForeverLX/nightforge/internal/nfutil"
+	"github.com/CR1MS0N-Operator/nightforge/internal/nfutil"
 )
 
 var errFmt = errors.New("cue fmt --check failed")

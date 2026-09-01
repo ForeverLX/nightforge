@@ -13,8 +13,8 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 # Defaults
-RESOLVERS="/home/ForeverLX/Tools/wordlists/SecLists/Miscellaneous/dns-resolvers.txt"
-WORDLIST="/home/ForeverLX/Tools/wordlists/SecLists/Discovery/DNS/subdomains-top1million-20000.txt"
+RESOLVERS="$HOME/Tools/wordlists/SecLists/Miscellaneous/dns-resolvers.txt"
+WORDLIST="$HOME/Tools/wordlists/SecLists/Discovery/DNS/subdomains-top1million-20000.txt"
 
 MODE="balanced"
 OUTPUT_DIR=""

@@ -5,9 +5,9 @@ set -euo pipefail
 # Run: scripts/harness/gate-check.sh
 # Output: data/gates/gates.json
 
-PROPOSALS="$HOME/Github/nightforge/data/proposals/proposals.json"
-FAILURES="$HOME/Github/nightforge/data/failures/failures.json"
-OUT_DIR="$HOME/Github/nightforge/data/gates"
+PROPOSALS="${NIGHTFORGE_DATA_DIR:-$HOME/nightforge/data}/proposals/proposals.json"
+FAILURES="${NIGHTFORGE_DATA_DIR:-$HOME/nightforge/data}/failures/failures.json"
+OUT_DIR="${NIGHTFORGE_DATA_DIR:-$HOME/nightforge/data}/gates"
 NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 mkdir -p "$OUT_DIR"
