@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SESSION_DIR="$HOME/.omp/agent/sessions"
-OUT_DIR="$HOME/Github/nightforge/data/cost"
+OUT_DIR="${NIGHTFORGE_DATA_DIR:-$HOME/nightforge/data}/cost"
 OUT_SESSIONS="$OUT_DIR/pi-costs.json"
 OUT_DAILY="$OUT_DIR/pi-costs-daily.json"
 NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")

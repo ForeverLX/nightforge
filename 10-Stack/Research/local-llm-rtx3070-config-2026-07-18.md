@@ -61,7 +61,7 @@ Three findings dominate everything else:
 File: `~/.config/systemd/user/llama-server.service`
 
 ```
---model /home/ForeverLX/Tools/ai/local-models/ornith-1.0-35b-Q4_K_M.gguf
+--model $HOME/Tools/ai/local-models/ornith-1.0-35b-Q4_K_M.gguf
 --host 127.0.0.1 --port 8081
 --ctx-size 65536
 --n-gpu-layers 10
@@ -88,8 +88,8 @@ File: `~/.config/systemd/user/llama-server.service`
 
 ```
 [Service]
-ExecStart=/home/ForeverLX/.local/bin/llama-server \
-  --model /home/ForeverLX/Tools/ai/local-models/ornith-1.0-35b-Q4_K_M.gguf \
+ExecStart=$HOME/.local/bin/llama-server \
+  --model $HOME/Tools/ai/local-models/ornith-1.0-35b-Q4_K_M.gguf \
   --host 127.0.0.1 --port 8081 \
   --ctx-size 16384 \
   --n-gpu-layers 99 \
@@ -129,7 +129,7 @@ Per Medium benchmark on RTX 3070 Ti (slightly faster than our 3070 due to GDDR6X
 ### Tuning procedure after applying
 
 1. Restart service: `systemctl --user daemon-reload && systemctl --user restart llama-server`
-2. Re-measure: `time curl -s -X POST http://127.0.0.1:8081/v1/chat/completions -H 'Content-Type: application/json' -d '{"model":"/home/ForeverLX/Tools/ai/local-models/ornith-1.0-35b-Q4_K_M.gguf","messages":[{"role":"user","content":"Write a fibonacci function in Python"}],"max_tokens":200,"temperature":0.6}'`
+2. Re-measure: `time curl -s -X POST http://127.0.0.1:8081/v1/chat/completions -H 'Content-Type: application/json' -d '{"model":"$HOME/Tools/ai/local-models/ornith-1.0-35b-Q4_K_M.gguf","messages":[{"role":"user","content":"Write a fibonacci function in Python"}],"max_tokens":200,"temperature":0.6}'`
 3. If tok/s is below 25, sweep `-ncmoe` from 19 to 30 in steps of 2, monitor with `nvidia-smi`, pick the value that gives highest tok/s while keeping VRAM < 7.5 GB
 4. If above 35, leave at 25 (don't push further — diminishing returns and stability risk)
 
@@ -236,7 +236,7 @@ curl -s http://127.0.0.1:8081/v1/models | head -3
 # 3. Generation speed
 time curl -s -X POST http://127.0.0.1:8081/v1/chat/completions \
   -H "Content-Type: application/json" \
-  -d '{"model":"/home/ForeverLX/Tools/ai/local-models/ornith-1.0-35b-Q4_K_M.gguf","messages":[{"role":"user","content":"Write a Python function to compute fibonacci"}],"max_tokens":200,"temperature":0.6}' | python -c "import json,sys; r=json.load(sys.stdin); print('Generated:', r['usage']['completion_tokens'], 'tokens'); print('Eval rate:', r['usage']['completion_tokens']/0.0, '(see timings')"
+  -d '{"model":"$HOME/Tools/ai/local-models/ornith-1.0-35b-Q4_K_M.gguf","messages":[{"role":"user","content":"Write a Python function to compute fibonacci"}],"max_tokens":200,"temperature":0.6}' | python -c "import json,sys; r=json.load(sys.stdin); print('Generated:', r['usage']['completion_tokens'], 'tokens'); print('Eval rate:', r['usage']['completion_tokens']/0.0, '(see timings')"
 # Expect 200 tokens in ~5-7 seconds (30-40 t/s)
 
 # 4. VRAM usage

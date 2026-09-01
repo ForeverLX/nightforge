@@ -24,12 +24,12 @@
 | Dir Hash | Remote URL | Repo |
 |----------|-----------|------|
 | `ff6dd5de6292` | `git@github.com:CR1MS0N-Operator/ai-lab-vault.git` | ai-lab-vault |
-| `f56459fbf053` | `<internal-gitea>/foreverlx/veil.git` | veil |
-| `ee55a8df2469` | `<internal-gitea>/foreverlx/euphrates.git` | euphrates |
-| `de26ea35d9e1` | `git@github.com:ForeverLX/azrael-security.git` | azrael-security |
-| `9edab0b7273b` | `git@github.com:ForeverLX/security-research.git` | security-research |
+| `f56459fbf053` | `<internal-gitea>/cr1ms0n-operator/veil.git` | veil |
+| `ee55a8df2469` | `<internal-gitea>/cr1ms0n-operator/euphrates.git` | euphrates |
+| `de26ea35d9e1` | `git@github.com:CR1MS0N-Operator/azrael-security.git` | azrael-security |
+| `9edab0b7273b` | `git@github.com:CR1MS0N-Operator/security-research.git` | security-research |
 | `5a6aaf5fd7cf` | `git@github.com:CR1MS0N-Operator/ACLGuard-Active-Directory-Permission-Auditor.git` | ACLGuard |
-| `2d0cb17c1721` | `<internal-gitea>/foreverlx/azrael-ops-dashboard.git` | azrael-ops-dashboard |
+| `2d0cb17c1721` | `<internal-gitea>/cr1ms0n-operator/azrael-ops-dashboard.git` | azrael-ops-dashboard |
 | `6ec5f2f9d76e` | `git@github.com:CR1MS0N-Operator/c4.git` | c4 (has actual branches pushed) |
 | `1615b9d23356` | `git@github.com:CR1MS0N-Operator/nightforge.git` | nightforge |
 
@@ -79,7 +79,7 @@ git commit → push → [no-mistakes gate]
 The current agent is wired as:
 ```yaml
 agent: acp:omp
-acpx_path: /home/ForeverLX/.npm-global/bin/acpx
+acpx_path: /home/CR1MS0N-Operator/.npm-global/bin/acpx
 acp_registry_overrides:
   omp: omp --model local-llama/Ornith-1.0-35B acp
 ```

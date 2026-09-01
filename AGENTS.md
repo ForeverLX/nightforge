@@ -2,9 +2,9 @@
 
 ## Purpose
 
-Operator workstation repository for CR1MS0N-Operator. Contains the desktop
-environment (Niri/Quickshell/Matugen dotfiles), rootless Podman container
-profiles, and the `harnessd` monitoring dashboard (Go, `127.0.0.1:9191`).
+Operator workstation repository for CR1MS0N-Operator. Omarchy-based (opinionated
+Arch Linux) desktop environment (Niri/Quickshell/Matugen dotfiles), rootless
+Podman container profiles, and the `harnessd` monitoring dashboard (Go, `127.0.0.1:9191`).
 
 ## Agent Architecture (current)
 

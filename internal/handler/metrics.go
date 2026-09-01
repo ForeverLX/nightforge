@@ -11,7 +11,7 @@ import (
 	"strings"
 	"sync/atomic"
 
-	"github.com/ForeverLX/nightforge/internal/collector"
+	"github.com/CR1MS0N-Operator/nightforge/internal/collector"
 )
 
 // requestsTotal counts every HTTP request served; exposed as

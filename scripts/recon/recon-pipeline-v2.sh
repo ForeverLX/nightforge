@@ -73,7 +73,7 @@ EXAMPLES:
 SCOPE FILE FORMAT:
     target.com
     *.target.com
-    192.168.1.0/24
+    192.168.X.0/24
     !exclude.target.com  # Lines starting with ! are excluded
 
 PHASES:

@@ -19,7 +19,7 @@ Complete configuration documentation for the CR1MS0N-Operator NightForge worksta
 **Config:** `~/.config/sway/config` (186 lines)
 
 **Workspaces:**
-- 1: ForeverLX (main)
+- 1: CR1MS0N-Operator (main)
 - 2: Terminal
 - 3: Browser
 - 4: Obsidian (notes)
@@ -149,8 +149,8 @@ Complete configuration documentation for the CR1MS0N-Operator NightForge worksta
 
 ### Git
 
-**User:** ForeverLX  
-**Email:** Darrius.G@proton.me  
+**User:** CR1MS0N-Operator  
+**Email:** [redacted]  
 **Editor:** nvim (via $EDITOR)
 
 **Config:** `~/.gitconfig`
