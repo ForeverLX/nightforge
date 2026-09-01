@@ -4,7 +4,7 @@
 
 A reproducible [Omarchy](https://omarchy.org/)-based operator workstation designed
 for the intersection of offensive security and AI agent orchestration. Where Kali
-Linux defined the penetration testing era, NightForge defines the agentic era —
+Linux defined the penetration testing era, NightForge defines the agentic era
 a purpose-built environment where red team operators work alongside AI agents.
 
 Features: Niri compositor, Quickshell shell and bar, Matugen theming, rootless
@@ -34,7 +34,7 @@ Built and operated by [CR1MS0N-Operator](https://github.com/CR1MS0N-Operator).
 
 NightForge is where validation evidence becomes decisions: the 10-layer
 harness turns findings from the rest of the platform into proposals, gates,
-and measured benefit — closing the loop instead of stopping at a report.
+and measured benefit, closing the loop instead of stopping at a report.
 
 | Framework | NightForge's Role |
 |-----------|-------------------|
