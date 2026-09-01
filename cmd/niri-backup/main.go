@@ -36,7 +36,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ForeverLX/nightforge/internal/nfutil"
+	"github.com/CR1MS0N-Operator/nightforge/internal/nfutil"
 )
 
 const usage = `backup-niri-config — checksummed backup of the tracked Niri config,

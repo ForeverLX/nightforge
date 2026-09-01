@@ -7,7 +7,7 @@ Active subsystems:
 3. **CUE Config Migration** — CUE schemas + Go toolchain for Niri config
 4. **Desktop Shell** — Niri compositor + Quickshell UI + Matugen theming
 
-The Go module is `github.com/ForeverLX/nightforge` (`go 1.26.5`), with
+The Go module is `github.com/CR1MS0N-Operator/nightforge` (`go 1.26.5`), with
 `go-chi/chi/v5` as the only external dependency (dashboard API router).
 
 ---

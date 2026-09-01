@@ -14,8 +14,8 @@ PanelWindow {
 
     MatugenColors { id: mocha }
 
-    readonly property string wallpaperDir: "/home/ForeverLX/Pictures/wallpapers"
-    readonly property string cacheDir:     "/home/ForeverLX/.cache/qs-wallpapers"
+    readonly property string wallpaperDir: "$HOME/Pictures/wallpapers"
+    readonly property string cacheDir:     "$HOME/.cache/qs-wallpapers"
     property var    wallpapers: []
     property var    _buf: []
     property string currentWall: ""
@@ -64,7 +64,7 @@ PanelWindow {
 
     Process {
         id: queryCurrent
-        command: ["cat", "/home/ForeverLX/.cache/current_wallpaper"]
+        command: ["sh", "-c", "cat $HOME/.cache/current_wallpaper"]
         running: false
         stdout: StdioCollector { onStreamFinished: { menu.currentWall = text.trim() } }
     }
@@ -72,10 +72,10 @@ PanelWindow {
     function setWallpaper(path) {
         menu.currentWall = path
         var awwwProc = Qt.createQmlObject('import Quickshell.Io; Process {}', menu)
-        awwwProc.command = ["sh", "-c", "awww img '" + path + "' --transition-type wipe --transition-duration 1 && echo '" + path + "' > /home/ForeverLX/.cache/current_wallpaper"]
+        awwwProc.command = ["sh", "-c", "awww img '" + path + "' --transition-type wipe --transition-duration 1 && echo '" + path + "' > $HOME/.cache/current_wallpaper"]
         awwwProc.running = true
         var matugenProc = Qt.createQmlObject('import Quickshell.Io; Process {}', menu)
-        matugenProc.command = ["bash", "/home/ForeverLX/.local/bin/matugen-sync.sh", path]
+        matugenProc.command = ["sh", "-c", "bash $HOME/.local/bin/matugen-sync.sh '" + path + "'"]
         matugenProc.running = true
         menu.visible = false
     }

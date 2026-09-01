@@ -10,7 +10,7 @@ set -euo pipefail
 # cr1ms0n profile was read, silently dropping omp/local (Bonsai-27B, Qwen3.5)
 # sessions from the dashboard.
 
-OUT="$HOME/Github/nightforge/data/tokens/current.json"
+OUT="${NIGHTFORGE_DATA_DIR:-$HOME/nightforge/data}/tokens/current.json"
 NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 DAYS=30
 TMPDIR=$(mktemp -d)

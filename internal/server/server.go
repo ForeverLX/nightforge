@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/ForeverLX/nightforge/internal/handler"
+	"github.com/CR1MS0N-Operator/nightforge/internal/handler"
 )
 
 // New creates an http.Handler with all routes registered.

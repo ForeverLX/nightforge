@@ -30,7 +30,7 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/ForeverLX/nightforge/internal/nfutil"
+	"github.com/CR1MS0N-Operator/nightforge/internal/nfutil"
 )
 
 // runTool executes a sibling CUE tool, building it on demand into

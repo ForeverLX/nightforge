@@ -15,7 +15,7 @@ Item {
 
     MatugenColors { id: mocha }
 
-    readonly property string scriptsDir: "/home/ForeverLX/Github/nightforge/scripts/qs-network"
+    readonly property string scriptsDir: "$HOME/Github/nightforge/scripts/qs-network"
 
     property bool ethPresent: false
     property bool wifiPresent: false

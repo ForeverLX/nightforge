@@ -56,7 +56,7 @@ binds {
     // ========== POWER / LOCK ==========
     Mod+Alt+L { spawn "sh" "-c" "~/.config/quickshell/scripts/lock-screen.sh"; }
     Mod+Alt+Q { quit; }
-    Mod+Shift+E { spawn "bash" "/home/ForeverLX/Github/nightforge/scripts/engagement-edit.sh"; }
+    Mod+Shift+E { spawn "bash" "$HOME/Github/nightforge/scripts/engagement-edit.sh"; }
 
     // ========== WINDOW MANAGEMENT ==========
     Mod+Q { close-window; }
@@ -133,7 +133,7 @@ binds {
     Mod+O { spawn "obsidian" "obsidian://open?vault=azrael-vault"; }
 
     // ========== SYSTEM ==========
-    Mod+Shift+P { spawn "bash" "/home/ForeverLX/Github/nightforge/scripts/toggle-performance-mode.sh"; }
+    Mod+Shift+P { spawn "bash" "$HOME/Github/nightforge/scripts/toggle-performance-mode.sh"; }
 
     // ========== WALLPAPER ROTATION ==========
     Mod+Alt+R { spawn "bash" "-c" "~/.local/bin/wallpaper-rotate.sh --notify && ~/.local/bin/matugen-sync.sh $(cat ~/.cache/current_wallpaper)"; }

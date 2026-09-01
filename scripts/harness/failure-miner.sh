@@ -5,8 +5,8 @@ set -euo pipefail
 # Run: scripts/harness/failure-miner.sh
 # Output: data/failures/failures.json
 
-OUT_DIR="$HOME/Github/nightforge/data/failures"
-PI_DATA="$HOME/Github/nightforge/data/cost/pi-costs.json"
+OUT_DIR="${NIGHTFORGE_DATA_DIR:-$HOME/nightforge/data}/failures"
+PI_DATA="${NIGHTFORGE_DATA_DIR:-$HOME/nightforge/data}/cost/pi-costs.json"
 NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 mkdir -p "$OUT_DIR"

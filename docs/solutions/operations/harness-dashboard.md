@@ -40,7 +40,7 @@ Solution: `docs/solutions/operations/harness-dashboard.md`
 
 ### Task 2: Go backend (harnessd)
 
-- Module: `github.com/ForeverLX/nightforge`
+- Module: `github.com/CR1MS0N-Operator/nightforge`
 - Files created:
   - `cmd/harnessd/main.go` — entry point, embed frontend, start collector
   - `internal/server/server.go` — router with CORS, logging middleware

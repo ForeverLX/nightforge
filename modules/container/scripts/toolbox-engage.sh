@@ -8,7 +8,7 @@ Usage:
 
 Defaults:
   --runtime podman
-  --image   ghcr.io/foreverlx/offsec-toolbox:dev   (EXAMPLE - you will build/pin later)
+  --image   ghcr.io/cr1ms0n-operator/offsec-toolbox:dev   (EXAMPLE - you will build/pin later)
 
 Mounts (explicit):
   ~/engage/<name>      -> /work/engage
@@ -23,7 +23,7 @@ USAGE
 NAME="$1"; shift
 
 RUNTIME="podman"
-IMAGE="ghcr.io/foreverlx/offsec-toolbox:dev"  # EXAMPLE - verify/pin later
+IMAGE="ghcr.io/cr1ms0n-operator/offsec-toolbox:dev"  # EXAMPLE - verify/pin later
 
 while [[ $# -gt 0 ]]; do
   case "$1" in

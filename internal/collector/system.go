@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/ForeverLX/nightforge/internal/collector/model"
+	"github.com/CR1MS0N-Operator/nightforge/internal/collector/model"
 )
 
 // healthLogPath is the path to the system health log file.
