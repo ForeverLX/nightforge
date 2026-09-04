@@ -8,6 +8,7 @@ let sse = null;
 // ---- Init ----
 document.addEventListener("DOMContentLoaded", () => {
   setupNav();
+  setupKeyboardNav();
   fetchAll();
   connectSSE();
   setupLogs();
@@ -35,6 +36,59 @@ function switchSection(name) {
   document.querySelectorAll("#navList .nav-link").forEach(l => l.classList.remove("active"));
   const link = document.querySelector(`[data-section="${name}"]`);
   if (link) link.classList.add("active");
+}
+
+// ---- Keyboard Navigation ----
+function setupKeyboardNav() {
+  const sections = ["overview", "tasks", "ports", "analysis", "logs", "layers", "api-usage"];
+  let currentIndex = 0;
+
+  document.addEventListener("keydown", (e) => {
+    // Don't trigger if user is typing in an input
+    if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT") {
+      return;
+    }
+
+    switch (e.key) {
+      case "1": case "2": case "3": case "4": case "5": case "6": case "7":
+        // Alt+1-7 to jump to sections
+        if (e.altKey) {
+          e.preventDefault();
+          const idx = parseInt(e.key) - 1;
+          if (idx < sections.length) {
+            currentIndex = idx;
+            switchSection(sections[currentIndex]);
+          }
+        }
+        break;
+      case "j": // Next section
+      case "ArrowDown":
+        if (e.ctrlKey) {
+          e.preventDefault();
+          currentIndex = (currentIndex + 1) % sections.length;
+          switchSection(sections[currentIndex]);
+        }
+        break;
+      case "k": // Previous section
+      case "ArrowUp":
+        if (e.ctrlKey) {
+          e.preventDefault();
+          currentIndex = (currentIndex - 1 + sections.length) % sections.length;
+          switchSection(sections[currentIndex]);
+        }
+        break;
+      case "r": // Refresh
+        if (e.ctrlKey) {
+          e.preventDefault();
+          fetchAll();
+        }
+        break;
+      case "Escape": // Close any open modal or return to overview
+        switchSection("overview");
+        currentIndex = 0;
+        break;
+    }
+  });
 }
 
 // ---- Data Fetching ----

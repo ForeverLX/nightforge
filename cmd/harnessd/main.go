@@ -1,27 +1,20 @@
 package main
 
 import (
-	"embed"
 	"log"
 	"net/http"
 
-	"github.com/CR1MS0N-Operator/nightforge/internal/collector"
-	"github.com/CR1MS0N-Operator/nightforge/internal/server"
+	"github.com/CR1MS0N-Operator/nightforge/internal/api"
+	"github.com/CR1MS0N-Operator/nightforge/internal/config"
 )
 
-//go:embed frontend/index.html
-var frontend embed.FS
-
 func main() {
-	// Start health collector
-	collector.Init("data")
+	cfg := config.Load()
 
-	// Build handler
-	handler := server.New(frontend)
+	log.Printf("TETHER harness control plane starting on %s", cfg.ListenAddr)
+	router := api.NewRouter()
 
-	addr := "127.0.0.1:9191"
-	log.Printf("harnessd listening on %s", addr)
-	if err := http.ListenAndServe(addr, handler); err != nil {
+	if err := http.ListenAndServe(cfg.ListenAddr, router); err != nil {
 		log.Fatalf("server error: %v", err)
 	}
 }

@@ -2,17 +2,17 @@
 
 Active subsystems:
 
-1. **Harness Dashboard** (`harnessd`) — Go monitoring daemon on `127.0.0.1:9191`
+1. **TETHER Harness Control Plan** — Go monitoring daemon on `127.0.0.1:9191`
 2. **Observability Stack** — Docker Compose (OTel/Prometheus/Grafana/Langfuse)
-3. **CUE Config Migration** — CUE schemas + Go toolchain for Niri config
-4. **Desktop Shell** — Niri compositor + Quickshell UI + Matugen theming
+3. **CUE Config Migration** — CUE schemas + Go toolchain for Hyprland config
+4. **Desktop Shell** — Hyprland compositor + Omarchy shell + Omarchy theming
 
 The Go module is `github.com/CR1MS0N-Operator/nightforge` (`go 1.26.5`), with
 `go-chi/chi/v5` as the only external dependency (dashboard API router).
 
 ---
 
-## 1. Harness Dashboard (`harnessd`)
+## 1. TETHER Harness Control Plan
 
 ### Overview
 
@@ -30,7 +30,7 @@ external deps. Runs as a systemd user service
 | Router | API routes + static files + CORS/logging middleware | `internal/server/server.go` |
 | Handlers | One per endpoint, JSON responses | `internal/handler/` |
 | Collector | 5-min health ticker, JSONL persistence | `internal/collector/health.go` |
-| Frontend | Single `index.html`, inline CSS/JS, Matugen-dark | `cmd/harnessd/frontend/` |
+| Frontend | Single `index.html`, inline CSS/JS, Omarchy-dark | `cmd/harnessd/frontend/` |
 
 ### API
 
@@ -81,13 +81,13 @@ Ports and startup procedure: `10-layer-stack/README.md` and
 
 ### CUE Config Migration
 
-Niri config is migrating from hand-maintained KDL to CUE schemas
+Hyprland config is migrating from hand-maintained Lua to CUE schemas
 (`cue/nightforge.cue`, `cue/schema.cue`) with a Go toolchain:
 
 ```
-cue/nightforge.cue ──▶ cmd/cue-to-kdl ──▶ dotfiles/niri/.config/niri/config.kdl
+cue/nightforge.cue ──▶ cmd/cue-to-kdl ──▶ ~/.config/hypr/hyprland.lua
        ▲
-cmd/cue-validate / cmd/fidelity-check / cmd/niri-staging-validate
+cmd/cue-validate / cmd/fidelity-check / cmd/hypr-staging-validate
 ```
 
 `scripts/*.sh` launchers build the tools into `build/bin/` on demand. See
@@ -102,20 +102,40 @@ reference. Note: per current agent guidance in [AGENTS.md](AGENTS.md), Hermes
 is deprecated and Pi is the planning role — the served table is a
 reconciliation candidate, not something this doc changes.
 
-### 10-Layer Harness
+### TETHER Architecture (Two-Stack)
+
+TETHER defines two separate 10-layer stacks — a self-improving backend loop
+and an operator-facing frontend. Phase 1 (L1+F1) is complete.
+
+**Backend (self-improving loop):**
 
 | Layer | Name | Status |
 |-------|------|--------|
-| L1 | Hardware/Infra | complete |
-| L2 | Gateway/Cost | not-applicable (flat-rate) |
-| L3 | Routing | complete |
-| L4 | Failure Mining | complete |
-| L5 | Proposal Engine | complete |
-| L6 | Validation Gate | complete (5 rules) |
-| L7 | Versioning & Rollback | complete |
-| L8 | Routing Matrix | complete |
-| L9 | Benefit Measurement | not-designed |
-| L10 | Weight Update | not-designed |
+| L1 | Stable Substrate | **implemented** |
+| L2 | Trace Log | design |
+| L3 | External State | design |
+| L4 | Failure Mining | design |
+| L5 | Proposal Engine | design |
+| L6 | Validation Gates | design |
+| L7 | Versioning/Rollback | design |
+| L8 | Routing & Variants | design |
+| L9 | Benefit Measurement | design |
+| L10 | Weight Update | design |
+
+**Frontend (operator experience):**
+
+| Layer | Name | Status |
+|-------|------|--------|
+| F1 | Stable Interface | **implemented** |
+| F2 | Agent Visibility | design |
+| F3 | Context Awareness | design |
+| F4 | Behavioral Detection | design |
+| F5 | Intervention Controls | design |
+| F6 | Policy Enforcement | design |
+| F7 | State Management | design |
+| F8 | Task Routing | design |
+| F9 | Performance Measurement | design |
+| F10 | Learning Integration | design |
 
 ---
 
@@ -124,19 +144,17 @@ reconciliation candidate, not something this doc changes.
 ```mermaid
 graph TB
     subgraph "Compositor Layer"
-        NIRI["Niri Wayland Compositor"]
-        AWWW["awww (wallpaper daemon)"]
-        MPD["MPD (music daemon)"]
+        HYPRLAND["Hyprland Wayland Compositor"]
     end
 
-    subgraph "Quickshell UI Layer"
+    subgraph "Omarchy Shell Layer"
         SHELL["shell.qml<br/>Entry Point (overlay)"]
         BAR["TopBar.qml<br/>Per-Screen Bar"]
         OVERLAY["Overlay PanelWindow<br/>StackView Widget System"]
         OSD["OSD.qml<br/>On-Screen Display"]
 
         subgraph "Services"
-            MATUGEN["MatugenColors.qml<br/>Dynamic Palette"]
+            OMARCHYCOLORS["OmarchyColors.qml<br/>Dynamic Palette"]
             MPDCLIENT["MpdClient.qml<br/>MPD State + Art"]
             VPN["VpnStatus.qml"]
             PODMAN["PodmanStatus.qml<br/>Container List"]
@@ -164,24 +182,20 @@ graph TB
     subgraph "IPC / Script Layer"
         QSM["qs_manager.sh<br/>Widget Toggle Router"]
         IPC["/tmp/qs_widget_state<br/>State File"]
-        D_WORK["workspaces.sh<br/>Niri WS JSON"]
+        D_WORK["workspaces.sh<br/>Hyprland WS JSON"]
         D_MUSIC["music_info.sh<br/>Playerctl + Art Colors"]
     end
 
     subgraph "Theming Pipeline"
-        MATUGEN_BIN["matugen-sync.sh<br/>Image → colors.json"]
-        COLORS_JSON["/tmp/matugen/colors.json"]
+        OMARCHY_THEME["omarchy theme set<br/>Image → palette"]
         QT6CT["qt6ct / kvantum<br/>Qt App Theming"]
     end
 
-    NIRI -->|"spawn-at-startup"| SHELL
-    NIRI -->|"spawn-at-startup"| BAR
-    AWWW -->|"wallpaper change"| MATUGEN_BIN
-    MATUGEN_BIN --> COLORS_JSON
-    COLORS_JSON --> MATUGEN
-    MATUGEN --> W_CC
-    MATUGEN --> BAR
-    MATUGEN --> W_MUSIC
+    HYPRLAND -->|"spawn-at-startup"| SHELL
+    HYPRLAND -->|"spawn-at-startup"| BAR
+    OMARCHYCOLORS --> W_CC
+    OMARCHYCOLORS --> BAR
+    OMARCHYCOLORS --> W_MUSIC
 
     MPD --> MPDCLIENT
     MPDCLIENT --> BAR
@@ -199,20 +213,16 @@ graph TB
     OVERLAY --> W_MON
 
     BAR -->|"dispatch()"| QSM
-    KEYBINDS["includes/keybinds.kdl"] -->|"Mod+Shift+S"| QSM
+    KEYBINDS["bindings.lua"] -->|"Mod+Shift+S"| QSM
 ```
 
 ### Stack
 
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
-| Compositor | Niri (Wayland) | Window management, tiling, keybinds |
-| Shell / Bar | Quickshell (`shell.qml` + `TopBar.qml`) | Widget overlay + per-screen bar |
-| Theming | Matugen | Dynamic color extraction from wallpaper |
-
-`dotfiles/niri/.config/niri/config.kdl` autostart (the "replace DMS" block):
-`awww-daemon`, `quickshell` overlay, `quickshell -p TopBar.qml`, matugen-sync,
-`podman-restart.service`, `wallpaper-rotate.timer`, `mpd.service`.
+| Compositor | Hyprland (Wayland) | Window management, tiling, keybinds |
+| Shell / Bar | Omarchy shell (Quickshell) | Widget overlay + per-screen bar |
+| Theming | Omarchy theming | Dynamic color extraction from wallpaper |
 
 ### QML Source Layout
 
@@ -228,7 +238,7 @@ graph TB
 
 | Service | Data | Updates |
 |---------|------|---------|
-| `MatugenColors.qml` | Palette from `/tmp/matugen/colors.json` | File watcher |
+| `OmarchyColors.qml` | Palette from Omarchy theme | File watcher |
 | `MpdClient.qml` | Track, artist, album, art URL, elapsed/total, play state | `mpc` polling + `idle` event |
 | `VpnStatus.qml` | WireGuard `wg show` connected state | 5s poll |
 | `PodmanStatus.qml` | Running container count + names/status | 5s poll |
@@ -240,29 +250,29 @@ File-based router: `qs_manager.sh` writes commands to `/tmp/qs_widget_state`;
 `shell.qml` polls the file (with `inotifywait` fallback) and pushes widgets
 onto the overlay `StackView` (morph transitions).
 
-### Niri Config
+### Hyprland Config
 
 ```
-dotfiles/niri/.config/niri/
-├── config.kdl               # Entry point + autostart
-└── includes/
-    ├── compositor.kdl       # Animation, blur, opacity, gaps
-    ├── input.kdl            # Keyboard, mouse, touch
-    ├── keybinds.kdl         # Navigation, workspace, window ops
-    ├── window-rules.kdl     # Floating windows, transparency rules
-    ├── colors.kdl           # Auto-generated border colors
-    └── local.kdl            # Machine-specific overrides (gitignored template)
+~/.config/hypr/
+├── hyprland.lua       # Main config (loads Omarchy defaults, then user files)
+├── bindings.lua       # Keybindings
+├── monitors.lua       # Display configuration
+├── input.lua          # Keyboard/mouse settings
+├── looknfeel.lua      # Appearance (gaps, borders, animations)
+├── autostart.lua      # Startup applications
+├── hyprsunset.conf    # Night light / blue light filter
+└── xdph.conf          # Screen sharing / desktop portal
 ```
 
 ### Theming Pipeline
 
 ```
-Wallpaper change (awww) → matugen-sync.sh → /tmp/matugen/colors.json
-    → MatugenColors.qml (file watcher) → all QML components re-render
+Wallpaper change → omarchy theme set → Omarchy palette
+    → OmarchyColors.qml (file watcher) → all QML components re-render
 ```
 
-Templates live in `dotfiles/matugen/.config/matugen/templates/` (Ghostty,
-GTK/Qt, Neovim, btop, Mako, Rofi, Starship, Quickshell, Waybar).
+Templates live in `dotfiles/omarchy/.config/omarchy/themed/` (Ghostty,
+GTK/Qt, Neovim, btop, Mako, Rofi, Starship, Quickshell).
 
 ---
 
@@ -270,9 +280,9 @@ GTK/Qt, Neovim, btop, Mako, Rofi, Starship, Quickshell, Waybar).
 
 | Category | Packages |
 |----------|----------|
-| Compositor | `niri`, `awww` |
+| Compositor | `hyprland`, `omarchy` |
 | Shell | `quickshell` (Qt6, QML) |
-| Theming | `matugen`, `imagemagick`, `qt6ct` |
+| Theming | `omarchy`, `qt6ct` |
 | Media | `mpd`, `mpc`, `playerctl` |
 | Network | `networkmanager`, `wireguard-tools`, `bluetoothctl` |
 | Audio | `pipewire`, `wireplumber`, `pamixer` |
@@ -280,7 +290,7 @@ GTK/Qt, Neovim, btop, Mako, Rofi, Starship, Quickshell, Waybar).
 | Utils | `jq`, `inotify-tools`, `socat` |
 | Dashboard | Go 1.26+ (`go-chi/chi/v5` + stdlib) |
 | Observability | Docker + Docker Compose (`10-layer-stack/observability-stack/`) |
-| Config migration | CUE (`cue` CLI), Go toolchain under `cmd/` |
+| Config migration | CUE (`cue` CLI), Go tooling under `cmd/` |
 
 ---
 
@@ -290,8 +300,8 @@ GTK/Qt, Neovim, btop, Mako, Rofi, Starship, Quickshell, Waybar).
    `dotfiles/quickshell/` copies have drifted (e.g. `modules/Bar.qml` differs
    from the dotfiles copy). Root is canonical per `main.qml` imports;
    reconciliation is a maintenance task, not a docs change.
-2. **Workspace polling**: Niri lacks Hyprland's event socket; 500ms polling
-   via `workspaces.sh`.
+2. **Workspace polling**: Hyprland event socket available; workspace state
+   via `hyprctl` or event subscriptions.
 3. **Routing table drift**: `internal/handler/routes.go` still lists a
    "Hermes BRAIN" role; current guidance marks Hermes deprecated (see
    [AGENTS.md](AGENTS.md)).
@@ -299,4 +309,4 @@ GTK/Qt, Neovim, btop, Mako, Rofi, Starship, Quickshell, Waybar).
 ## Design Decisions
 
 See [docs/DECISIONS.md](docs/DECISIONS.md) for the full rationale
-(Niri over Sway, Quickshell over eww/AGS, Matugen, Ghostty, Podman).
+(Hyprland over Niri, Omarchy shell over eww/AGS, Omarchy theming, Ghostty, Podman).

@@ -7,8 +7,8 @@ for the intersection of offensive security and AI agent orchestration. Where Kal
 Linux defined the penetration testing era, NightForge defines the agentic era —
 a purpose-built environment where red team operators work alongside AI agents.
 
-Features: Niri compositor, Quickshell shell and bar, Matugen theming, rootless
-Podman toolchains, and the `harnessd` validation dashboard. NightForge is the
+Features: Hyprland compositor, Omarchy shell and bar, Omarchy theming, rootless
+Podman toolchains, and the TETHER harness control plan. NightForge is the
 **measurement and mobilization layer** of the
 [CR1MS0N continuous adversarial validation platform](https://github.com/CR1MS0N-Operator/veil).
 
@@ -18,7 +18,7 @@ Built and operated by [CR1MS0N-Operator](https://github.com/CR1MS0N-Operator).
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Go](https://img.shields.io/badge/Go-1.26-00ADD8?logo=go)](https://go.dev)
 [![OS: Omarchy](https://img.shields.io/badge/OS-Omarchy-1793D1?logo=archlinux)](https://omarchy.org)
-[![WM: Niri](https://img.shields.io/badge/WM-Niri-1a1a2e)](https://github.com/YaLTeR/niri)
+[![WM: Hyprland](https://img.shields.io/badge/WM-Hyprland-5e81ac)](https://hyprland.org)
 
 ## Status
 
@@ -28,7 +28,7 @@ Built and operated by [CR1MS0N-Operator](https://github.com/CR1MS0N-Operator).
 | Active | Yes |
 | CI | GitHub Actions (`.github/workflows/ci.yml`) |
 | Tests | Go build + `go vet`, `bash -n` (CI) |
-| Last Updated | 2026-08-11 |
+| Last Updated | 2026-09-02 |
 
 ## Continuous Adversarial Validation
 
@@ -38,7 +38,7 @@ and measured benefit — closing the loop instead of stopping at a report.
 
 | Framework | NightForge's Role |
 |-----------|-------------------|
-| **CTEM** (Continuous Threat Exposure Management) | **Mobilize** — the 10-layer harness pipeline turns findings into proposals (L5) and validation gates (L6), driving remediation and risk acceptance. **Validate** — `harnessd` surfaces live posture and validation state. |
+| **CTEM** (Continuous Threat Exposure Management) | **Mobilize** — the 10-layer harness pipeline turns findings into proposals (L5) and validation gates (L6), driving remediation and risk acceptance. **Validate** — TETHER surfaces live posture and validation state. |
 | **FAIR** (Factor Analysis of Information Risk) | L9 benefit measurement (designed) quantifies risk reduction in dollars — the FAIR return-on-security-investment loop for the whole platform. |
 | **AEV** (Adversarial Exposure Validation) | The harness is the evaluation + optimization loop for agentic validation: failure mining (L4) → proposals (L5) → gates (L6) → routing and weight updates (L8–L10). |
 | **GRC Engineering** | JSONL evidence data dirs (sessions, gates, failures, tokens) are the audit-ready compliance substrate. |
@@ -49,22 +49,23 @@ Sibling projects: [Veil](https://github.com/CR1MS0N-Operator/veil) (validation s
 
 ## Features
 
-- **Reproducible desktop** — version-controlled Niri / Quickshell / Matugen
-  dotfiles and manifests; a fresh install reproduces the same environment
-- **Material-You theming** — one wallpaper → Matugen HCT palette → Ghostty,
+- **Reproducible desktop** — version-controlled Hyprland / Omarchy shell /
+  Omarchy theming dotfiles and manifests; a fresh install reproduces the
+  same environment
+- **Omarchy theming** — one wallpaper → Omarchy HCT palette → Ghostty,
   GTK/Qt, Neovim, btop, Mako, Rofi, Starship, Quickshell
 - **Rootless Podman toolchains** — `toolbox` / `ad` / `re` / `web` profiles,
   explicit mounts only, export/import for air-gapped engagements
 - **Operator terminal framework** — VPN/engagement/network/git/system
   context with MITRE ATT&CK technique logging (`mitre log`)
-- **`harnessd` dashboard** — single-binary Go daemon on `127.0.0.1:9191`:
-  health, 10-layer state, sessions, routing, cost
+- **TETHER harness control plan** — two-stack architecture (10-layer
+  self-improving loop + 10-layer operator experience), design phase
 - **10-layer validation harness** — failure mining → proposals → gates →
   versioning → routing, orchestrated by `scripts/harness/`
 - **Observability substrate** — OTel / Prometheus / Grafana / Langfuse stack
   for traces and future L9 benefit measurement
-- **CUE-validated config** — Niri configuration authored in CUE, validated
-  and exported by Go tooling (`cmd/cue-*`)
+- **CUE-validated config** — Hyprland configuration authored in CUE,
+  validated and exported by Go tooling (`cmd/cue-*`)
 
 ---
 
@@ -89,7 +90,7 @@ less docs/INSTALL.md
 # 5. Build container profiles (optional)
 ./modules/container/scripts/container.sh build-all
 
-# 6. Build and run the harness dashboard
+# 6. Build and run the TETHER harness control plan
 go build ./cmd/harnessd/
 ./harnessd    # serves http://127.0.0.1:9191
 
@@ -109,17 +110,17 @@ Three collaborating layers (full design in
 
 | Layer | What it is | Tech |
 |-------|-----------|------|
-| **Desktop** | Compositor, shell/bar, theming, terminal framework | Niri, Quickshell (QML), Matugen, Ghostty, Omarchy |
-| **Harness** | 10-layer validation pipeline + dashboard + data store | Go (`harnessd`), bash (`scripts/harness/`), JSONL (`data/`) |
+| **Desktop** | Compositor, shell/bar, theming, terminal framework | Hyprland, Omarchy shell (Quickshell), Omarchy theming, Ghostty, Omarchy |
+| **Harness** | 10-layer validation pipeline + dashboard + data store | Go (TETHER), bash (`scripts/harness/`), JSONL (`data/`) |
 | **Substrate** | Trace + metrics + benefit measurement (L2/L9) | Docker Compose (OTel, Prometheus, Grafana, Langfuse) |
 
 The harness pipeline: L4 failure mining → L5 proposals → L6 gates → L7
 versioning → L8 routing — each stage written to `data/` and surfaced by
-`harnessd` at `127.0.0.1:9191`.
+TETHER at `127.0.0.1:9191`.
 
 ---
 
-## Harness Dashboard (`harnessd`)
+## TETHER Harness Control Plan
 
 The active monitoring system: a Go backend on `127.0.0.1:9191` serving a
 single-file HTML frontend. No database, no build step. Depends only on
@@ -133,7 +134,7 @@ single-file HTML frontend. No database, no build step. Depends only on
 - **Handlers:** `internal/handler/` — one file per endpoint
 - **Collector:** `internal/collector/health.go` — 5-minute health snapshot
   ticker, JSONL persistence
-- **Frontend:** `cmd/harnessd/frontend/index.html` — inline CSS/JS, Matugen
+- **Frontend:** `cmd/harnessd/frontend/index.html` — inline CSS/JS, Omarchy
   dark theme, 6 tabs, 30s auto-refresh on the health tab
 
 ### API
@@ -172,23 +173,43 @@ single-file HTML frontend. No database, no build step. Depends only on
 | `token-tracker.sh` | Token usage → `data/tokens/current.json` (30min cron) |
 | `pi-session-parser.sh` | Cost data from OMP/Pi session JSONL |
 
-### 10-Layer Harness
+### TETHER Architecture (Two-Stack)
+
+TETHER defines two separate 10-layer stacks — a self-improving backend loop
+and an operator-facing frontend. Phase 1 (L1+F1) is complete.
+
+**Backend (self-improving loop):**
 
 | Layer | Name | Status |
 |-------|------|--------|
-| L1 | Hardware/Infra (Omarchy, Niri, NightForge) | complete |
-| L2 | Gateway/Cost (flat-rate, no tracking needed) | not-applicable |
-| L3 | Routing (v5 routing matrix) | complete |
-| L4 | Failure Mining | complete |
-| L5 | Proposal Engine | complete |
-| L6 | Validation Gate | complete |
-| L7 | Versioning & Rollback | complete |
-| L8 | Routing Matrix | complete |
-| L9 | Benefit Measurement | in-design (observability substrate live) |
-| L10 | Weight Update | not-designed |
+| L1 | Stable Substrate | **implemented** |
+| L2 | Trace Log | design |
+| L3 | External State | design |
+| L4 | Failure Mining | design |
+| L5 | Proposal Engine | design |
+| L6 | Validation Gates | design |
+| L7 | Versioning/Rollback | design |
+| L8 | Routing & Variants | design |
+| L9 | Benefit Measurement | design |
+| L10 | Weight Update | design |
 
-Run with `systemctl --user status harnessd` on the workstation. See
-[ARCHITECTURE.md](ARCHITECTURE.md) for the full design and
+**Frontend (operator experience):**
+
+| Layer | Name | Status |
+|-------|------|--------|
+| F1 | Stable Interface | **implemented** |
+| F2 | Agent Visibility | design |
+| F3 | Context Awareness | design |
+| F4 | Behavioral Detection | design |
+| F5 | Intervention Controls | design |
+| F6 | Policy Enforcement | design |
+| F7 | State Management | design |
+| F8 | Task Routing | design |
+| F9 | Performance Measurement | design |
+| F10 | Learning Integration | design |
+
+Run with `systemctl --user status harnessd` on the workstation (TETHER daemon).
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the full design and
 [scripts/harness/](scripts/harness/) for the pipeline implementation.
 
 ---
@@ -213,10 +234,10 @@ NightForge configs are being migrated to [CUE](https://cuelang.org/) schemas
 
 | Tool | Purpose |
 |------|---------|
-| `cmd/cue-to-kdl` | Export validated CUE config → Niri `config.kdl` |
+| `cmd/cue-to-kdl` | Export validated CUE config → Hyprland `hyprland.lua` |
 | `cmd/cue-validate` | Validate CUE schemas + config |
 | `cmd/fidelity-check` | Compare exported config against live state |
-| `cmd/niri-backup` | Snapshot current Niri config before changes |
+| `cmd/niri-backup` | Snapshot current Hyprland config before changes |
 | `cmd/niri-staging-validate` | Validate staged config against CUE before apply |
 
 Scripts in `scripts/` (`cue-to-kdl.sh`, `cue-validate.sh`, `fidelity-check.sh`,
@@ -227,29 +248,27 @@ build into `build/bin/` on demand. See [docs/CUE-MIGRATION.md](docs/CUE-MIGRATIO
 
 ## Desktop Stack
 
-Wayland desktop built around Niri on Omarchy with a Quickshell overlay + top bar.
-`dotfiles/niri/.config/niri/config.kdl` autostart (the "replace DMS" block):
-`awww-daemon` (wallpaper), Quickshell overlay (`shell.qml`) + top bar
-(`TopBar.qml`), `matugen-sync.sh` (theming), `podman-restart.service`,
-`wallpaper-rotate.timer`, `mpd.service`.
+Wayland desktop built around Hyprland on Omarchy with Omarchy shell (Quickshell-based
+bar + overlay). `~/.config/hypr/hyprland.lua` autostart: Omarchy shell, Podman
+restart service, wallpaper rotation timer, MPD service.
 
 | Component | Role |
 |-----------|------|
-| **Niri** | Scrolling-tiling Wayland compositor (per-monitor workspaces) |
-| **Quickshell** | QML shell: overlay widgets (StackView) + per-screen bar |
-| **Matugen** | Material You color extraction, template-based re-theming |
+| **Hyprland** | Wayland compositor (Omarchy default) |
+| **Omarchy shell** | QML shell: overlay widgets (StackView) + per-screen bar |
+| **Omarchy theming** | Material You color extraction, template-based re-theming |
 | **Ghostty** | GPU terminal, SIGUSR1 config reload for theme switching |
 | **Zsh + Starship** | Prompt + operator terminal framework (<100ms startup) |
 | **Podman** | Rootless container profiles (toolbox, ad, re, web) |
 
 ### Design Decisions (condensed)
 
-- **Niri over Sway** — scrolling layout keeps window geometry stable during
-  multi-window work; built-in overview; per-monitor workspaces.
-- **Quickshell over eww/AGS** — GPU-accelerated QML, watcher-based scripts
-  (no polling loops), live Matugen color sync.
-- **Matugen** — HCT tonal palette extraction, one wallpaper → configs for
-  Ghostty/GTK/Qt/Neovim/btop/Mako/Rofi/Starship/Quickshell.
+- **Hyprland over Niri** — Omarchy's default compositor, mature ecosystem,
+  Lua config, auto-reload on save.
+- **Omarchy shell over eww/AGS** — GPU-accelerated QML, watcher-based scripts
+  (no polling loops), live Omarchy color sync.
+- **Omarchy theming** — HCT tonal palette extraction, one wallpaper → configs
+  for Ghostty/GTK/Qt/Neovim/btop/Mako/Rofi/Starship/Quickshell.
 - **Rootless Podman over Docker** — no daemon, `--userns=keep-id`, local
   images only, export/import for air-gapped work.
 - **Ghostty over Kitty/Alacritty/WezTerm** — multi-config dark/light maps to
@@ -308,22 +327,22 @@ nightforge/
 │   ├── harness/             # Pipeline scripts (failure-miner, proposal-engine, gate-check, …)
 │   ├── maintenance/         # Weekly/monthly/quarterly upkeep
 │   ├── audit/ benchmark/ engagement/ helpers/ recon/ security/ setup/
-│   ├── qs-watcher/ niri-outputs/   # Small Go helpers
+│   ├── qs-watcher/ hyprland-outputs/   # Small Go helpers
 │   ├── security/            # Tool-agnostic safety hooks (block destructive/credential ops)
 │   ├── cue-to-kdl.sh, cue-validate.sh, fidelity-check.sh, …
-│   └── apply-dotfiles.sh, deploy.sh, matugen-sync.sh, …
-├── dotfiles/                # Stow-style per-app configs (niri, quickshell, ghostty, matugen, …)
-├── modules/                 # Quickshell QML sources (Bar.qml, widgets) + niri/ shell/ container/ nightowl/
-├── services/                # Quickshell QML services (MatugenColors, MpdClient, VpnStatus, PodmanStatus)
+│   └── apply-dotfiles.sh, deploy.sh, omarchy-sync.sh, …
+├── dotfiles/                # Stow-style per-app configs (hyprland, quickshell, ghostty, omarchy, …)
+├── modules/                 # Quickshell QML sources (Bar.qml, widgets) + hyprland/ shell/ container/ nightowl/
+├── services/                # Quickshell QML services (OmarchyColors, MpdClient, VpnStatus, PodmanStatus)
 ├── manifests/               # Package lists (host, aur, container, ad/re/web tooling)
 ├── profiles/                # install.sh profiles (local-only, solo-operator, team-operator)
 ├── 10-layer-stack/          # L2/L9 substrate: observability-stack (OTel/Prometheus/Grafana/Langfuse)
 ├── 10-Stack/ 80-Operations/ # Planning scaffolding (mostly empty — see docs/CLEANUP-CANDIDATES.md)
-├── niri-modifications/      # Niri experiment scripts + README
+├── niri-modifications/      # Legacy Niri experiment scripts + README (deprecated)
 ├── system/optimizations/    # Sysctl/kernel tuning
 ├── docs/                    # INSTALL, ARCHITECTURE-referenced guides, plans/, solutions/, security/
 ├── .github/workflows/ci.yml # Go build/vet + bash syntax
-├── AGENTS.md                # Agent guidance (pi/OMP/zero, harness ops)
+├── AGENTS.md                # Agent guidance (pi/OMP/zero, TETHER ops)
 ├── CONTRIBUTING.md          # Contribution guide
 ├── CHANGELOG.md             # Change history
 ├── SECURITY.md              # Security policy + OPSEC commitments
@@ -340,7 +359,7 @@ Measured on the operator workstation (i3-10105F, GTX 1650):
 | Metric | Value |
 |--------|-------|
 | Boot (systemd-analyze) | ~21.3s total (man-db 6.9s top offender) |
-| Idle RAM | ~1.8 GB (Niri + Quickshell) |
+| Idle RAM | ~1.8 GB (Hyprland + Omarchy shell) |
 | Terminal startup | ~87ms (operator framework) |
 | Container build (toolbox) | ~3m45s first, ~30s cached |
 
@@ -351,8 +370,8 @@ Run `./scripts/benchmark/system-baseline.sh` for a full baseline
 
 ## Troubleshooting
 
-See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) — Niri start/config, container
-build failures, terminal framework, Matugen theming, maintenance timers,
+See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) — Hyprland start/config, container
+build failures, terminal framework, Omarchy theming, maintenance timers,
 network/VPN.
 
 ---
@@ -373,7 +392,7 @@ network/VPN.
 3. **OPSEC-aware workflows.** Theme switching, VPN-aware terminal, engagement
    isolation, MITRE technique logging.
 4. **Local-first.** All tooling runs locally; export/import for air-gapped ops.
-5. **Maintainable over clever.** Boring tech (bash, KDL, QML, Go stdlib) with
+5. **Maintainable over clever.** Boring tech (bash, Lua, QML, Go stdlib) with
    documented trade-offs.
 
 ---

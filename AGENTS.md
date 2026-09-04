@@ -3,8 +3,8 @@
 ## Purpose
 
 Operator workstation repository for CR1MS0N-Operator. Omarchy-based (opinionated
-Arch Linux) desktop environment (Niri/Quickshell/Matugen dotfiles), rootless
-Podman container profiles, and the `harnessd` monitoring dashboard (Go, `127.0.0.1:9191`).
+Arch Linux) desktop environment (Hyprland/Omarchy shell/Omarchy theming dotfiles), rootless
+Podman container profiles, and the TETHER harness control plan (Go, `127.0.0.1:9191`).
 
 ## Agent Architecture (current)
 
@@ -37,7 +37,7 @@ Execute in order, adapted to this repo:
 4. CUE migration work: `go build ./cmd/cue-validate/` + validate against
    `cue/` schemas (see `docs/CUE-MIGRATION.md`)
 
-## Harness Operations
+## TETHER Operations
 
 ```bash
 go build ./cmd/harnessd/
@@ -59,7 +59,7 @@ populating `.env`; ports 31744–31750, all loopback-bound. See
 
 ## Constraints
 
-- **Never** modify or stage: `data/` (telemetry), `dotfiles/matugen/`
+- **Never** modify or stage: `data/` (telemetry), `dotfiles/omarchy/`
   (deploy state), `docs/plans/`, `harnessd.bak`
 - **Never** push without explicit approval
 - Stage only files you personally changed; prefer micro-commits with
@@ -69,8 +69,8 @@ populating `.env`; ports 31744–31750, all loopback-bound. See
 
 ## Documentation
 
-- `README.md` — overview, quick start, harness API
-- `ARCHITECTURE.md` — harness + desktop shell design
+- `README.md` — overview, quick start, TETHER API
+- `ARCHITECTURE.md` — TETHER + desktop shell design
 - `CONTRIBUTING.md` — contribution workflow
 - `docs/INSTALL.md`, `docs/TROUBLESHOOTING.md` (top level), `docs/DECISIONS.md`
 

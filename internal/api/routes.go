@@ -38,6 +38,11 @@ func NewRouter() http.Handler {
 		r.Get("/layers/l7/snapshots", snapshotsHandler)
 		r.Get("/alerts", alertsHandler)
 		r.Get("/history", historyHandler)
+		r.Get("/discovery", discoveryHandler)
+		r.Get("/config", configHandler)
+		r.Get("/notifications", notificationsHandler)
+		r.Post("/notifications/read", markNotificationsReadHandler)
+		r.Delete("/notifications", clearNotificationsHandler)
 	})
 
 	// SSE hub.

@@ -213,6 +213,45 @@ func historyHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// ---- discovery ----
+
+func discoveryHandler(w http.ResponseWriter, r *http.Request) {
+	services := collector.GetAllDiscoveredServices("", "", nil)
+	writeJSON(w, http.StatusOK, map[string]any{
+		"services": services,
+	})
+}
+
+// ---- config ----
+
+func configHandler(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, http.StatusOK, map[string]any{
+		"listen_addr": "127.0.0.1:9191",
+		"version":     "1.0.0",
+		"status":      "running",
+	})
+}
+
+// ---- notifications ----
+
+func notificationsHandler(w http.ResponseWriter, r *http.Request) {
+	notifs := notifications.GetNotifications()
+	writeJSON(w, http.StatusOK, map[string]any{
+		"notifications": notifs,
+		"unread_count":  notifications.GetUnreadCount(),
+	})
+}
+
+func markNotificationsReadHandler(w http.ResponseWriter, r *http.Request) {
+	notifications.MarkAllRead()
+	writeJSON(w, http.StatusOK, map[string]any{"status": "ok"})
+}
+
+func clearNotificationsHandler(w http.ResponseWriter, r *http.Request) {
+	notifications.Clear()
+	writeJSON(w, http.StatusOK, map[string]any{"status": "ok"})
+}
+
 // ---- helpers ----
 
 // writeJSON marshals v to JSON and writes it with the given status code.
