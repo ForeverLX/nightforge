@@ -5,6 +5,19 @@ validation, while preserving all existing Niri and Quickshell behavior.
 
 **Status: Phases 1–4 complete. Production config NOT changed.**
 
+**S226 Update (2026-09-04):** The Niri → Omarchy/Hyprland migration requires
+migrating the CUE schemas from `package niri` to `package hypr`. The 3-section
+structure (spawns, binds, windowRules) is preserved, but field names change:
+- `openFloating` → `float`
+- `openFullscreen` → `fullscreen`
+- `defaultColumnWidth` → `size`
+- `geometryCornerRadius` → `rounding`
+- Niri action names → Hyprland dispatchers (e.g. `focus-column-left` → `movefocus l`)
+
+See `docs/migration-prompts/s226-C6-migrate-cue-schemas.md` and
+`docs/migration-prompts/s226-C7-migrate-go-tools.md` for the detailed migration plan.
+Omarchy API reference: `docs/OMARCHY-API.md`.
+
 ## Why CUE
 
 Evaluated in S186: TOML lacks validation/schema, Lua is a security risk
