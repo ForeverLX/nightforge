@@ -137,7 +137,7 @@ llama-server \
 
 1. **Spark llama.cpp fork build**: Custom build at `~/Downloads/Local-Models/llama.cpp-spark/` — must rebuild after llama.cpp updates
 2. **LFM pooling**: `--pooling mean` is required; default `none` causes OpenAI API errors
-3. **System llama-server rebuild**: `omarchy update` rebuilds `llama.cpp-cuda` from source (slow). Solution: add `IgnorePkg = llama.cpp-cuda` to pacman.conf via omarchy hook
+3. **System llama-server rebuild**: `omarchy update` rebuilds `llama.cpp-cuda` from source (slow). Solution: add `IgnorePkg = llama.cpp-cuda` to `/etc/pacman.conf` under `[options]`. Command: `sudo sed -i '/^\[options\]/a IgnorePkg = llama.cpp-cuda' /etc/pacman.conf`. NOTE: modifying `omarchy-update-aur-pkgs` directly does NOT work — it's a symlink owned by the `omarchy-dev` package and gets overwritten on update.
 4. **Context overflow**: Pi/OMP system prompts consume 18-34K tokens. Spark at 32K context hits overflow with large task prompts. Use trimmed prompts (~1-2K tokens) and let the harness read files itself
 
 ## Change Log
