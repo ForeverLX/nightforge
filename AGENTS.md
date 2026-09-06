@@ -10,16 +10,15 @@ Podman container profiles, and the TETHER harness control plan (Go, `127.0.0.1:9
 
 | Role | Scope |
 |------|-------|
+| **Hermes** | Primary orchestrator — planning, proposals, decisions, coordination |
 | **pi** | Brain — planning, proposals, decisions, roadmap |
 | **OMP** | Executor — implements approved plans, code, docs, verification |
 | **zero** | Offsec / cron — quick fixes, scheduled maintenance tasks |
-| **Hermes** | **Deprecated** — do not route new work to Hermes |
 
 Model/provider truth is the **live routing table** served by the harness at
 `GET http://127.0.0.1:9191/api/v1/routes` (source:
 `internal/handler/routes.go`). Do not hardcode model claims in docs; the
-served table is authoritative. Note: that table still contains a legacy
-"Hermes BRAIN" entry — reconciliation is a candidate, not a doc change.
+served table is authoritative.
 
 ## Session Strategy
 
