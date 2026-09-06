@@ -5,8 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"time"
-
-	"github.com/CR1MS0N-Operator/nightforge/internal/collector/model"
 )
 
 // DiscoveredService represents a dynamically discovered service.
